@@ -51,14 +51,22 @@ all:  ${PATTERN:=.vcd}
 hex:  ${PATTERN:=.hex}
 
 %.vvp: %_tb.v %.hex
-ifeq ($(SIM),RTL)
-	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
-	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
-	-I $(UPRJ_RTL_PATH) \
+# -I $(UPRJ_RTL_PATH) \
 	-I $(UPRJ_RTL_ICESOC) \
 	-I $(UPRJ_RTL_IBEXCORE) \
 	-I $(UPRJ_RTL_EFPGACORE) \
 	-I $(UPRJ_RTL_EFPGACONF) \
+#../../rtl/ibex_core/ibex_core.v ../../rtl/ibex_core/ibex_top.v ../../rtl/ibex_core/flexbex_ibex_core.v ../../rtl/icesoc/icesoc_top.v ../../rtl/eFPGA_CPU_top.v
+ifeq ($(SIM),RTL) #the -I only helps iverilog to find the files included in the _tb.v file, which is the one that will be used to generate the .vvp output file 
+	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
+	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
+	-I ../../rtl/wrapper_folder \
+	../../rtl/eFPGA_core/*.v \
+	../../rtl/eFPGA_conf/*.v \
+	../../rtl/ibex_core/*.v \
+	../../rtl/icesoc/*.v \
+	../../rtl/*.v \
+	../../../caravel/verilog/rtl/defines.v
 	$< -o $@ -g2012
 else  
 	iverilog $(SIM_DEFINES) -DGL -I $(PDK_PATH) \
