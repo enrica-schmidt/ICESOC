@@ -35,8 +35,8 @@ UPRJ_RTL_EFPGACORE = $(UPRJ_VERILOG_PATH)/rtl/eFPGA_core
 UPRJ_RTL_EFPGACONF = $(UPRJ_VERILOG_PATH)/rtl/eFPGA_conf
 
 ## RISCV GCC 
-GCC_PATH?=/ef/apps/bin
-GCC_PREFIX?=riscv32-unknown-elf
+#GCC_PATH?=/ef/apps/bin
+GCC_PREFIX?=riscv64-unknown-elf
 
 ## Simulation mode: RTL/GL
 SIM_DEFINES = -DFUNCTIONAL -DSIM
@@ -56,18 +56,13 @@ hex:  ${PATTERN:=.hex}
 	-I $(UPRJ_RTL_IBEXCORE) \
 	-I $(UPRJ_RTL_EFPGACORE) \
 	-I $(UPRJ_RTL_EFPGACONF) \
+	-I $(PDK_PATH) \
+	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
 #../../rtl/ibex_core/ibex_core.v ../../rtl/ibex_core/ibex_top.v ../../rtl/ibex_core/flexbex_ibex_core.v ../../rtl/icesoc/icesoc_top.v ../../rtl/eFPGA_CPU_top.v
 ifeq ($(SIM),RTL) #the -I only helps iverilog to find the files included in the _tb.v file, which is the one that will be used to generate the .vvp output file 
-	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
-	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
-	-I ../../rtl/wrapper_folder \
-	../../rtl/eFPGA_core/*.v \
-	../../rtl/eFPGA_conf/*.v \
-	../../rtl/ibex_core/*.v \
-	../../rtl/icesoc/*.v \
-	../../rtl/*.v \
-	../../../caravel/verilog/rtl/defines.v
-	$< -o $@ -g2012
+	iverilog $(SIM_DEFINES) ../../../caravel/verilog/rtl/defines.v ../../../caravel/verilog/rtl/user_defines.v ../../../caravel/verilog/rtl/pads.v ../../../caravel/verilog/rtl/housekeeping.v ../../../caravel/verilog/rtl/caravel_netlists.v ../../../caravel/verilog/rtl/housekeeping_spi.v  \
+	$(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v \
+	../../everything/*.v $< -s wb_test_icesoc_tb -o $@ -g2012
 else  
 	iverilog $(SIM_DEFINES) -DGL -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(CARAVEL_VERILOG_PATH) \
@@ -83,15 +78,15 @@ $(ibex_prog): ibex_prog/*.c
 	make -C ./ibex_prog all work_dir=build
  
 %.elf: %.c $(ibex_prog) $(CARAVEL_FIRMWARE_PATH)/sections.lds $(CARAVEL_FIRMWARE_PATH)/start.s check-env 
-	${GCC_PATH}/${GCC_PREFIX}-gcc -I $(CARAVEL_PATH) -march=rv32imc -mabi=ilp32 -Wl,-Bstatic,-T,$(CARAVEL_FIRMWARE_PATH)/sections.lds,--strip-debug -ffreestanding -nostdlib -o $@ $(CARAVEL_FIRMWARE_PATH)/start.s $<
+	${GCC_PREFIX}-gcc -I $(CARAVEL_PATH) -march=rv32imc -mabi=ilp32 -Wl,-Bstatic,-T,$(CARAVEL_FIRMWARE_PATH)/sections.lds,--strip-debug -ffreestanding -nostdlib -o $@ $(CARAVEL_FIRMWARE_PATH)/start.s $<
 
 %.hex: %.elf
-	${GCC_PATH}/${GCC_PREFIX}-objcopy -O verilog $< $@ 
+	${GCC_PREFIX}-objcopy -O verilog $< $@ 
 	# to fix flash base address
 	sed -i 's/@1000/@0000/g' $@
 
 %.bin: %.elf
-	${GCC_PATH}/${GCC_PREFIX}-objcopy -O binary $< /dev/stdout | tail -c +1048577 > $@
+	${GCC_PREFIX}-objcopy -O binary $< /dev/stdout | tail -c +1048577 > $@
 
 check-env:
 ifndef PDK_ROOT
@@ -99,9 +94,6 @@ ifndef PDK_ROOT
 endif
 ifeq (,$(wildcard $(PDK_ROOT)/sky130A))
 	$(error $(PDK_ROOT)/sky130A not found, please install pdk before running make)
-endif
-ifeq (,$(wildcard $(GCC_PATH)/$(GCC_PREFIX)-gcc ))
-	$(error $(GCC_PATH)/$(GCC_PREFIX)-gcc is not found, please export GCC_PATH and GCC_PREFIX before running make)
 endif
 # check for efabless style installation
 ifeq (,$(wildcard $(PDK_ROOT)/sky130A/libs.ref/*/verilog))

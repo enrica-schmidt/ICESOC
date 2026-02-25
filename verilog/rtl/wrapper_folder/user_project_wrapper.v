@@ -44,38 +44,38 @@ module user_project_wrapper #(
 `endif
 
     // Wishbone Slave ports (WB MI A)
-    input wb_clk_i,
-    input wb_rst_i,
-    input wbs_stb_i,
-    input wbs_cyc_i,
-    input wbs_we_i,
-    input [3:0] wbs_sel_i,
-    input [31:0] wbs_dat_i,
-    input [31:0] wbs_adr_i,
-    output wbs_ack_o,
-    output [31:0] wbs_dat_o,
+    input wire wb_clk_i,
+    input wire wb_rst_i,
+    input wire wbs_stb_i, //strobe input stb_i, when asserted, indicates that the slave is selected. slave responds only when this is asserted
+    input wire wbs_cyc_i, //cycle input cyc_i, when asserted, indicates that a valid bus cycle is in progress (asserted for the duration of all bus cycles)
+    input wire wbs_we_i, //write enable input indicates if the current local bus cycle is a read or write cycle (low during read cycles, high during write cycles)
+    input wire [3:0] wbs_sel_i, //select input array (where is valid data placed on the dat_i signal array during write cycles and where it should be present on the dat_o during read cycles)
+    input wire [31:0] wbs_dat_i,
+    input wire [31:0] wbs_adr_i, //address input array adr_i is used to pass a binary address 
+    output wire wbs_ack_o, //acknowledge output, when asserted, indicates the termination of a normal bus cycle 
+    output wire [31:0] wbs_dat_o,
 
     // Logic Analyzer Signals
-    input  [127:0] la_data_in,
-    output [127:0] la_data_out,
-    input  [127:0] la_oenb,
+    input  wire [127:0] la_data_in,
+    output wire [127:0] la_data_out,
+    input  wire [127:0] la_oenb,
 
     // IOs
-    input  [`MPRJ_IO_PADS-1:0] io_in,
-    output [`MPRJ_IO_PADS-1:0] io_out,
-    output [`MPRJ_IO_PADS-1:0] io_oeb,
+    input  wire [`MPRJ_IO_PADS-1:0] io_in,
+    output wire [`MPRJ_IO_PADS-1:0] io_out,
+    output wire [`MPRJ_IO_PADS-1:0] io_oeb,
 
     // Analog (direct connection to GPIO pad---use with caution)
     // Note that analog I/O is not available on the 7 lowest-numbered
     // GPIO pads, and so the analog_io indexing is offset from the
     // GPIO indexing by 7 (also upper 2 GPIOs do not have analog_io).
-    inout [`MPRJ_IO_PADS-10:0] analog_io,
+    inout wire [`MPRJ_IO_PADS-10:0] analog_io,
 
     // Independent clock (on independent integer divider)
-    input   user_clock2,
+    input wire  user_clock2,
 
     // User maskable interrupt signals
-    output [2:0] user_irq
+    output wire [2:0] user_irq
 );
 
 /*--------------------------------------*/

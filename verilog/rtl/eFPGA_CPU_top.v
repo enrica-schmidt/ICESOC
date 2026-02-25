@@ -15,8 +15,9 @@
 // limitations under the License.
 //
 // SPDX-License-Identifier: Apache-2.0
+`define CLK_DIV 2
 `ifndef USEeFPGA
-  `define USEeFPGA 0
+  `define USEeFPGA 1
 `endif
 
 `default_nettype none
@@ -27,28 +28,28 @@ module eFPGA_CPU_top (
     inout vssd1,	// User area 1 digital ground
 `endif
     // Wishbone Slave ports (WB MI A)
-    input wb_clk_i,
-    input wb_rst_i,
-    input wbs_stb_i,
-    input wbs_cyc_i,
-    input wbs_we_i,
-    input [3:0] wbs_sel_i,
-    input [31:0] wbs_dat_i,
-    input [31:0] wbs_adr_i,
-    output wbs_ack_o,
-    output [31:0] wbs_dat_o,
+    input wire wb_clk_i,
+    input wire wb_rst_i,
+    input wire wbs_stb_i,
+    input wire wbs_cyc_i,
+    input wire wbs_we_i,
+    input wire [3:0] wbs_sel_i,
+    input wire [31:0] wbs_dat_i,
+    input wire [31:0] wbs_adr_i,
+    output wire wbs_ack_o,
+    output wire [31:0] wbs_dat_o,
 
     // Logic Analyzer Signals
-    output [2:0] la_data_out,
-    input  [3:0] la_data_in,
+    output wire [2:0] la_data_out,
+    input  wire [3:0] la_data_in,
 
     // IOs
-    input  [37:0] io_in, //CLK: [2:0] eFPGA: [12:3]
-    output [37:0] io_out, //CLK: [2:0] eFPGA: [12:3]
-    output [37:0] io_oeb, //CLK: [2:0] eFPGA: [12:3]
+    input wire [37:0] io_in, //CLK: [2:0] eFPGA: [12:3]
+    output wire [37:0] io_out, //CLK: [2:0] eFPGA: [12:3]
+    output wire [37:0] io_oeb, //CLK: [2:0] eFPGA: [12:3]
 
     // Independent clock (on independent integer divider)
-    input   user_clock2
+    input  wire user_clock2
 );
 
 localparam include_eFPGA    = `USEeFPGA;

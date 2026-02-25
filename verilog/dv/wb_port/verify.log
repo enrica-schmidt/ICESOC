@@ -1,0 +1,3 @@
+make[2]: Entering directory '/home/enrica/Uni/studienarbeit/ICESOC/verilog/dv/wb_port'
+Makefile:84: *** /ef/apps/bin/riscv32-unknown-elf-gcc is not found, please export GCC_PATH and GCC_PREFIX before running make.  Stop.
+make[2]: Leaving directory '/home/enrica/Uni/studienarbeit/ICESOC/verilog/dv/wb_port'

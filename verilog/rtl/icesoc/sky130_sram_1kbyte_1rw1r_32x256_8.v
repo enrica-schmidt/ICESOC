@@ -38,17 +38,17 @@ module sky130_sram_1kbyte_1rw1r_32x256_8(
   inout vdd;
   inout gnd;
 `endif
-  input  clk0; // clock
-  input   csb0; // active low chip select
-  input  web0; // active low write control
-  input [NUM_WMASKS-1:0]   wmask0; // write mask
-  input [ADDR_WIDTH-1:0]  addr0;
-  input [DATA_WIDTH-1:0]  din0;
-  output [DATA_WIDTH-1:0] dout0;
-  input  clk1; // clock
-  input   csb1; // active low chip select
-  input [ADDR_WIDTH-1:0]  addr1;
-  output  [DATA_WIDTH-1:0] dout1;
+  input wire clk0; // clock
+  input wire  csb0; // active low chip select
+  input wire  web0; // active low write control
+  input wire [NUM_WMASKS-1:0]   wmask0; // write mask
+  input wire [ADDR_WIDTH-1:0]  addr0;
+  input wire [DATA_WIDTH-1:0]  din0;
+  output wire [DATA_WIDTH-1:0] dout0;
+  input  wire clk1; // clock
+  input wire  csb1; // active low chip select
+  input wire [ADDR_WIDTH-1:0]  addr1;
+  output  wire [DATA_WIDTH-1:0] dout1;
 
   reg  csb0_reg;
   reg  web0_reg;

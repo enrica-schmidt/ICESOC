@@ -17,9 +17,9 @@
 
 `timescale 1 ns / 1 ps
 
-`include "uprj_netlists.v"
-`include "caravel_netlists.v"
-`include "spiflash.v"
+//`include "../../rtl/everything/uprj_netlists.v"
+//`include "../../rtl/everything/caravel_netlists.v"
+//`include "../../rtl/everything/spiflash.v"
 
 module wb_test_icesoc_tb;
 	reg clock;

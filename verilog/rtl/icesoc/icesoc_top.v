@@ -12,13 +12,13 @@ module icesoc_top #(
    parameter ROMASTER_ADDR_WIDTH=11
 ) (
 `ifdef USE_POWER_PINS
-    inout vccd1,	// User area 1 1.8V supply
-    inout vssd1,	// User area 1 digital ground
+    inout wire vccd1,	// User area 1 1.8V supply
+    inout wire vssd1,	// User area 1 digital ground
 `endif
    //core 1
    input  wire        debug_req_1_i,
    input  wire        fetch_enable_1_i,         // enable cpu 1
-   output             irq_ack_1_o,
+   output wire            irq_ack_1_o,
    input  wire        irq_1_i,
    input  wire [ 4:0] irq_id_1_i,
    output wire [ 4:0] irq_id_1_o,
