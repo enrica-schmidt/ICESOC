@@ -16,7 +16,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 `ifndef USEeFPGA
-  `define USEeFPGA 0
+  `define USEeFPGA 1
 `endif
 
 `default_nettype none
