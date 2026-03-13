@@ -36,8 +36,8 @@ module wb_test_icesoc_tb;
 	wire [5:0]i_counter;
 
 	logic rxd_uart_to_mem;
-	integer i, k, fd;
-	logic dummy_signal_debug;
+	integer word_idx, fd;
+	//logic dummy_signal_debug;
 
 	assign checkbits = mprj_io[31:16];
 	assign sram_address = mprj_io[31:0];
@@ -64,6 +64,12 @@ module wb_test_icesoc_tb;
     localparam MEM_BYTES = NUM_INSTR * 7; //7 bytes written per instruction (uart to mem write_cmd, address etc))
     localparam BIT_PERIOD_UART_TO_MEM = 8 * CLK_PER;
     reg [7:0] memory[0:MEM_BYTES-1];
+	reg [7:0] bitstream[0:MAX_BITBYTES-1];
+	reg [7:0] ctrl_bytes[0:2];
+
+	integer ctrl_byte_idx, bit_idx, data_byte_idx;
+	reg [7:0] send_byte;
+
 
 	initial begin
 		$dumpfile("wb_test_icesoc.vcd");
@@ -85,11 +91,20 @@ module wb_test_icesoc_tb;
 			$fatal;
 		end
 
+		fd = $fopen("top.hex", "r");
+		if (fd != 0) begin
+			$readmemh("top.hex", bitstream);
+			$display("Read bitstream hex from %s", "top.hex");
+		end else begin
+			$display("\nFailed to open the bitstream file %s", "top.hex");
+			$fatal;
+		end
+
 		RSTB <= 1'b0;
 		#2000;
 		RSTB <= 1'b1;	    	// Release resetB
 		
-		dummy_signal_debug = 1'b0;
+		/*dummy_signal_debug = 1'b0;
 		#BIT_PERIOD_UART_TO_MEM;
 		for (k = 0; k < MEM_BYTES; k = k + 1) begin
             //send_byte(memory[k], rxd_uart_to_mem);
@@ -107,10 +122,110 @@ module wb_test_icesoc_tb;
             #BIT_PERIOD_UART_TO_MEM;
             #(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
         end
+		*/
+
+		//#BIT_PERIOD_UART_TO_MEM;
+		ctrl_bytes[0] = 8'h41;
+		ctrl_bytes[1] = 8'h60; //write to sram1
+		ctrl_bytes[2] = 8'h80;
+		//outer loop: for every word that is written to mem
+		for (word_idx = 0; word_idx < MEM_BYTES; word_idx = word_idx + 4) begin
+			//ctrl_bytes[2] = ctrl_bytes[2] + word_idx;
+			//uart_to_mem_send_word(ctrl_bytes[0], ctrl_bytes[1], ctrl_bytes[2], memory[word_idx]);
+			
+			//for each word send three control bytes first (41, 60, addr)
+			for (ctrl_byte_idx = 0; ctrl_byte_idx < 3; ctrl_byte_idx = ctrl_byte_idx + 1) begin
+				send_byte = ctrl_bytes[ctrl_byte_idx];
+				if (ctrl_byte_idx == 2) begin
+					send_byte = ctrl_bytes[ctrl_byte_idx] + word_idx;
+				end
+
+				//send start bit
+				rxd_uart_to_mem = 1'b0;
+				#BIT_PERIOD_UART_TO_MEM;
+				//send ctrl bits
+				for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
+					rxd_uart_to_mem = send_byte[bit_idx];
+					//dummy_signal_debug = ~dummy_signal_debug;
+					#BIT_PERIOD_UART_TO_MEM;
+				end
+				//send stop bit
+				rxd_uart_to_mem = 1'b1;
+				#BIT_PERIOD_UART_TO_MEM;
+				#(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
+			end
+
+			for (data_byte_idx = 0; data_byte_idx < 4; data_byte_idx = data_byte_idx + 1) begin
+				send_byte = memory[data_byte_idx + word_idx]; //send the instructions for the core
+
+				//send start bit
+				rxd_uart_to_mem = 1'b0;
+				#BIT_PERIOD_UART_TO_MEM;
+				//send data bits
+				for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
+					rxd_uart_to_mem = send_byte[bit_idx];
+					#BIT_PERIOD_UART_TO_MEM;
+				end
+				//send stop bit
+				rxd_uart_to_mem = 1'b1;
+				#BIT_PERIOD_UART_TO_MEM;
+			end
+			#(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
+		
+		end
 
 		RSTB <= 1'b0;
 		#2000;
 		RSTB <= 1'b1;	    	// Release resetB
+
+		//#BIT_PERIOD_UART_TO_MEM;
+		ctrl_bytes[0] = 8'h41;
+		ctrl_bytes[1] = 8'h64; //write to sram2 
+		ctrl_bytes[2] = 8'h80;
+		//outer loop: for every word that is written to mem
+		for (word_idx = 0; word_idx < MAX_BITBYTES; word_idx = word_idx + 4) begin
+			//ctrl_bytes[2] = ctrl_bytes[2] + word_idx;
+			//uart_to_mem_send_word(ctrl_bytes[0], ctrl_bytes[1], ctrl_bytes[2], bitstream[word_idx]);
+			//for each word send three control bytes first (41, 60, addr)
+			for (ctrl_byte_idx = 0; ctrl_byte_idx < 3; ctrl_byte_idx = ctrl_byte_idx + 1) begin
+				send_byte = ctrl_bytes[ctrl_byte_idx];
+				if (ctrl_byte_idx == 2) begin
+					send_byte = ctrl_bytes[ctrl_byte_idx] + word_idx;
+				end
+
+				//send start bit
+				rxd_uart_to_mem = 1'b0;
+				#BIT_PERIOD_UART_TO_MEM;
+				//send ctrl bits
+				for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
+					rxd_uart_to_mem = send_byte[bit_idx];
+					//dummy_signal_debug = ~dummy_signal_debug;
+					#BIT_PERIOD_UART_TO_MEM;
+				end
+				//send stop bit
+				rxd_uart_to_mem = 1'b1;
+				#BIT_PERIOD_UART_TO_MEM;
+				#(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
+			end
+
+			for (data_byte_idx = 0; data_byte_idx < 4; data_byte_idx = data_byte_idx + 1) begin
+				send_byte = bitstream[data_byte_idx + word_idx]; //send the instructions for the core
+
+				//send start bit
+				rxd_uart_to_mem = 1'b0;
+				#BIT_PERIOD_UART_TO_MEM;
+				//send data bits
+				for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
+					rxd_uart_to_mem = send_byte[bit_idx];
+					#BIT_PERIOD_UART_TO_MEM;
+				end
+				//send stop bit
+				rxd_uart_to_mem = 1'b1;
+				#BIT_PERIOD_UART_TO_MEM;
+			end
+			#(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
+		end
+
 
 		// Repeat cycles of 1000 clock edges as needed to complete testbench
                 repeat (100) begin
@@ -126,6 +241,54 @@ module wb_test_icesoc_tb;
 		$display("%c[0m",27);
 		$finish;
 	end
+
+	//pass 3 ctrl bytes and current word to be sent
+	//not using output rx but global variable rxd_uart_to_mem to continuously assign value
+	task uart_to_mem_send_word(input [7:0] ctrl0, input [7:0] ctrl1, input [7:0] ctrl2, input [31:0] word);
+		integer ctrl_byte_idx, bit_idx, data_byte_idx;
+		reg [7:0] send_byte;
+		reg [7:0] ctrl [2:0]; 
+		ctrl[0] = ctrl0;
+		ctrl[1] = ctrl1;
+		ctrl[2] = ctrl2;
+		//for each word send three control bytes first (41, 60, addr)
+		for (ctrl_byte_idx = 0; ctrl_byte_idx < 3; ctrl_byte_idx = ctrl_byte_idx + 1) begin
+			send_byte = ctrl[ctrl_byte_idx];
+			/*if (ctrl_byte_idx == 2) begin
+				send_byte = ctrl[ctrl_byte_idx] + word_idx;
+			end*/
+
+			//send start bit
+			rxd_uart_to_mem = 1'b0;
+			#BIT_PERIOD_UART_TO_MEM;
+			//send ctrl bits
+			for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
+				rxd_uart_to_mem = send_byte[bit_idx];
+				#BIT_PERIOD_UART_TO_MEM;
+			end
+			//send stop bit
+			rxd_uart_to_mem = 1'b1;
+			#BIT_PERIOD_UART_TO_MEM;
+			#(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
+		end
+
+		for (data_byte_idx = 0; data_byte_idx < 4; data_byte_idx = data_byte_idx + 1) begin
+			send_byte = word[data_byte_idx]; //send the data
+
+			//send start bit
+			rxd_uart_to_mem = 1'b0;
+			#BIT_PERIOD_UART_TO_MEM;
+			//send data bits
+			for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
+				rxd_uart_to_mem = send_byte[bit_idx];
+				#BIT_PERIOD_UART_TO_MEM;
+			end
+			//send stop bit
+			rxd_uart_to_mem = 1'b1;
+			#BIT_PERIOD_UART_TO_MEM;
+		end
+		#(5*BIT_PERIOD_UART_TO_MEM); //wait between the bytes to avoid conflicts with the tx part
+	endtask
 
         reg [31:0] checkpoint;
         reg [ 7:0] ibex_ctrl;
