@@ -148,7 +148,7 @@ void main() {
   }
 
   while (1) {
-    if (sram1[1] == 0xDEADBEEF) {
+    if (sram1[4] == 0xDEADBEEF) {
       reg_mprj_datal = 0x00040000; // simulation end with successful test
     } else if (sram1[1] == 0xCAFEBABE) {
       reg_mprj_datal = 0x00050000; // simulation end with failed test

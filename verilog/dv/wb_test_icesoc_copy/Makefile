@@ -68,6 +68,7 @@ hex:  ${PATTERN:=.hex}
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)
+	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.hex ../../memory.hex
 	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
 	-I $(UPRJ_RTL_PATH) \

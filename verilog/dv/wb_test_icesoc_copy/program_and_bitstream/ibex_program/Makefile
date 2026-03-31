@@ -15,8 +15,8 @@ all:
 %.hex: %.bin
 #need to escape the $ with $$ for the sed command
 	hexdump -v -e '1/4 "%08x"' $< | sed 's/../&\n/g' | sed '/^$$/d' > $@
-#substitute all nop instructions with the custom instruction 0003300b, the nice solution would be to modify the compiler to recognize custom instructions, but this is sufficient for now
-	perl -0777 -i -pe 's/00\n00\n00\n13/00\n03\n30\n0b/g' program.hex
+#substitute all nop instructions with the custom instruction 000ff00b, the nice solution would be to modify the compiler to recognize custom instructions, but this is sufficient for now
+	perl -0777 -i -pe 's/00\n00\n00\n13/00\n0f\nf0\n0b/g' program.hex
 
 %.disasm: %.elf
 	riscv64-unknown-elf-objdump -d $< > $@

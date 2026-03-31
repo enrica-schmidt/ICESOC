@@ -63,8 +63,13 @@ module wb_test_icesoc_tb;
     localparam NUM_INSTR = 64; //nr of instructions to be written to sram 
     localparam MEM_BYTES = NUM_INSTR * 4; //4 bytes written per instruction
     localparam BIT_PERIOD_UART_TO_MEM = 8 * CLK_PER;
-	localparam PAGE_SIZE = 256; //nr words per page, only 1/4th is addressable
-	localparam NUM_PAGES = 2; //nr of pages
+	
+	localparam PAGE_SIZE_BITSTR = 256; //nr words per page, only 1/4th is addressable
+	localparam NUM_PAGES_BITSTR = 2; //nr of pages
+	
+	localparam PAGE_SIZE_INSTRS = 256; //nr words per page, only 1/4th is addressable
+	localparam NUM_PAGES_INSTRS = 2; //nr of pages
+
     reg [7:0] memory[0:MEM_BYTES-1];
 	reg [7:0] bitstream[0:MAX_BITBYTES-1];
 	reg [7:0] ctrl_bytes[0:2];
@@ -114,30 +119,36 @@ module wb_test_icesoc_tb;
 		flat_ctrl_bytes_start = 24'h416080; //swap endianness in word when sending
 		//outer loop: for every word that is written to mem
 		//MEM_BYTES/4: nr of words to write, PAGE_SIZE/4: nr of words addressable per page 
-		for (page_ctr = 0; page_ctr < (MEM_BYTES/4)/(PAGE_SIZE/4); page_ctr = page_ctr + 1) begin
-			page_idx = page_ctr % NUM_PAGES;
-			for (word_idx = 0; word_idx < PAGE_SIZE; word_idx = word_idx + 4) begin
-				word = {memory[(page_ctr*PAGE_SIZE) + word_idx], memory[(page_ctr*PAGE_SIZE) + word_idx+1], memory[(page_ctr*PAGE_SIZE) + word_idx+2], memory[(page_ctr*PAGE_SIZE) + word_idx+3]};
-				flat_ctrl_bytes = flat_ctrl_bytes_start + (page_idx * PAGE_SIZE) + word_idx;
+		for (page_ctr = 0; page_ctr < (MEM_BYTES/4)/(PAGE_SIZE_INSTRS/4); page_ctr = page_ctr + 1) begin
+			page_idx = page_ctr % NUM_PAGES_INSTRS;
+			for (word_idx = 0; word_idx < PAGE_SIZE_INSTRS; word_idx = word_idx + 4) begin
+				word = {memory[(page_ctr*PAGE_SIZE_INSTRS) + word_idx], memory[(page_ctr*PAGE_SIZE_INSTRS) + word_idx+1], memory[(page_ctr*PAGE_SIZE_INSTRS) + word_idx+2], memory[(page_ctr*PAGE_SIZE_INSTRS) + word_idx+3]};
+				flat_ctrl_bytes = flat_ctrl_bytes_start + (page_idx * PAGE_SIZE_INSTRS) + word_idx;
 				uart_to_mem_send_word(flat_ctrl_bytes, word);
 			end
 			uart_to_mem_send_word(24'h416000, page_idx); //write 0 or 1 to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
 		end
 		
 		uart_to_mem_send_word(24'h416000, 32'h0);
+		uart_to_mem_send_word(24'h416004, PAGE_SIZE_INSTRS); //write instr page size to address 0x004
+		uart_to_mem_send_word(24'h416008, NUM_PAGES_INSTRS); //write nr of instr pages to address 0x008
 
 		flat_ctrl_bytes_start = 24'h416480; //swap endianness in word when sending
 		//outer loop: for every word that is written to mem
 		//MEM_BYTES/4: nr of words to write, PAGE_SIZE/4: nr of words addressable per page 
-		uart_to_mem_send_word(24'h416404, MAX_BITBYTES/4); //write nr of words in bitstream to address 0x404
-		for (page_ctr = 0; page_ctr < (MAX_BITBYTES/4)/(PAGE_SIZE/4); page_ctr = page_ctr + 1) begin
-			page_idx = page_ctr % NUM_PAGES;
-			for (word_idx = 0; word_idx < PAGE_SIZE; word_idx = word_idx + 4) begin
-				word = {bitstream[(page_ctr*PAGE_SIZE) + word_idx], bitstream[(page_ctr*PAGE_SIZE) + word_idx+1], bitstream[(page_ctr*PAGE_SIZE) + word_idx+2], bitstream[(page_ctr*PAGE_SIZE) + word_idx+3]};
-				flat_ctrl_bytes = flat_ctrl_bytes_start + (page_idx * PAGE_SIZE) + word_idx;
+		uart_to_mem_send_word(24'h416404, PAGE_SIZE_BITSTR); //write bitstream page size to address 0x404
+		uart_to_mem_send_word(24'h416408, NUM_PAGES_BITSTR); //write nr of bitstream pages to address 0x408
+		//uart_to_mem_send_word(24'h41640c, 3);
+		uart_to_mem_send_word(24'h41640c, MAX_BITBYTES/4); //write nr of words in bitstream to address 0x40c
+
+		for (page_ctr = 0; page_ctr < (MAX_BITBYTES/4)/(PAGE_SIZE_BITSTR/4); page_ctr = page_ctr + 1) begin
+			page_idx = page_ctr % NUM_PAGES_BITSTR;
+			for (word_idx = 0; word_idx < PAGE_SIZE_BITSTR; word_idx = word_idx + 4) begin
+				word = {bitstream[(page_ctr*PAGE_SIZE_BITSTR) + word_idx], bitstream[(page_ctr*PAGE_SIZE_BITSTR) + word_idx+1], bitstream[(page_ctr*PAGE_SIZE_BITSTR) + word_idx+2], bitstream[(page_ctr*PAGE_SIZE_BITSTR) + word_idx+3]};
+				flat_ctrl_bytes = flat_ctrl_bytes_start + (page_idx * PAGE_SIZE_BITSTR) + word_idx;
 				uart_to_mem_send_word(flat_ctrl_bytes, word);
 			end
-			uart_to_mem_send_word(24'h416400, page_idx); //write 0 or 1 to address 0x000 (address 0 in sram2) so the core can check this if the next page is ready
+			uart_to_mem_send_word(24'h416400, page_ctr); //write 0 or 1 to address 0x000 (address 0 in sram2) so the core can check this if the next page is ready
 			if (page_ctr == 0) begin
 				RSTB <= 1'b0;
 				#2000;
@@ -147,7 +158,7 @@ module wb_test_icesoc_tb;
 
 		// Repeat cycles of 1000 clock edges as needed to complete testbench
         repeat (100) begin
-			repeat (1000) @(posedge clock);
+			repeat (10000) @(posedge clock);
             $display("+1000 cycles");
 		end
 		$display("%c[1;31m",27);
@@ -209,13 +220,14 @@ module wb_test_icesoc_tb;
 		wait(checkbits == 16'h0003);
 	   	$display("Monitor: Start ibex");
 		ibex_ctrl = 8'b0010_0110;
+		//start and finish bitstream upload
 	end
 
 	initial begin
 		wait(checkbits == 16'h0004);
 		$display ("Monitor: ibex Passed");
 		#7000;
-		#(BIT_PERIOD_UART_TO_MEM * 20000);
+		#(BIT_PERIOD_UART_TO_MEM * 450000);
 		$finish;
 	end
 
