@@ -20,6 +20,8 @@
 #include <gpio_config_io.h>
 #include <stdint.h>
 #include <stub.c>
+#include "memory.h"
+#include "bitstream.h"
 /*
         Wishbone Test:
                 - Configures MPRJ lower 8-IO pins as outputs
@@ -28,6 +30,13 @@
 #define SRAM_2_OFFSET 0x100                    // 0x400 / 4
 #define SRAM_LAST_ACCESSIBLE_WORD_ADDRESS 0x3F // 0FF / 4
 #define PROGRAM_START_ADDRESS 0x20             // 0x80 / 4
+#define MAX_BITBYTES 200 //change this back to 20000
+#define NUM_INSTR 128 //nr of instructions to be written to sram 
+#define MEM_BYTES (NUM_INSTR * 4) //4 bytes written per instruction
+#define PAGE_SIZE_BITSTR 256 //nr words per page, only 1/4th is addressable
+#define NUM_PAGES_BITSTR 2 //nr of pages
+#define PAGE_SIZE_INSTRS 256 //nr words per page, only 1/4th is addressable
+#define NUM_PAGES_INSTRS 2 //nr of pages
 
 void main() {
 
@@ -146,6 +155,78 @@ void main() {
        address++) {
     tmp = sram2[address];
   }
+
+
+
+  uint32_t page_request_idx, word_ctr, page_ctr, page_idx;
+  //sram1[0] = 0xdeadbeef; //try if writing works
+  uint32_t word;
+  
+  //reg_mprj_datal = 0x0fff0000;;
+  for (uint32_t word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
+    //todo: instead of cafebabe write instruction page 0
+    word = instructions[word_ctr];
+   // __asm__ volatile ("fence" ::: "memory"); // RISC-V Memory Barrier
+    //sram1[32 + word_ctr] = 0xcafebabe;
+    sram1[32 + word_ctr] = word;
+    //if (word_ctr < 5) {
+    //  sram1[32 + word_ctr] = 0xcafebabe;
+    //}
+    //reg_mprj_datal = word;
+    /*if (word_ctr == 0 && word == 0x00102f83) {        // Check against the known first value in memory.h
+        reg_mprj_datal = 0x00070000; // Success pattern
+    } else {
+        reg_mprj_datal = 0x00080000; // Fail pattern
+    }*/
+  }
+  sram1[1] = PAGE_SIZE_INSTRS;
+  sram1[2] = NUM_PAGES_INSTRS;
+  sram1[0] = 0x0; //write page ready idx instrs = 0 (page 0 was written fully)
+
+  //page_request_idx = sram1[3];
+
+  sram2[0] = 0xdeadbeef; //initialize page ready idx bitstream
+  sram2[1] = PAGE_SIZE_BITSTR;
+  sram2[2] = NUM_PAGES_BITSTR;
+  sram2[3] = MAX_BITBYTES/4;
+
+  //writing bitstream to sram2
+  word_ctr = 0;
+  while (word_ctr < MAX_BITBYTES/4) {
+    page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
+    page_idx = page_ctr % NUM_PAGES_BITSTR;
+    //todo: instead of abcdefab, write all bitsteam pages 
+    //sram2[32 + (page_idx * PAGE_SIZE_BITSTR) + ((word_ctr % (PAGE_SIZE_BITSTR/4)) * 4)] = 0xabcdefab;
+    sram2[32 + (page_idx * PAGE_SIZE_INSTRS) + ((word_ctr % (PAGE_SIZE_INSTRS/4)) * 4)] = bitstream[word_ctr];
+    if ((word_ctr + 1) % (PAGE_SIZE_BITSTR/4) == 0) {
+				sram2[0] = page_ctr;
+  	}
+		word_ctr++;
+  }
+
+  //writing remaining instruction pages to sram1
+  word_ctr = (PAGE_SIZE_INSTRS/4); //first page was sent already (start with second page)
+  while(word_ctr < NUM_INSTR) {
+    page_ctr = word_ctr / (PAGE_SIZE_INSTRS/4);
+    page_idx = (page_ctr) % NUM_PAGES_INSTRS;
+
+    sram1[32 + (page_idx * PAGE_SIZE_INSTRS) + ((word_ctr % (PAGE_SIZE_INSTRS/4)) * 4)] = instructions[word_ctr];
+
+    if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
+      sram1[0] = page_ctr; //write page counter to address 0x000 (address 0 in sram2) so the core can check this if the next page is ready
+      //TODO!!: check the page request and stall until page is requested, then continue with next line
+    }
+    word_ctr++;
+  }
+  sram1[0] = page_ctr;
+
+
+
+
+
+
+
+
 
   while (1) {
     if (sram1[4] == 0xDEADBEEF) {

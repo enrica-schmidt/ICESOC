@@ -62,13 +62,13 @@ SIM?=RTL
 
 PATTERN = wb_test_icesoc
 
-all:  ${PATTERN:=.vcd}
+all:  ${PATTERN:=.vcd} ${PATTERN:=.disasm}
 
 hex:  ${PATTERN:=.hex}
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)
-	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.hex ../../memory.hex
+	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && cp program.hex ../../memory.hex
 	date
 	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
@@ -97,6 +97,9 @@ $(ibex_prog): ibex_prog/*.c
 
 %.elf: %.c $(ibex_prog) $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
+
+%.disasm: %.elf
+	riscv64-unknown-elf-objdump -d $< > $@
 
 %.hex: %.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O verilog $< $@

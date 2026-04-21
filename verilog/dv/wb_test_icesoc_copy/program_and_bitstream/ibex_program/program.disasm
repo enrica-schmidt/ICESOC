@@ -15,9 +15,9 @@ Disassembly of section .text:
 
 00000014 <main>:
   14:	020000ef          	jal	34 <deadbeef>
-  18:	40402503          	lw	a0,1028(zero) # 404 <next_page+0x32c>
-  1c:	40802583          	lw	a1,1032(zero) # 408 <next_page+0x330>
-  20:	40c02603          	lw	a2,1036(zero) # 40c <next_page+0x334>
+  18:	40402503          	lw	a0,1028(zero) # 404 <next_page1+0x2c8>
+  1c:	40802583          	lw	a1,1032(zero) # 408 <next_page1+0x2cc>
+  20:	40c02603          	lw	a2,1036(zero) # 40c <next_page1+0x2d0>
   24:	020000ef          	jal	44 <load_bitstream>
   28:	00402503          	lw	a0,4(zero) # 4 <start+0x4>
   2c:	00802583          	lw	a1,8(zero) # 8 <req_all>
@@ -25,7 +25,7 @@ Disassembly of section .text:
 
 00000034 <deadbeef>:
   34:	deadc2b7          	lui	t0,0xdeadc
-  38:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada613>
+  38:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada4ef>
   3c:	00502823          	sw	t0,16(zero) # 10 <req_all+0x8>
   40:	00008067          	ret
 
@@ -37,7 +37,7 @@ Disassembly of section .text:
   54:	00000e93          	li	t4,0
 
 00000058 <first_page>:
-  58:	40002f83          	lw	t6,1024(zero) # 400 <next_page+0x328>
+  58:	40002f83          	lw	t6,1024(zero) # 400 <next_page1+0x2c4>
   5c:	ffdf9ee3          	bne	t6,t4,58 <first_page>
 
 00000060 <read_page>:
@@ -59,7 +59,7 @@ Disassembly of section .text:
   94:	00030e13          	mv	t3,t1
 
 00000098 <poll_bitstr>:
-  98:	40002f83          	lw	t6,1024(zero) # 400 <next_page+0x328>
+  98:	40002f83          	lw	t6,1024(zero) # 400 <next_page1+0x2c4>
   9c:	ffdf9ee3          	bne	t6,t4,98 <poll_bitstr>
   a0:	fc1ff06f          	j	60 <read_page>
 
@@ -86,3 +86,86 @@ Disassembly of section .text:
 
 000000d8 <next_page>:
   d8:	00048067          	jr	s1
+  dc:	00000013          	nop
+  e0:	00000013          	nop
+  e4:	00000013          	nop
+  e8:	00000013          	nop
+  ec:	00000013          	nop
+  f0:	00000013          	nop
+  f4:	00000013          	nop
+  f8:	00000013          	nop
+  fc:	00000013          	nop
+
+00000100 <req_next1>:
+ 100:	00c02283          	lw	t0,12(zero) # c <req_all+0x4>
+ 104:	00128293          	addi	t0,t0,1
+ 108:	00502623          	sw	t0,12(zero) # c <req_all+0x4>
+
+0000010c <main1>:
+ 10c:	00000013          	nop
+ 110:	00402503          	lw	a0,4(zero) # 4 <start+0x4>
+ 114:	00802583          	lw	a1,8(zero) # 8 <req_all>
+ 118:	0040006f          	j	11c <paging1>
+
+0000011c <paging1>:
+ 11c:	00198993          	addi	s3,s3,1
+ 120:	00190913          	addi	s2,s2,1
+ 124:	00a484b3          	add	s1,s1,a0
+ 128:	00b99663          	bne	s3,a1,134 <poll_instr1>
+ 12c:	00000993          	li	s3,0
+ 130:	00040493          	mv	s1,s0
+
+00000134 <poll_instr1>:
+ 134:	00002283          	lw	t0,0(zero) # 0 <start>
+ 138:	ff229ee3          	bne	t0,s2,134 <poll_instr1>
+
+0000013c <next_page1>:
+ 13c:	00048067          	jr	s1
+ 140:	00000013          	nop
+ 144:	00000013          	nop
+ 148:	00000013          	nop
+ 14c:	00000013          	nop
+ 150:	00000013          	nop
+ 154:	00000013          	nop
+ 158:	00000013          	nop
+ 15c:	00000013          	nop
+ 160:	00000013          	nop
+ 164:	00000013          	nop
+ 168:	00000013          	nop
+ 16c:	00000013          	nop
+ 170:	00000013          	nop
+ 174:	00000013          	nop
+ 178:	00000013          	nop
+ 17c:	00000013          	nop
+ 180:	00000013          	nop
+ 184:	00000013          	nop
+ 188:	00000013          	nop
+ 18c:	00000013          	nop
+ 190:	00000013          	nop
+ 194:	00000013          	nop
+ 198:	00000013          	nop
+ 19c:	00000013          	nop
+ 1a0:	00000013          	nop
+ 1a4:	00000013          	nop
+ 1a8:	00000013          	nop
+ 1ac:	00000013          	nop
+ 1b0:	00000013          	nop
+ 1b4:	00000013          	nop
+ 1b8:	00000013          	nop
+ 1bc:	00000013          	nop
+ 1c0:	00000013          	nop
+ 1c4:	00000013          	nop
+ 1c8:	00000013          	nop
+ 1cc:	00000013          	nop
+ 1d0:	00000013          	nop
+ 1d4:	00000013          	nop
+ 1d8:	00000013          	nop
+ 1dc:	00000013          	nop
+ 1e0:	00000013          	nop
+ 1e4:	00000013          	nop
+ 1e8:	00000013          	nop
+ 1ec:	00000013          	nop
+ 1f0:	00000013          	nop
+ 1f4:	00000013          	nop
+ 1f8:	00000013          	nop
+ 1fc:	00000013          	nop
