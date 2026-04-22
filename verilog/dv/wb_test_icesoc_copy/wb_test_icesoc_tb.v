@@ -92,7 +92,7 @@ module wb_test_icesoc_tb;
 			$dumpvars(0, wb_test_icesoc_tb.memory[address]);
 		end
 		*/
-
+		/*
 		fd = $fopen("memory.hex", "r");
 		if (fd != 0) begin
 			$readmemh("memory.hex", memory);
@@ -110,15 +110,12 @@ module wb_test_icesoc_tb;
 			$display("\nFailed to open the bitstream file %s", "bitstream.hex");
 			$fatal;
 		end
-
+		*/
 		RSTB <= 1'b0;
 		#2000;
 		RSTB <= 1'b1;	    	// Release resetB
 
 		//flat_ctrl_bytes_start = 24'h416080; //swap endianness in word when sending
-		
-		
-		
 		
 		/*$timeformat(-9, 2, " ns", 2);
 		$display("Monitor: Sending instruction page 0 [T=%0t]", $realtime);
@@ -222,7 +219,14 @@ module wb_test_icesoc_tb;
 
 		// Repeat cycles of 1000 clock edges as needed to complete testbench
         //repeat (50) begin
-		repeat (40) begin
+		wait(checkbits == 16'h0007); //wait for the first instruction page to be written to sram
+		$display("Monitor: First instruction page written to sram 1, now resetting to start ibex core [T=%0t]", $realtime);
+		
+		RSTB <= 1'b0;
+		#2000;
+		RSTB <= 1'b1;	    	// Release resetB
+
+		repeat (20) begin
 			repeat (10000) @(posedge clock);
             $display("+1000 cycles");
 		end
@@ -311,18 +315,12 @@ module wb_test_icesoc_tb;
 		wait(checkbits == 16'h0003);
 	   	$display("Monitor: Start ibex [T=%0t]", $realtime);
 		ibex_ctrl = 8'b0010_0110;
-		wait(checkbits == 16'h0fff);
-		repeat (200000) begin
-			repeat (1000) @(posedge clock);
-            $display("Monitor: mprj_io: %h [T=%0t]", mprj_io, $realtime);
-		end
-		
 		//start and finish bitstream upload
 	end
 
 	initial begin
-		//wait(checkbits == 16'h0004);
-		wait(checkbits == 16'h0007);
+		wait(checkbits == 16'h0004);
+		//wait(checkbits == 16'h0007);
 		$display ("Monitor: ibex Passed [T=%0t]", $realtime);
 		//#7000;
 		//#(BIT_PERIOD_UART_TO_MEM * 40000);
@@ -332,8 +330,8 @@ module wb_test_icesoc_tb;
 
 
 	initial begin
-		//wait(checkbits == 16'h0005);
-		wait(checkbits == 16'h0008);
+		wait(checkbits == 16'h0005);
+		//wait(checkbits == 16'h0008);
 		$display ("Monitor: ibex Failed [T=%0t]", $realtime);
 		#7000;
 		#(BIT_PERIOD_UART_TO_MEM * 20000);
