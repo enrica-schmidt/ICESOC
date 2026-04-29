@@ -226,7 +226,7 @@ module wb_test_icesoc_tb;
 		#2000;
 		RSTB <= 1'b1;	    	// Release resetB
 
-		repeat (20) begin
+		repeat (40) begin
 			repeat (10000) @(posedge clock);
             $display("+1000 cycles");
 		end

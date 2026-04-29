@@ -15,9 +15,9 @@ Disassembly of section .text:
 
 00000014 <main>:
   14:	020000ef          	jal	34 <deadbeef>
-  18:	40402503          	lw	a0,1028(zero) # 404 <next_page1+0x2c8>
-  1c:	40802583          	lw	a1,1032(zero) # 408 <next_page1+0x2cc>
-  20:	40c02603          	lw	a2,1036(zero) # 40c <next_page1+0x2d0>
+  18:	40402503          	lw	a0,1028(zero) # 404 <next_page1+0x2b4>
+  1c:	40802583          	lw	a1,1032(zero) # 408 <next_page1+0x2b8>
+  20:	41002603          	lw	a2,1040(zero) # 410 <next_page1+0x2c0>
   24:	020000ef          	jal	44 <load_bitstream>
   28:	00402503          	lw	a0,4(zero) # 4 <start+0x4>
   2c:	00802583          	lw	a1,8(zero) # 8 <req_all>
@@ -37,7 +37,7 @@ Disassembly of section .text:
   54:	00000e93          	li	t4,0
 
 00000058 <first_page>:
-  58:	40002f83          	lw	t6,1024(zero) # 400 <next_page1+0x2c4>
+  58:	40002f83          	lw	t6,1024(zero) # 400 <next_page1+0x2b0>
   5c:	ffdf9ee3          	bne	t6,t4,58 <first_page>
 
 00000060 <read_page>:
@@ -59,7 +59,7 @@ Disassembly of section .text:
   94:	00030e13          	mv	t3,t1
 
 00000098 <poll_bitstr>:
-  98:	40002f83          	lw	t6,1024(zero) # 400 <next_page1+0x2c4>
+  98:	40002f83          	lw	t6,1024(zero) # 400 <next_page1+0x2b0>
   9c:	ffdf9ee3          	bne	t6,t4,98 <poll_bitstr>
   a0:	fc1ff06f          	j	60 <read_page>
 
@@ -102,30 +102,32 @@ Disassembly of section .text:
  108:	00502623          	sw	t0,12(zero) # c <req_all+0x4>
 
 0000010c <main1>:
- 10c:	00000013          	nop
- 110:	00402503          	lw	a0,4(zero) # 4 <start+0x4>
- 114:	00802583          	lw	a1,8(zero) # 8 <req_all>
- 118:	0040006f          	j	11c <paging1>
+ 10c:	014000ef          	jal	120 <deadbeef1>
+ 110:	00000013          	nop
+ 114:	00402503          	lw	a0,4(zero) # 4 <start+0x4>
+ 118:	00802583          	lw	a1,8(zero) # 8 <req_all>
+ 11c:	0140006f          	j	130 <paging1>
 
-0000011c <paging1>:
- 11c:	00198993          	addi	s3,s3,1
- 120:	00190913          	addi	s2,s2,1
- 124:	00a484b3          	add	s1,s1,a0
- 128:	00b99663          	bne	s3,a1,134 <poll_instr1>
- 12c:	00000993          	li	s3,0
- 130:	00040493          	mv	s1,s0
+00000120 <deadbeef1>:
+ 120:	deadc2b7          	lui	t0,0xdeadc
+ 124:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada4ef>
+ 128:	02502023          	sw	t0,32(zero) # 20 <main+0xc>
+ 12c:	00008067          	ret
 
-00000134 <poll_instr1>:
- 134:	00002283          	lw	t0,0(zero) # 0 <start>
- 138:	ff229ee3          	bne	t0,s2,134 <poll_instr1>
+00000130 <paging1>:
+ 130:	00198993          	addi	s3,s3,1
+ 134:	00190913          	addi	s2,s2,1
+ 138:	00a484b3          	add	s1,s1,a0
+ 13c:	00b99663          	bne	s3,a1,148 <poll_instr1>
+ 140:	00000993          	li	s3,0
+ 144:	00040493          	mv	s1,s0
 
-0000013c <next_page1>:
- 13c:	00048067          	jr	s1
- 140:	00000013          	nop
- 144:	00000013          	nop
- 148:	00000013          	nop
- 14c:	00000013          	nop
- 150:	00000013          	nop
+00000148 <poll_instr1>:
+ 148:	00002283          	lw	t0,0(zero) # 0 <start>
+ 14c:	ff229ee3          	bne	t0,s2,148 <poll_instr1>
+
+00000150 <next_page1>:
+ 150:	00048067          	jr	s1
  154:	00000013          	nop
  158:	00000013          	nop
  15c:	00000013          	nop

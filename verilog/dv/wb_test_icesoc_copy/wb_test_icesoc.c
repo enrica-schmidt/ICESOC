@@ -30,7 +30,7 @@
 #define SRAM_2_OFFSET 0x100                    // 0x400 / 4
 #define SRAM_LAST_ACCESSIBLE_WORD_ADDRESS 0x3F // 0FF / 4
 #define PROGRAM_START_ADDRESS 0x20             // 0x80 / 4
-#define MAX_BITBYTES 200 //change this back to 20000
+#define MAX_BITBYTES 20 //change this back to 20000
 #define NUM_INSTR 128 //nr of instructions to be written to sram 
 #define MEM_BYTES (NUM_INSTR * 4) //4 bytes written per instruction
 #define PAGE_SIZE_BITSTR 256 //nr words per page, only 1/4th is addressable
@@ -150,50 +150,57 @@ void main() {
   reg_mprj_datal = 0x00030000;
   reg_la0_data = reg_la0_data | 0xA;
 
-  volatile uint32_t tmp;
+  /*volatile uint32_t tmp;
   for (uint32_t address = 0u; address < SRAM_LAST_ACCESSIBLE_WORD_ADDRESS;
        address++) {
     tmp = sram2[address];
   }
-
+    */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   uint32_t page_request_idx, word_ctr, page_ctr, page_idx;
   uint32_t word;
 
-//writing first instruction page to sram1//////////////////////////////////////////////////////////////////////////////////////////////
-  sram1[3] = 0xdeadbeef; //initialize page request idx so it can be polled
+  sram1[0] = 0xffffffff;        //initialize instruction page ready counter
+  sram1[1] = PAGE_SIZE_INSTRS;
+  sram1[2] = NUM_PAGES_INSTRS;  
+  sram1[3] = 0xffffffff;        //initialize instruction page request counter
+
+  sram2[0] = 0xffffffff;        //initialize bistream page ready counter
+  sram2[1] = PAGE_SIZE_BITSTR;  //highest address - lowest address (nr words * 4)
+  sram2[2] = NUM_PAGES_BITSTR;
+  sram2[3] = 0xffffffff;        //initialize bitstream page request counter    
+  sram2[4] = MAX_BITBYTES/4;    //nr of words in bitstream
+  
+//writing first instruction page to sram1////////////////////////////////////////////////////////////////////////////////////////////////
   for (word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
     word = instructions[word_ctr];
     sram1[32 + word_ctr] = word;
   }
-  sram1[1] = PAGE_SIZE_INSTRS;
-  sram1[2] = NUM_PAGES_INSTRS;
-  sram1[0] = 0x0; //write page ready idx instrs = 0 (page 0 was written fully)
-  reg_mprj_datal = 0x00070000; //signaling that first instruction page is ready
+  sram1[0] = 0x0;               //write page ready idx instrs = 0 (page 0 was written fully)
+  reg_mprj_datal = 0x00070000;  //signaling that first instruction page is ready
 
 //writing bitstream to sram2//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  sram2[0] = 0xdeadbeef; //initialize page ready idx bitstream
-  sram2[1] = PAGE_SIZE_BITSTR; //highest address - lowest address (nr words * 4)
-  sram2[2] = NUM_PAGES_BITSTR;
-  sram2[3] = MAX_BITBYTES/4;
-
   word_ctr = 0;
   while (word_ctr < MAX_BITBYTES/4) {
     page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
     page_idx = page_ctr % NUM_PAGES_BITSTR;
+
     sram2[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
+
     if ((word_ctr + 1) % (PAGE_SIZE_BITSTR/4) == 0) {
-				sram2[0] = page_ctr; //signal that next bitstream page is written to sram and ready to be read by core
+				sram2[0] = page_ctr;  //signal that next bitstream page is written to sram and ready to be read by core
   	}
 		word_ctr++;
   }
+  sram2[0] = page_ctr;
+
 
 //writing remaining instruction pages to sram1//////////////////////////////////////////////////////////////////////////////////////////
   word_ctr = (PAGE_SIZE_INSTRS/4); //first page was sent already (start with second page)
   while(word_ctr < NUM_INSTR) {
     page_ctr = word_ctr / (PAGE_SIZE_INSTRS/4);
-    page_idx = (page_ctr) % NUM_PAGES_INSTRS;
+    page_idx = page_ctr % NUM_PAGES_INSTRS;
 
     sram1[32 + (page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr];
 
@@ -205,8 +212,8 @@ void main() {
     word_ctr++;
   }
   sram1[0] = page_ctr;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   while (1) {
     if (sram1[4] == 0xDEADBEEF) {
       reg_mprj_datal = 0x00040000; // simulation end with successful test

@@ -99,7 +99,7 @@ $(ibex_prog): ibex_prog/*.c
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
 
 %.disasm: %.elf
-	riscv64-unknown-elf-objdump -d $< > $@
+	riscv64-unknown-elf-objdump -S -d $< > $@
 
 %.hex: %.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O verilog $< $@
