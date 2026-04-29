@@ -48,7 +48,7 @@ INCLUDES := \
 
 CFLAGS := -Os -Wall -Wpedantic -g -mabi=ilp32 -march=rv32i_zicsr -D__vexriscv__ -ffreestanding -nostdlib
 LDSCRIPT := ../riscv_firmware_src/sections.lds
-LDFLAGS := -Wl,-Bstatic,-T,$(LDSCRIPT),--strip-debug
+LDFLAGS := -Wl,-Bstatic,-T,$(LDSCRIPT)
 
 ## RISCV GCC
 GCC_PATH?=
@@ -130,6 +130,6 @@ endif
 # ---- Clean ----
 
 clean:
-	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.log ibex_prog.h ibex_prog/build
+	rm -rf *.hex *.bin *.vvp *.vcd *.log ibex_prog.h ibex_prog/build
 
 .PHONY: clean hex all

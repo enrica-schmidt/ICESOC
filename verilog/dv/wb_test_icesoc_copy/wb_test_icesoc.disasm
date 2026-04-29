@@ -5,183 +5,384 @@ wb_test_icesoc.elf:     file format elf32-littleriscv
 Disassembly of section .text:
 
 10000000 <_ftext>:
+.global main
+.global isr
+.global _start
+
+_start:
+  j crt_init
 10000000:	0b00006f          	j	100000b0 <crt_init>
+  nop
 10000004:	00000013          	nop
+  nop
 10000008:	00000013          	nop
+  nop
 1000000c:	00000013          	nop
+  nop
 10000010:	00000013          	nop
+  nop
 10000014:	00000013          	nop
+  nop
 10000018:	00000013          	nop
+  nop
 1000001c:	00000013          	nop
 
 10000020 <trap_entry>:
+
+.global  trap_entry
+trap_entry:
+  sw x1,  - 1*4(sp)
 10000020:	fe112e23          	sw	ra,-4(sp)
+  sw x5,  - 2*4(sp)
 10000024:	fe512c23          	sw	t0,-8(sp)
+  sw x6,  - 3*4(sp)
 10000028:	fe612a23          	sw	t1,-12(sp)
+  sw x7,  - 4*4(sp)
 1000002c:	fe712823          	sw	t2,-16(sp)
+  sw x10, - 5*4(sp)
 10000030:	fea12623          	sw	a0,-20(sp)
+  sw x11, - 6*4(sp)
 10000034:	feb12423          	sw	a1,-24(sp)
+  sw x12, - 7*4(sp)
 10000038:	fec12223          	sw	a2,-28(sp)
+  sw x13, - 8*4(sp)
 1000003c:	fed12023          	sw	a3,-32(sp)
+  sw x14, - 9*4(sp)
 10000040:	fce12e23          	sw	a4,-36(sp)
+  sw x15, -10*4(sp)
 10000044:	fcf12c23          	sw	a5,-40(sp)
+  sw x16, -11*4(sp)
 10000048:	fd012a23          	sw	a6,-44(sp)
+  sw x17, -12*4(sp)
 1000004c:	fd112823          	sw	a7,-48(sp)
+  sw x28, -13*4(sp)
 10000050:	fdc12623          	sw	t3,-52(sp)
+  sw x29, -14*4(sp)
 10000054:	fdd12423          	sw	t4,-56(sp)
+  sw x30, -15*4(sp)
 10000058:	fde12223          	sw	t5,-60(sp)
+  sw x31, -16*4(sp)
 1000005c:	fdf12023          	sw	t6,-64(sp)
+  addi sp,sp,-16*4
 10000060:	fc010113          	addi	sp,sp,-64
+  call isr
 10000064:	0b0000ef          	jal	10000114 <isr>
+  lw x1 , 15*4(sp)
 10000068:	03c12083          	lw	ra,60(sp)
+  lw x5,  14*4(sp)
 1000006c:	03812283          	lw	t0,56(sp)
+  lw x6,  13*4(sp)
 10000070:	03412303          	lw	t1,52(sp)
+  lw x7,  12*4(sp)
 10000074:	03012383          	lw	t2,48(sp)
+  lw x10, 11*4(sp)
 10000078:	02c12503          	lw	a0,44(sp)
+  lw x11, 10*4(sp)
 1000007c:	02812583          	lw	a1,40(sp)
+  lw x12,  9*4(sp)
 10000080:	02412603          	lw	a2,36(sp)
+  lw x13,  8*4(sp)
 10000084:	02012683          	lw	a3,32(sp)
+  lw x14,  7*4(sp)
 10000088:	01c12703          	lw	a4,28(sp)
+  lw x15,  6*4(sp)
 1000008c:	01812783          	lw	a5,24(sp)
+  lw x16,  5*4(sp)
 10000090:	01412803          	lw	a6,20(sp)
+  lw x17,  4*4(sp)
 10000094:	01012883          	lw	a7,16(sp)
+  lw x28,  3*4(sp)
 10000098:	00c12e03          	lw	t3,12(sp)
+  lw x29,  2*4(sp)
 1000009c:	00812e83          	lw	t4,8(sp)
+  lw x30,  1*4(sp)
 100000a0:	00412f03          	lw	t5,4(sp)
+  lw x31,  0*4(sp)
 100000a4:	00012f83          	lw	t6,0(sp)
+  addi sp,sp,16*4
 100000a8:	04010113          	addi	sp,sp,64
+  mret
 100000ac:	30200073          	mret
 
 100000b0 <crt_init>:
+  .text
+
+
+crt_init:
+  la sp, _fstack
 100000b0:	40000113          	li	sp,1024
+  la a0, trap_entry
 100000b4:	00000517          	auipc	a0,0x0
 100000b8:	f6c50513          	addi	a0,a0,-148 # 10000020 <trap_entry>
+  csrw mtvec, a0
 100000bc:	30551073          	csrw	mtvec,a0
 
 100000c0 <data_init>:
+
+data_init:
+  la a0, _fdata
 100000c0:	00000513          	li	a0,0
+  la a1, _edata
 100000c4:	00000593          	li	a1,0
+  la a2, _fdata_rom
 100000c8:	00001617          	auipc	a2,0x1
 100000cc:	93860613          	addi	a2,a2,-1736 # 10000a00 <_erodata>
 
 100000d0 <data_loop>:
+data_loop:
+  beq a0,a1,data_done
 100000d0:	00b50c63          	beq	a0,a1,100000e8 <bss_init>
+  lw a3,0(a2)
 100000d4:	00062683          	lw	a3,0(a2)
+  sw a3,0(a0)
 100000d8:	00d52023          	sw	a3,0(a0)
+  add a0,a0,4
 100000dc:	00450513          	addi	a0,a0,4
+  add a2,a2,4
 100000e0:	00460613          	addi	a2,a2,4
+  j data_loop
 100000e4:	fedff06f          	j	100000d0 <data_loop>
 
 100000e8 <bss_init>:
+data_done:
+
+bss_init:
+  la a0, _fbss
 100000e8:	00000513          	li	a0,0
+  la a1, _ebss
 100000ec:	00800593          	li	a1,8
 
 100000f0 <bss_loop>:
+bss_loop:
+  beq a0,a1,bss_done
 100000f0:	00b50863          	beq	a0,a1,10000100 <bss_done>
+  sw zero,0(a0)
 100000f4:	00052023          	sw	zero,0(a0)
+  add a0,a0,4
 100000f8:	00450513          	addi	a0,a0,4
+#ifndef SIM
+  j bss_loop
 100000fc:	ff5ff06f          	j	100000f0 <bss_loop>
 
 10000100 <bss_done>:
+#endif
+bss_done:
+
+  li a0, 0x880  //880 enable timer + external interrupt sources (until mstatus.MIE is set, they will never trigger an interrupt)
 10000100:	00001537          	lui	a0,0x1
 10000104:	88050513          	addi	a0,a0,-1920 # 880 <_fstack+0x480>
+  csrw mie,a0
 10000108:	30451073          	csrw	mie,a0
+
+  call main
 1000010c:	388000ef          	jal	10000494 <main>
 
 10000110 <infinit_loop>:
+infinit_loop:
+  j infinit_loop
 10000110:	0000006f          	j	10000110 <infinit_loop>
 
 10000114 <isr>:
+    return mask;
+}
+
+#ifndef GTEST
+static inline void irq_setmask(unsigned int mask) {
+    asm volatile("csrw %0, %1" ::"i"(CSR_IRQ_MASK), "r"(mask));
 10000114:	00000793          	li	a5,0
 10000118:	bc079073          	csrw	0xbc0,a5
+
+uint16_t flag;
+
+void isr(void) {
+    irq_setmask(0);
+    reg_timer0_irq_en = 0; // disable interrupt
 1000011c:	f00057b7          	lui	a5,0xf0005
+
+    reg_timer0_update = 1;
 10000120:	f00056b7          	lui	a3,0xf0005
+    reg_timer0_irq_en = 0; // disable interrupt
 10000124:	0007ae23          	sw	zero,28(a5) # f000501c <_erodata+0xe000461c>
+    reg_timer0_update = 1;
 10000128:	00100713          	li	a4,1
 1000012c:	00e6a623          	sw	a4,12(a3) # f000500c <_erodata+0xe000460c>
+    if (reg_timer0_value == 0)
 10000130:	0106a683          	lw	a3,16(a3)
+    reg_timer0_irq_en = 0; // disable interrupt
 10000134:	01c78793          	addi	a5,a5,28
+    if (reg_timer0_value == 0)
 10000138:	00069663          	bnez	a3,10000144 <isr+0x30>
+        flag = 1;
 1000013c:	00e01023          	sh	a4,0(zero) # 0 <flag>
 10000140:	00008067          	ret
+    else
+        reg_timer0_irq_en = 1;
 10000144:	00e7a023          	sw	a4,0(a5)
+
+    return;
+}
 10000148:	00008067          	ret
 
 1000014c <count_down>:
+#include "send_packet.h"
+#include <defs.h>
+
+void count_down(const int d) {
+  /* Configure timer for a single-shot countdown */
+  reg_timer0_config = 0;
 1000014c:	f00057b7          	lui	a5,0xf0005
 10000150:	0007a423          	sw	zero,8(a5) # f0005008 <_erodata+0xe0004608>
+  reg_timer0_data = d;
 10000154:	00a7a023          	sw	a0,0(a5)
+  reg_timer0_config = 1; /* Enabled, one-shot, down count */
 10000158:	00100693          	li	a3,1
+  reg_timer0_data = d;
 1000015c:	00078713          	mv	a4,a5
+  reg_timer0_config = 1; /* Enabled, one-shot, down count */
 10000160:	00d7a423          	sw	a3,8(a5)
+
+  // Loop, waiting for value to reach zero
+  reg_timer0_update = 1; // latch current value
+  while (reg_timer0_value > 0) {
 10000164:	01070713          	addi	a4,a4,16
+  reg_timer0_update = 1; // latch current value
 10000168:	00c78793          	addi	a5,a5,12
 1000016c:	00d7a023          	sw	a3,0(a5)
+  while (reg_timer0_value > 0) {
 10000170:	00072603          	lw	a2,0(a4)
 10000174:	00061463          	bnez	a2,1000017c <count_down+0x30>
+    reg_timer0_update = 1;
+  }
+}
 10000178:	00008067          	ret
+    reg_timer0_update = 1;
 1000017c:	00d7a023          	sw	a3,0(a5)
 10000180:	ff1ff06f          	j	10000170 <count_down+0x24>
 
 10000184 <send_pulse_io37>:
+
+void send_pulse_io37() {
 10000184:	ff010113          	addi	sp,sp,-16
 10000188:	00812423          	sw	s0,8(sp)
+  int mask = 0x1F;
+  int temp = reg_mprj_datah & mask;
 1000018c:	26000437          	lui	s0,0x26000
 10000190:	01042783          	lw	a5,16(s0) # 26000010 <_erodata+0x15fff610>
+void send_pulse_io37() {
 10000194:	00112623          	sw	ra,12(sp)
+  reg_mprj_datah = temp; // 0
+  count_down(PULSE_WIDTH);
 10000198:	0003d537          	lui	a0,0x3d
+  int temp = reg_mprj_datah & mask;
 1000019c:	01f7f793          	andi	a5,a5,31
+  reg_mprj_datah = temp; // 0
 100001a0:	00f42823          	sw	a5,16(s0)
+  count_down(PULSE_WIDTH);
 100001a4:	09050513          	addi	a0,a0,144 # 3d090 <_fstack+0x3cc90>
 100001a8:	fa5ff0ef          	jal	1000014c <count_down>
+  temp = reg_mprj_datah;
 100001ac:	01042783          	lw	a5,16(s0)
+  reg_mprj_datah = temp | 0x20; // 1
+  count_down(PULSE_WIDTH);
+}
 100001b0:	00c12083          	lw	ra,12(sp)
+  count_down(PULSE_WIDTH);
 100001b4:	0003d537          	lui	a0,0x3d
 100001b8:	0207e793          	ori	a5,a5,32
+  reg_mprj_datah = temp | 0x20; // 1
 100001bc:	00f42823          	sw	a5,16(s0)
+}
 100001c0:	00812403          	lw	s0,8(sp)
+  count_down(PULSE_WIDTH);
 100001c4:	09050513          	addi	a0,a0,144 # 3d090 <_fstack+0x3cc90>
+}
 100001c8:	01010113          	addi	sp,sp,16
+  count_down(PULSE_WIDTH);
 100001cc:	f81ff06f          	j	1000014c <count_down>
 
 100001d0 <send_packet_io37>:
+
+void send_packet_io37(int num_pulses) {
 100001d0:	fe010113          	addi	sp,sp,-32
 100001d4:	00812c23          	sw	s0,24(sp)
 100001d8:	00112e23          	sw	ra,28(sp)
+  // send pulses
+  for (int i = 0; i < num_pulses + 1; i++) {
 100001dc:	00000413          	li	s0,0
 100001e0:	00855e63          	bge	a0,s0,100001fc <send_packet_io37+0x2c>
+    send_pulse_io37();
+  }
+  // end of packet
+  count_down(PULSE_WIDTH * 10);
+}
 100001e4:	01812403          	lw	s0,24(sp)
 100001e8:	01c12083          	lw	ra,28(sp)
+  count_down(PULSE_WIDTH * 10);
 100001ec:	00262537          	lui	a0,0x262
 100001f0:	5a050513          	addi	a0,a0,1440 # 2625a0 <_fstack+0x2621a0>
+}
 100001f4:	02010113          	addi	sp,sp,32
+  count_down(PULSE_WIDTH * 10);
 100001f8:	f55ff06f          	j	1000014c <count_down>
 100001fc:	00a12623          	sw	a0,12(sp)
+    send_pulse_io37();
 10000200:	f85ff0ef          	jal	10000184 <send_pulse_io37>
+  for (int i = 0; i < num_pulses + 1; i++) {
 10000204:	00c12503          	lw	a0,12(sp)
 10000208:	00140413          	addi	s0,s0,1
 1000020c:	fd5ff06f          	j	100001e0 <send_packet_io37+0x10>
 
 10000210 <receive_io0>:
+
+int receive_io0() {
 10000210:	ff010113          	addi	sp,sp,-16
 10000214:	00912223          	sw	s1,4(sp)
+  /*
+      flag == 1 --> increment
+      flag == 2 --> reset
+  */
+  int flag = 0;
+  old_received = reg_mprj_datal & mask;
 10000218:	260004b7          	lui	s1,0x26000
 1000021c:	00c48493          	addi	s1,s1,12 # 2600000c <_erodata+0x15fff60c>
+int receive_io0() {
 10000220:	00812423          	sw	s0,8(sp)
+  old_received = reg_mprj_datal & mask;
 10000224:	0004a403          	lw	s0,0(s1)
+  send_packet_io37(2);
 10000228:	00200513          	li	a0,2
+int receive_io0() {
 1000022c:	00112623          	sw	ra,12(sp)
+  send_packet_io37(2);
 10000230:	fa1ff0ef          	jal	100001d0 <send_packet_io37>
+  old_received = reg_mprj_datal & mask;
 10000234:	00147413          	andi	s0,s0,1
+  int pulse = 0;
 10000238:	00000713          	li	a4,0
+    received = reg_mprj_datal & mask;
+    if (received != old_received) {
+      pulse++;
+      old_received = received;
+    }
+    if (pulse == 8) {
 1000023c:	00800693          	li	a3,8
+    received = reg_mprj_datal & mask;
 10000240:	0004a783          	lw	a5,0(s1)
 10000244:	0017f793          	andi	a5,a5,1
+    if (received != old_received) {
 10000248:	00f40663          	beq	s0,a5,10000254 <receive_io0+0x44>
+      pulse++;
 1000024c:	00170713          	addi	a4,a4,1
+    if (pulse == 8) {
 10000250:	00d70663          	beq	a4,a3,1000025c <receive_io0+0x4c>
+  int pulse = 0;
 10000254:	00078413          	mv	s0,a5
 10000258:	fe9ff06f          	j	10000240 <receive_io0+0x30>
+      flag = 1;
+      return flag;
+    }
+  }
+}
 1000025c:	00c12083          	lw	ra,12(sp)
 10000260:	00812403          	lw	s0,8(sp)
 10000264:	00412483          	lw	s1,4(sp)
@@ -190,56 +391,101 @@ Disassembly of section .text:
 10000270:	00008067          	ret
 
 10000274 <delay>:
+#include <stdint.h>
+
+void delay(const int clock_cycles) {
+
+  /* Configure timer for a single-shot countdown */
+  reg_timer0_config = 0;
 10000274:	f00057b7          	lui	a5,0xf0005
 10000278:	0007a423          	sw	zero,8(a5) # f0005008 <_erodata+0xe0004608>
+  reg_timer0_data = clock_cycles;
 1000027c:	00a7a023          	sw	a0,0(a5)
+  reg_timer0_config = 1;
 10000280:	00100693          	li	a3,1
+  reg_timer0_data = clock_cycles;
 10000284:	00078713          	mv	a4,a5
+  reg_timer0_config = 1;
 10000288:	00d7a423          	sw	a3,8(a5)
+
+  // Loop, waiting for value to reach zero
+  reg_timer0_update = 1; // latch current value
+  while (reg_timer0_value > 0) {
 1000028c:	01070713          	addi	a4,a4,16
+  reg_timer0_update = 1; // latch current value
 10000290:	00c78793          	addi	a5,a5,12
 10000294:	00d7a023          	sw	a3,0(a5)
+  while (reg_timer0_value > 0) {
 10000298:	00072603          	lw	a2,0(a4)
 1000029c:	00061463          	bnez	a2,100002a4 <delay+0x30>
+    reg_timer0_update = 1;
+  }
+}
 100002a0:	00008067          	ret
+    reg_timer0_update = 1;
 100002a4:	00d7a023          	sw	a3,0(a5)
 100002a8:	ff1ff06f          	j	10000298 <delay+0x24>
 
 100002ac <bb_mode>:
+
+void bb_mode() {
+  // Enable bit-bang mode
+  reg_mprj_xfer = 0x06; // Enable bit-bang mode
 100002ac:	260007b7          	lui	a5,0x26000
 100002b0:	00600713          	li	a4,6
 100002b4:	00e7a023          	sw	a4,0(a5) # 26000000 <_erodata+0x15fff600>
+  reg_mprj_xfer = 0x02; // Pulse reset
 100002b8:	00200693          	li	a3,2
 100002bc:	00d7a023          	sw	a3,0(a5)
+  reg_mprj_xfer = 0x06;
 100002c0:	00e7a023          	sw	a4,0(a5)
+}
 100002c4:	00008067          	ret
 
 100002c8 <load>:
+
+void load() {
 100002c8:	ff010113          	addi	sp,sp,-16
 100002cc:	00112623          	sw	ra,12(sp)
 100002d0:	00812423          	sw	s0,8(sp)
 100002d4:	00912223          	sw	s1,4(sp)
+  reg_mprj_xfer = 0x06;
 100002d8:	26000437          	lui	s0,0x26000
 100002dc:	00600493          	li	s1,6
+  delay(WAIT);
 100002e0:	0000c537          	lui	a0,0xc
+  reg_mprj_xfer = 0x06;
 100002e4:	00942023          	sw	s1,0(s0) # 26000000 <_erodata+0x15fff600>
+  delay(WAIT);
 100002e8:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
 100002ec:	f89ff0ef          	jal	10000274 <delay>
+  reg_mprj_xfer = 0x0e; // Apply load
 100002f0:	00e00793          	li	a5,14
+  delay(WAIT);
 100002f4:	0000c537          	lui	a0,0xc
+  reg_mprj_xfer = 0x0e; // Apply load
 100002f8:	00f42023          	sw	a5,0(s0)
+  delay(WAIT);
 100002fc:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
 10000300:	f75ff0ef          	jal	10000274 <delay>
+  reg_mprj_xfer = 0x06;
 10000304:	00942023          	sw	s1,0(s0)
+  delay(WAIT);
+}
 10000308:	00812403          	lw	s0,8(sp)
 1000030c:	00c12083          	lw	ra,12(sp)
 10000310:	00412483          	lw	s1,4(sp)
+  delay(WAIT);
 10000314:	0000c537          	lui	a0,0xc
 10000318:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
+}
 1000031c:	01010113          	addi	sp,sp,16
+  delay(WAIT);
 10000320:	f55ff06f          	j	10000274 <delay>
 
 10000324 <clear_registers>:
+
+void clear_registers() {
 10000324:	fe010113          	addi	sp,sp,-32
 10000328:	00812c23          	sw	s0,24(sp)
 1000032c:	00912a23          	sw	s1,20(sp)
@@ -247,245 +493,448 @@ Disassembly of section .text:
 10000334:	01312623          	sw	s3,12(sp)
 10000338:	00112e23          	sw	ra,28(sp)
 1000033c:	0fa00413          	li	s0,250
+  // clear shift register with zeros and load before starting test
+  for (int i = 0; i < 250; i++) {
+    reg_mprj_xfer = 0x06;
 10000340:	260004b7          	lui	s1,0x26000
 10000344:	00600993          	li	s3,6
+    delay(WAIT);
+    reg_mprj_xfer = 0x16;
 10000348:	01600913          	li	s2,22
+    delay(WAIT);
 1000034c:	0000c537          	lui	a0,0xc
 10000350:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
+    reg_mprj_xfer = 0x06;
 10000354:	0134a023          	sw	s3,0(s1) # 26000000 <_erodata+0x15fff600>
+    delay(WAIT);
 10000358:	f1dff0ef          	jal	10000274 <delay>
+    delay(WAIT);
 1000035c:	0000c537          	lui	a0,0xc
+    reg_mprj_xfer = 0x16;
 10000360:	0124a023          	sw	s2,0(s1)
+    delay(WAIT);
 10000364:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
+  for (int i = 0; i < 250; i++) {
 10000368:	fff40413          	addi	s0,s0,-1
+    delay(WAIT);
 1000036c:	f09ff0ef          	jal	10000274 <delay>
+  for (int i = 0; i < 250; i++) {
 10000370:	fc041ee3          	bnez	s0,1000034c <clear_registers+0x28>
+  }
+  load();
+}
 10000374:	01812403          	lw	s0,24(sp)
 10000378:	01c12083          	lw	ra,28(sp)
 1000037c:	01412483          	lw	s1,20(sp)
 10000380:	01012903          	lw	s2,16(sp)
 10000384:	00c12983          	lw	s3,12(sp)
 10000388:	02010113          	addi	sp,sp,32
+  load();
 1000038c:	f3dff06f          	j	100002c8 <load>
 
 10000390 <gpio_config_io>:
+
+void gpio_config_io(char const *const config_stream) {
 10000390:	fe010113          	addi	sp,sp,-32
 10000394:	00812c23          	sw	s0,24(sp)
 10000398:	00912a23          	sw	s1,20(sp)
 1000039c:	01212823          	sw	s2,16(sp)
 100003a0:	00112e23          	sw	ra,28(sp)
 100003a4:	01312623          	sw	s3,12(sp)
+  char n_bits = config_stream[0];
 100003a8:	00054983          	lbu	s3,0(a0)
+void gpio_config_io(char const *const config_stream) {
 100003ac:	00050493          	mv	s1,a0
 100003b0:	00150413          	addi	s0,a0,1
+  // start at  offset 1, first value is n_bits
+  for (uint8_t i = 1u; i < n_bits; i++) {
+    reg_mprj_xfer = config_stream[i];
 100003b4:	26000937          	lui	s2,0x26000
+  for (uint8_t i = 1u; i < n_bits; i++) {
 100003b8:	409407b3          	sub	a5,s0,s1
 100003bc:	0ff7f793          	zext.b	a5,a5
 100003c0:	0337e063          	bltu	a5,s3,100003e0 <gpio_config_io+0x50>
+    delay(WAIT);
+    reg_mprj_xfer = config_stream[i] + 0x10;
+    delay(WAIT);
+  }
+  load();
+}
 100003c4:	01812403          	lw	s0,24(sp)
 100003c8:	01c12083          	lw	ra,28(sp)
 100003cc:	01412483          	lw	s1,20(sp)
 100003d0:	01012903          	lw	s2,16(sp)
 100003d4:	00c12983          	lw	s3,12(sp)
 100003d8:	02010113          	addi	sp,sp,32
+  load();
 100003dc:	eedff06f          	j	100002c8 <load>
+    reg_mprj_xfer = config_stream[i];
 100003e0:	00044783          	lbu	a5,0(s0)
+    delay(WAIT);
 100003e4:	0000c537          	lui	a0,0xc
 100003e8:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
+    reg_mprj_xfer = config_stream[i];
 100003ec:	00f92023          	sw	a5,0(s2) # 26000000 <_erodata+0x15fff600>
+    delay(WAIT);
 100003f0:	e85ff0ef          	jal	10000274 <delay>
+    reg_mprj_xfer = config_stream[i] + 0x10;
 100003f4:	00044783          	lbu	a5,0(s0)
+    delay(WAIT);
 100003f8:	0000c537          	lui	a0,0xc
 100003fc:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
+    reg_mprj_xfer = config_stream[i] + 0x10;
 10000400:	01078793          	addi	a5,a5,16
 10000404:	00f92023          	sw	a5,0(s2)
+    delay(WAIT);
 10000408:	e6dff0ef          	jal	10000274 <delay>
+  for (uint8_t i = 1u; i < n_bits; i++) {
 1000040c:	00140413          	addi	s0,s0,1
 10000410:	fa9ff06f          	j	100003b8 <gpio_config_io+0x28>
 
 10000414 <uart_putchar>:
+ * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+#include <defs.h>
+
+void uart_putchar(char c) {
 10000414:	ff010113          	addi	sp,sp,-16
 10000418:	00812423          	sw	s0,8(sp)
 1000041c:	00112623          	sw	ra,12(sp)
+    if (c == '\n')
 10000420:	00a00793          	li	a5,10
+void uart_putchar(char c) {
 10000424:	00050413          	mv	s0,a0
+    if (c == '\n')
 10000428:	00f51663          	bne	a0,a5,10000434 <uart_putchar+0x20>
+        uart_putchar('\r');
 1000042c:	00d00513          	li	a0,13
 10000430:	fe5ff0ef          	jal	10000414 <uart_putchar>
+    while (reg_uart_txfull == 1)
 10000434:	f00067b7          	lui	a5,0xf0006
 10000438:	80478793          	addi	a5,a5,-2044 # f0005804 <_erodata+0xe0004e04>
 1000043c:	00100713          	li	a4,1
 10000440:	0007a683          	lw	a3,0(a5)
 10000444:	fee68ee3          	beq	a3,a4,10000440 <uart_putchar+0x2c>
+        ;
+    reg_uart_data = c;
 10000448:	f00067b7          	lui	a5,0xf0006
+}
 1000044c:	00c12083          	lw	ra,12(sp)
+    reg_uart_data = c;
 10000450:	8087a023          	sw	s0,-2048(a5) # f0005800 <_erodata+0xe0004e00>
+}
 10000454:	00812403          	lw	s0,8(sp)
 10000458:	01010113          	addi	sp,sp,16
 1000045c:	00008067          	ret
 
 10000460 <print>:
+
+void print(const char *p) {
 10000460:	ff010113          	addi	sp,sp,-16
 10000464:	00812423          	sw	s0,8(sp)
 10000468:	00112623          	sw	ra,12(sp)
 1000046c:	00050413          	mv	s0,a0
+    while (*p)
 10000470:	00044503          	lbu	a0,0(s0)
 10000474:	00051a63          	bnez	a0,10000488 <print+0x28>
+        uart_putchar(*(p++));
+}
 10000478:	00c12083          	lw	ra,12(sp)
 1000047c:	00812403          	lw	s0,8(sp)
 10000480:	01010113          	addi	sp,sp,16
 10000484:	00008067          	ret
+        uart_putchar(*(p++));
 10000488:	00140413          	addi	s0,s0,1
 1000048c:	f89ff0ef          	jal	10000414 <uart_putchar>
 10000490:	fe1ff06f          	j	10000470 <print+0x10>
 
 10000494 <main>:
+  */
+
+  /* Set up the housekeeping SPI to be connected internally so	*/
+  /* that external pin changes don't affect it.			*/
+
+  reg_wb_enable = 1;
 10000494:	00100713          	li	a4,1
 10000498:	f00047b7          	lui	a5,0xf0004
 1000049c:	80e7a023          	sw	a4,-2048(a5) # f0003800 <_erodata+0xe0002e00>
+  reg_hkspi_disable = 1;
 100004a0:	262007b7          	lui	a5,0x26200
 100004a4:	00e7a823          	sw	a4,16(a5) # 26200010 <_erodata+0x161ff610>
+
+  // Connect the housekeeping SPI to the SPI master
+  // so that the CSB line is not left floating.  This allows
+  // all of the GPIO pins to be used for user functions.
+
+  reg_mprj_io_37 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004a8:	000027b7          	lui	a5,0x2
 100004ac:	260006b7          	lui	a3,0x26000
 100004b0:	80978793          	addi	a5,a5,-2039 # 1809 <_fstack+0x1409>
 100004b4:	0af6ac23          	sw	a5,184(a3) # 260000b8 <_erodata+0x15fff6b8>
+  reg_mprj_io_36 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004b8:	0af6aa23          	sw	a5,180(a3)
+  reg_mprj_io_35 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004bc:	0af6a823          	sw	a5,176(a3)
+  reg_mprj_io_34 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004c0:	0af6a623          	sw	a5,172(a3)
+  reg_mprj_io_33 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004c4:	0af6a423          	sw	a5,168(a3)
+  reg_mprj_io_32 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004c8:	0af6a223          	sw	a5,164(a3)
+  reg_mprj_io_31 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004cc:	0af6a023          	sw	a5,160(a3)
+  reg_mprj_io_30 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004d0:	08f6ae23          	sw	a5,156(a3)
+  reg_mprj_io_29 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004d4:	08f6ac23          	sw	a5,152(a3)
+  reg_mprj_io_28 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004d8:	08f6aa23          	sw	a5,148(a3)
+  reg_mprj_io_27 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004dc:	08f6a823          	sw	a5,144(a3)
+  reg_mprj_io_26 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004e0:	08f6a623          	sw	a5,140(a3)
+  reg_mprj_io_25 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004e4:	08f6a423          	sw	a5,136(a3)
+  reg_mprj_io_24 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004e8:	08f6a223          	sw	a5,132(a3)
+  reg_mprj_io_23 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004ec:	08f6a023          	sw	a5,128(a3)
+  reg_mprj_io_22 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004f0:	06f6ae23          	sw	a5,124(a3)
+  reg_mprj_io_21 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004f4:	06f6ac23          	sw	a5,120(a3)
+  reg_mprj_io_20 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004f8:	06f6aa23          	sw	a5,116(a3)
+  reg_mprj_io_19 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004fc:	06f6a823          	sw	a5,112(a3)
+  reg_mprj_io_18 = GPIO_MODE_MGMT_STD_OUTPUT;
 10000500:	06f6a623          	sw	a5,108(a3)
+  reg_mprj_io_17 = GPIO_MODE_MGMT_STD_OUTPUT;
 10000504:	06f6a423          	sw	a5,104(a3)
+  reg_mprj_io_16 = GPIO_MODE_MGMT_STD_OUTPUT;
 10000508:	06f6a223          	sw	a5,100(a3)
+
+  // Configure lower 8-IOs as user output
+  // Observe counter value in the testbench
+  reg_mprj_io_0 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 1000050c:	000017b7          	lui	a5,0x1
 10000510:	80378793          	addi	a5,a5,-2045 # 803 <_fstack+0x403>
 10000514:	02f6a223          	sw	a5,36(a3)
+  reg_mprj_io_1 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000518:	02f6a423          	sw	a5,40(a3)
+  reg_mprj_io_2 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 1000051c:	02f6a623          	sw	a5,44(a3)
+  reg_mprj_io_3 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000520:	02f6a823          	sw	a5,48(a3)
+  reg_mprj_io_4 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000524:	02f6aa23          	sw	a5,52(a3)
+  reg_mprj_io_5 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000528:	02f6ac23          	sw	a5,56(a3)
+  reg_mprj_io_6 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 1000052c:	02f6ae23          	sw	a5,60(a3)
+  reg_mprj_io_7 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000530:	04f6a023          	sw	a5,64(a3)
+
+  reg_mprj_io_8 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000534:	04f6a223          	sw	a5,68(a3)
+  reg_mprj_io_9 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 10000538:	04f6a423          	sw	a5,72(a3)
+  reg_mprj_io_10 = GPIO_MODE_USER_STD_OUTPUT;
 1000053c:	000027b7          	lui	a5,0x2
 10000540:	80878793          	addi	a5,a5,-2040 # 1808 <_fstack+0x1408>
 10000544:	04f6a623          	sw	a5,76(a3)
+  reg_mprj_io_11 = GPIO_MODE_USER_STD_OUTPUT;
 10000548:	04f6a823          	sw	a5,80(a3)
+  reg_mprj_io_12 = GPIO_MODE_USER_STD_OUTPUT;
 1000054c:	04f6aa23          	sw	a5,84(a3)
+
+  /* Apply configuration */
+  reg_mprj_xfer = 1;
 10000550:	00e6a023          	sw	a4,0(a3)
+  while (reg_mprj_xfer == 1)
 10000554:	0006a783          	lw	a5,0(a3)
 10000558:	fee78ee3          	beq	a5,a4,10000554 <main+0xc0>
+    ;
+
+  // Flag start of the test
+  reg_mprj_datal = 0x00010000;
 1000055c:	260006b7          	lui	a3,0x26000
 10000560:	000107b7          	lui	a5,0x10
 10000564:	00f6a623          	sw	a5,12(a3) # 2600000c <_erodata+0x15fff60c>
+  reg_la2_oenb = reg_la2_iena = 0xFFFFFFFF; // [95:64]
 10000568:	f0003737          	lui	a4,0xf0003
 1000056c:	fff00793          	li	a5,-1
 10000570:	00f72223          	sw	a5,4(a4) # f0003004 <_erodata+0xe0002604>
 10000574:	00f72a23          	sw	a5,20(a4)
+
+  // Set LA bits 0-3 as outputs
+  reg_la0_oenb = reg_la0_oenb & ~0xF;
 10000578:	01c72603          	lw	a2,28(a4)
+  sram2[2] = NUM_PAGES_BITSTR;
+  sram2[3] = 0xffffffff;        //initialize bitstream page request counter    
+  sram2[4] = MAX_BITBYTES/4;    //nr of words in bitstream
+  
+//writing first instruction page to sram1////////////////////////////////////////////////////////////////////////////////////////////////
+  for (word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
 1000057c:	04000593          	li	a1,64
+  reg_la0_oenb = reg_la0_oenb & ~0xF;
 10000580:	ff067613          	andi	a2,a2,-16
 10000584:	00c72e23          	sw	a2,28(a4)
+  reg_mprj_datal = 0x00020000;
 10000588:	00020737          	lui	a4,0x20
 1000058c:	00e6a623          	sw	a4,12(a3)
+  reg_la0_data = reg_la0_data & ~0xA;
 10000590:	f0003737          	lui	a4,0xf0003
 10000594:	03c72603          	lw	a2,60(a4) # f000303c <_erodata+0xe000263c>
 10000598:	ff567613          	andi	a2,a2,-11
 1000059c:	02c72e23          	sw	a2,60(a4)
+  reg_mprj_datal = 0x00030000;
 100005a0:	00030637          	lui	a2,0x30
 100005a4:	00c6a623          	sw	a2,12(a3)
+  reg_la0_data = reg_la0_data | 0xA;
 100005a8:	03c72683          	lw	a3,60(a4)
+  sram1[0] = 0xffffffff;        //initialize instruction page ready counter
 100005ac:	30000637          	lui	a2,0x30000
+  reg_la0_data = reg_la0_data | 0xA;
 100005b0:	00a6e693          	ori	a3,a3,10
 100005b4:	02d72e23          	sw	a3,60(a4)
+  sram1[2] = NUM_PAGES_INSTRS;  
 100005b8:	00200713          	li	a4,2
 100005bc:	00e62423          	sw	a4,8(a2) # 30000008 <_erodata+0x1ffff608>
+  sram2[2] = NUM_PAGES_BITSTR;
 100005c0:	40e62423          	sw	a4,1032(a2)
+  sram2[4] = MAX_BITBYTES/4;    //nr of words in bitstream
 100005c4:	00500713          	li	a4,5
+  sram1[1] = PAGE_SIZE_INSTRS;
 100005c8:	10000693          	li	a3,256
+  sram2[4] = MAX_BITBYTES/4;    //nr of words in bitstream
 100005cc:	40e62823          	sw	a4,1040(a2)
+    word = instructions[word_ctr];
 100005d0:	10000737          	lui	a4,0x10000
+  sram1[0] = 0xffffffff;        //initialize instruction page ready counter
 100005d4:	00f62023          	sw	a5,0(a2)
+  sram1[3] = 0xffffffff;        //initialize instruction page request counter
 100005d8:	00f62623          	sw	a5,12(a2)
+  sram2[0] = 0xffffffff;        //initialize bistream page ready counter
 100005dc:	40f62023          	sw	a5,1024(a2)
+  sram2[3] = 0xffffffff;        //initialize bitstream page request counter    
 100005e0:	40f62623          	sw	a5,1036(a2)
+  sram1[1] = PAGE_SIZE_INSTRS;
 100005e4:	00d62223          	sw	a3,4(a2)
+  sram2[1] = PAGE_SIZE_BITSTR;  //highest address - lowest address (nr words * 4)
 100005e8:	40d62223          	sw	a3,1028(a2)
+  for (word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
 100005ec:	00000793          	li	a5,0
+    word = instructions[word_ctr];
 100005f0:	70070713          	addi	a4,a4,1792 # 10000700 <_etext>
 100005f4:	00279693          	slli	a3,a5,0x2
 100005f8:	00d70533          	add	a0,a4,a3
 100005fc:	00052503          	lw	a0,0(a0)
+    sram1[32 + word_ctr] = word;
 10000600:	00d606b3          	add	a3,a2,a3
+  for (word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
 10000604:	00178793          	addi	a5,a5,1 # 10001 <_fstack+0xfc01>
+    sram1[32 + word_ctr] = word;
 10000608:	08a6a023          	sw	a0,128(a3)
+  for (word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
 1000060c:	feb794e3          	bne	a5,a1,100005f4 <main+0x160>
+  }
+  sram1[0] = 0x0;               //write page ready idx instrs = 0 (page 0 was written fully)
 10000610:	00062023          	sw	zero,0(a2)
+  reg_mprj_datal = 0x00070000;  //signaling that first instruction page is ready
 10000614:	260006b7          	lui	a3,0x26000
 10000618:	00070637          	lui	a2,0x70
 1000061c:	00c6a623          	sw	a2,12(a3) # 2600000c <_erodata+0x15fff60c>
+  word_ctr = 0;
+  while (word_ctr < MAX_BITBYTES/4) {
+    page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
+    page_idx = page_ctr % NUM_PAGES_BITSTR;
+
+    sram2[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 10000620:	20072603          	lw	a2,512(a4)
 10000624:	300006b7          	lui	a3,0x30000
+    page_idx = page_ctr % NUM_PAGES_INSTRS;
+
+    sram1[32 + (page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr];
+
+    if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
+      sram1[0] = page_ctr; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
 10000628:	00100513          	li	a0,1
+    sram2[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 1000062c:	48c6a023          	sw	a2,1152(a3) # 30000480 <_erodata+0x1ffffa80>
 10000630:	20472603          	lw	a2,516(a4)
+  while(word_ctr < NUM_INSTR) {
 10000634:	08000593          	li	a1,128
+    sram2[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 10000638:	48c6a223          	sw	a2,1156(a3)
 1000063c:	20872603          	lw	a2,520(a4)
 10000640:	48c6a423          	sw	a2,1160(a3)
 10000644:	20c72603          	lw	a2,524(a4)
 10000648:	48c6a623          	sw	a2,1164(a3)
 1000064c:	21072603          	lw	a2,528(a4)
+  sram2[0] = page_ctr;
 10000650:	4006a023          	sw	zero,1024(a3)
+    sram2[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 10000654:	48c6a823          	sw	a2,1168(a3)
+    sram1[32 + (page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr];
 10000658:	00068613          	mv	a2,a3
 1000065c:	00279693          	slli	a3,a5,0x2
 10000660:	00d70833          	add	a6,a4,a3
 10000664:	00082803          	lw	a6,0(a6)
 10000668:	00d606b3          	add	a3,a2,a3
+    if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
 1000066c:	00178793          	addi	a5,a5,1
+    sram1[32 + (page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr];
 10000670:	0906a023          	sw	a6,128(a3)
+    if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
 10000674:	03f7f693          	andi	a3,a5,63
 10000678:	00069463          	bnez	a3,10000680 <main+0x1ec>
+      sram1[0] = page_ctr; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
 1000067c:	00a62023          	sw	a0,0(a2) # 70000 <_fstack+0x6fc00>
+  while(word_ctr < NUM_INSTR) {
 10000680:	fcb79ee3          	bne	a5,a1,1000065c <main+0x1c8>
+  }
+  sram1[0] = page_ctr;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  while (1) {
+    if (sram1[4] == 0xDEADBEEF) {
 10000684:	300007b7          	lui	a5,0x30000
 10000688:	0107a703          	lw	a4,16(a5) # 30000010 <_erodata+0x1ffff610>
 1000068c:	deadc7b7          	lui	a5,0xdeadc
 10000690:	eef78793          	addi	a5,a5,-273 # deadbeef <_erodata+0xceadb4ef>
 10000694:	02f70a63          	beq	a4,a5,100006c8 <main+0x234>
+      reg_mprj_datal = 0x00040000; // simulation end with successful test
+    } else if (sram1[1] == 0xCAFEBABE) {
 10000698:	30000737          	lui	a4,0x30000
 1000069c:	cafec6b7          	lui	a3,0xcafec
 100006a0:	260007b7          	lui	a5,0x26000
 100006a4:	00470713          	addi	a4,a4,4 # 30000004 <_erodata+0x1ffff604>
 100006a8:	abe68693          	addi	a3,a3,-1346 # cafebabe <_erodata+0xbafeb0be>
 100006ac:	00c78793          	addi	a5,a5,12 # 2600000c <_erodata+0x15fff60c>
+      reg_mprj_datal = 0x00050000; // simulation end with failed test
+    } else {
+      reg_mprj_datal = 0x00060000; // simulation end with failed test
 100006b0:	00060637          	lui	a2,0x60
+      reg_mprj_datal = 0x00050000; // simulation end with failed test
 100006b4:	000505b7          	lui	a1,0x50
+    } else if (sram1[1] == 0xCAFEBABE) {
 100006b8:	00072503          	lw	a0,0(a4)
 100006bc:	02d51063          	bne	a0,a3,100006dc <main+0x248>
+      reg_mprj_datal = 0x00050000; // simulation end with failed test
 100006c0:	00b7a023          	sw	a1,0(a5)
+    if (sram1[4] == 0xDEADBEEF) {
 100006c4:	ff5ff06f          	j	100006b8 <main+0x224>
+      reg_mprj_datal = 0x00040000; // simulation end with successful test
 100006c8:	260007b7          	lui	a5,0x26000
 100006cc:	00c78793          	addi	a5,a5,12 # 2600000c <_erodata+0x15fff60c>
 100006d0:	00040737          	lui	a4,0x40
 100006d4:	00e7a023          	sw	a4,0(a5)
+    if (sram1[4] == 0xDEADBEEF) {
 100006d8:	ffdff06f          	j	100006d4 <main+0x240>
+      reg_mprj_datal = 0x00060000; // simulation end with failed test
 100006dc:	00c7a023          	sw	a2,0(a5)
+    if (sram1[4] == 0xDEADBEEF) {
 100006e0:	fd9ff06f          	j	100006b8 <main+0x224>
 	...
