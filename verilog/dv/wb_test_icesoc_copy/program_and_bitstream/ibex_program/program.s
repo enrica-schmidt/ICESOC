@@ -1,22 +1,21 @@
 #SRAM paging
 #### page 0 ####################################################################################################
-start:          lw t6, 0x00(zero)
-                bne t6, zero, start
-req_all:        lw a1, 0x8(zero)            #a1=nr_pages  
-                addi t0, a1, -1
-                sw t0, 0xc(zero)
 main:           jal ra, deadbeef            #call function deadbeef that writes deadbeef to addr 0x010
                 lw a0, 0x404(zero)          #a0=page_size
                 lw a1, 0x408(zero)          #a1=nr_pages
                 lw a2, 0x410(zero)          #a2=bitstream_words
                 jal ra, load_bitstream      #call function load_bitstream
                 lw a0, 0x4(zero)            #a0=page_size
-                lw a1, 0x8(zero)            #a1=nr_pages                    
+                lw a1, 0x8(zero)            #a1=nr_pages  
+                jal ra, req_all
                 jal zero, init_paging
 #write deadbeef to address 0x004 to pass test
 deadbeef:       lui t0, 0xdeadc
                 addi t0, t0, -273           #t0=deadbeef
                 sw t0, 0x010(zero)          #mem[0x010]=deadbeef
+                jalr zero, 0(ra)
+req_all:        addi t0, a1, -1             #a1=nr_pages (mem[0x8])
+                sw t0, 0xc(zero)
                 jalr zero, 0(ra)
 #load the bitstream from SRAM into the eFPGA
 load_bitstream: addi t0, zero, 0x0          #t0: word_ctr = 0
@@ -61,6 +60,7 @@ poll_instr:     lw t0, 0x0(zero)
 next_page:      jalr zero, s1, 0            #move PC to start address of next page
                 nop
                 nop 
+                nop
                 nop
                 nop
                 nop
