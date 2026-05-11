@@ -82,11 +82,7 @@ module wb_test_icesoc_tb;
 	initial begin
 		$dumpfile("wb_test_icesoc.vcd");
 		$dumpvars(0, wb_test_icesoc_tb);
-		for (address = 0; address < 40; address = address + 4) begin
-			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[address]);
-			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_2_i.mem[address]);
-		end
-		for (address = 128; address < 644; address = address + 4) begin
+		for (address = 0; address < 256; address = address + 4) begin
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[address]);
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_2_i.mem[address]);
 		end
@@ -96,7 +92,7 @@ module wb_test_icesoc_tb;
 		RSTB <= 1'b1;        // Release resetB
 
 		//wait(checkbits == 16'h0007); //wait for the first instruction page to be written to sram
-		repeat (40) begin
+		repeat (50) begin
 			repeat (10000) @(posedge clock);
             $display("+1000 cycles");
 		end

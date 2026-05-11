@@ -39,4 +39,4 @@ all:
 	riscv64-unknown-elf-objdump -d $< > $@
 
 clean:
-	rm -f *.elf *.bin *.hex *disasm
+	rm -f *.elf *.bin *.hex *.disasm *.h

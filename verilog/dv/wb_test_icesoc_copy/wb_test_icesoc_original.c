@@ -31,15 +31,12 @@
 #define SRAM_LAST_ACCESSIBLE_WORD_ADDRESS 0x3F // 0FF / 4
 #define PROGRAM_START_ADDRESS 0x20             // 0x80 / 4
 #define MAX_BITBYTES 288 //change this back to 20000
-#define NUM_INSTR 32 //nr of instructions to be written to sram (not including page A-C) (PAGE_SIZE_INSTRS/4 * nr of virtual pages)
+#define NUM_INSTR 192 //nr of instructions to be written to sram (PAGE_SIZE_INSTRS/4 * nr of virtual pages)
 #define MEM_BYTES (NUM_INSTR * 4) //4 bytes written per instruction
-#define PAGE_SIZE_BITSTR 64 //nr words per page, only 1/4th is addressable
+#define PAGE_SIZE_BITSTR 256 //nr words per page, only 1/4th is addressable
 #define NUM_PAGES_BITSTR 2 //nr of physical pages
-#define PAGE_SIZE_INSTRS 64 //nr words per page, only 1/4th is addressable
-#define NUM_PAGES_INSTRS 4 //nr of physical pages
-#define INSTRS_PAGE_A 9
-#define INSTRS_PAGE_B 64
-#define INSTRS_PAGE_C 21
+#define PAGE_SIZE_INSTRS 256 //nr words per page, only 1/4th is addressable
+#define NUM_PAGES_INSTRS 2 //nr of physical pages
 
 void main() {
 
@@ -162,72 +159,54 @@ void main() {
     */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  uint32_t page_request_idx, word_ctr, page_ctr, page_idx, word_ctr_total;
+  uint32_t page_request_idx, word_ctr, page_ctr, page_idx;
   uint32_t word;
 
-  sram1[0] = PAGE_SIZE_INSTRS;
-  sram1[1] = NUM_PAGES_INSTRS;  
-  sram1[2] = 0x00000000;        //initialize instruction page ready counter (first page will be ready when ibex is started))
+  sram1[0] = 0x00000000;        //initialize instruction page ready counter (first page will be ready when ibex is started))
+  sram1[1] = PAGE_SIZE_INSTRS;
+  sram1[2] = NUM_PAGES_INSTRS;  
   sram1[3] = 0x00000000;        //initialize instruction page request counter
-  sram1[4] = PAGE_SIZE_BITSTR;  //highest address - lowest address (nr words * 4)
-  sram1[5] = NUM_PAGES_BITSTR;
-  sram1[6] = 0xffffffff;        //initialize bistream page ready counter (first page will be ready when ibex is started)
-  sram1[7] = 0xffffffff;        //initialize bitstream page request counter    
-  sram1[8] = MAX_BITBYTES/4;    //nr of words in bitstream
+
+  sram2[0] = 0x00000000;        //initialize bistream page ready counter (first page will be ready when ibex is started)
+  sram2[1] = PAGE_SIZE_BITSTR;  //highest address - lowest address (nr words * 4)
+  sram2[2] = NUM_PAGES_BITSTR;
+  sram2[3] = 0x00000000;        //initialize bitstream page request counter    
+  sram2[4] = MAX_BITBYTES/4;    //nr of words in bitstream
   
 //writing first instruction page to sram1////////////////////////////////////////////////////////////////////////////////////////////////
-  for (word_ctr = 0; word_ctr < INSTRS_PAGE_A; word_ctr++) {
+  for (word_ctr = 0; word_ctr < (PAGE_SIZE_INSTRS/4); word_ctr++) {
     word = instructions[word_ctr];
     sram1[32 + word_ctr] = word;
   }
-//writing second instruction page to sram2////////////////////////////////////////////////////////////////////////////////////////////////
-  for (word_ctr = 0; word_ctr < INSTRS_PAGE_B; word_ctr++) {
-    word = instructions[INSTRS_PAGE_A + word_ctr];
-    sram2[0 + word_ctr] = word;
-  }
-//start ibex core
-reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page are ready
-//writing bitstream to sram1//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//writing bitstream to sram2//////////////////////////////////////////////////////////////////////////////////////////////////////////////
   word_ctr = 0;
-  page_request_idx = sram1[7];
-  while (page_request_idx == 0xffffffff) { //0xffffffff: first page not requested yet
-    page_request_idx = sram1[7]; //read new value of page request
-  } //wait until next page is requested
   while (word_ctr < MAX_BITBYTES/4) {
     page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
     page_idx = page_ctr % NUM_PAGES_BITSTR;
 
-    sram1[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
+    sram2[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 
     if ((word_ctr + 1) % (PAGE_SIZE_BITSTR/4) == 0) {
          __asm__ volatile("" ::: "memory"); //to make sure all the writes to sram above are done before continuing, otherwise instructions might be reordered
-				sram1[6] = page_ctr;  //bitstream page ready counter
+        if(page_ctr == 0) {
+          reg_mprj_datal = 0x00070000;  //signaling that first instruction page and first bitstream page are ready
+        }
+				sram2[0] = page_ctr;  //signal that next bitstream page is written to sram and ready to be read by core
         __asm__ volatile("" ::: "memory");
 
-        page_request_idx = sram1[7];
+        page_request_idx = sram2[3];
         while (page_request_idx < (page_ctr + 1)) {
-          page_request_idx = sram1[7]; //read new value of page request
+          page_request_idx = sram2[3]; //read new value of page request
         } //wait until next page is requested
   	}
 		word_ctr++;
   }
+  reg_mprj_datal = 0x00070000; //setting fetch_enable=1 again doesn't change anything if it's already 1 from before. if less than a page was written, this is needed to avoid infinite waiting for the first page to be fully written
   __asm__ volatile("" ::: "memory");
-  sram1[6] = page_ctr;
+  sram2[0] = page_ctr;
   __asm__ volatile("" ::: "memory");
-
-//writing permanent page with req_next and paging function to sram1////////////////////////////////////////////////////////////////////////////////////////////////
-  page_request_idx = sram1[3];
-  while(page_request_idx < 1) {
-    page_request_idx = sram1[3]; //read new value of page request
-  } //wait until page request >= page 1 
-  for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
-    word = instructions[INSTRS_PAGE_A + INSTRS_PAGE_B + word_ctr];
-    sram1[32 + word_ctr] = word;
-  }
-
-//writing remaining instruction pages to sram2//////////////////////////////////////////////////////////////////////////////////////////
-  word_ctr_total = INSTRS_PAGE_A + INSTRS_PAGE_B + INSTRS_PAGE_C; //first three pages were written already
-  word_ctr = 0;
+//writing remaining instruction pages to sram1//////////////////////////////////////////////////////////////////////////////////////////
+  word_ctr = (PAGE_SIZE_INSTRS/4); //first page was sent already (start with second page)
   page_request_idx = sram1[3];
   while(page_request_idx < 1) {
     page_request_idx = sram1[3]; //read new value of page request
@@ -237,24 +216,23 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
     page_ctr = word_ctr / (PAGE_SIZE_INSTRS/4);
     page_idx = page_ctr % NUM_PAGES_INSTRS;
 
-    sram2[(page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr_total];
+    sram1[32 + (page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr];
 
     if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
       __asm__ volatile("" ::: "memory");
-      sram1[2] = page_ctr + 1; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
+      sram1[0] = page_ctr; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
       __asm__ volatile("" ::: "memory");
 
       page_request_idx = sram1[3];
-      while (page_request_idx < (page_ctr + 2)) {
+      while (page_request_idx < (page_ctr + 1)) {
         page_request_idx = sram1[3]; //read new value of page request
       } //wait until next page is requested
 
     }
     word_ctr++;
-    word_ctr_total++;
   }
   __asm__ volatile("" ::: "memory");
-  sram1[2] = page_ctr + 1;
+  sram1[0] = page_ctr;
   __asm__ volatile("" ::: "memory");
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

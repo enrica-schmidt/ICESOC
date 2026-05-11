@@ -62,13 +62,12 @@ SIM?=RTL
 
 PATTERN = wb_test_icesoc
 
-all:  ${PATTERN:=.vcd} ${PATTERN:=.disasm}
+all:  clean ${PATTERN:=.vcd} ${PATTERN:=.disasm}
 
 hex:  ${PATTERN:=.hex}
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)
-	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && cp program.hex ../../memory.hex
 	date
 	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
@@ -91,11 +90,14 @@ endif
 %.vcd: %.vvp
 	vvp $<
 
-ibex_prog = ./ibex_prog.h
-$(ibex_prog): ibex_prog/*.c
-	make -C ./ibex_prog all work_dir=build
+#ibex_prog = ./ibex_prog.h
+#$(ibex_prog): ibex_prog/*.c
+#	make -C ./ibex_prog all work_dir=build
 
-%.elf: %.c $(ibex_prog) $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
+#compile the program for ibex with the makefile in that folder, copy the header file generated in this directory, copy the bitstream.h file. then compile the firmware 
+%.elf: %.c $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
+	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h
+	cd program_and_bitstream/bitstream && cp bitstream.h ../../bitstream.h
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
 
 %.disasm: %.elf
@@ -130,6 +132,6 @@ endif
 # ---- Clean ----
 
 clean:
-	rm -rf *.hex *.bin *.vvp *.vcd *.log ibex_prog.h ibex_prog/build
+	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.disasm *.log ibex_prog.h ibex_prog/build *.h
 
 .PHONY: clean hex all
