@@ -236,7 +236,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
   } //wait until page request >= page 1 
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
     word = instructions[INSTRS_PAGE_A + INSTRS_PAGE_B + word_ctr];
-    sram1[32 + word_ctr] = word;
+    sram1[43 + word_ctr] = word;
   }
 
 //writing remaining instruction pages to sram2//////////////////////////////////////////////////////////////////////////////////////////

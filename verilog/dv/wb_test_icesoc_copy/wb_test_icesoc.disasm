@@ -943,20 +943,20 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
   } //wait until page request >= page 1 
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
     word = instructions[INSTRS_PAGE_A + INSTRS_PAGE_B + word_ctr];
-    sram1[32 + word_ctr] = word;
+    sram1[43 + word_ctr] = word;
 100006cc:	30000637          	lui	a2,0x30000
-100006d0:	f5c60613          	addi	a2,a2,-164 # 2fffff5c <_erodata+0x1ffff25c>
+100006d0:	f8860613          	addi	a2,a2,-120 # 2fffff88 <_erodata+0x1ffff288>
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
 100006d4:	05e00593          	li	a1,94
     word = instructions[INSTRS_PAGE_A + INSTRS_PAGE_B + word_ctr];
 100006d8:	00279713          	slli	a4,a5,0x2
 100006dc:	00e68533          	add	a0,a3,a4
 100006e0:	00052503          	lw	a0,0(a0)
-    sram1[32 + word_ctr] = word;
+    sram1[43 + word_ctr] = word;
 100006e4:	00c70733          	add	a4,a4,a2
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
 100006e8:	00178793          	addi	a5,a5,1
-    sram1[32 + word_ctr] = word;
+    sram1[43 + word_ctr] = word;
 100006ec:	00a72023          	sw	a0,0(a4)
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
 100006f0:	feb794e3          	bne	a5,a1,100006d8 <main+0x244>

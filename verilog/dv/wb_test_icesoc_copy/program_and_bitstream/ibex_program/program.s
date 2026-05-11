@@ -1,13 +1,13 @@
 #SRAM paging
 #### page A ###########################################################@0x80
-initA:          addi sp, zero, 0x80         #stack pointer=middle of sram1(before boot addr)
+initA:          addi sp, zero, 0xac         #stack pointer=middle of sram1(before boot addr)
                 #because sp is decremented before writing, the first word on the stack is written to addr 0x7c
                 lw s0, 0x0(zero)            #s0: instr_page_size (mem[0x0])
                 lw s1, 0x4(zero)            #s1: instr_nr_pages (mem[0x4])
                 lw a0, 0x10(zero)           #a0: bitstr_page_size
                 lw a1, 0x14(zero)           #a1: bitstr_nr_pages
                 lw a2, 0x20(zero)           #a2: bitstream_words
-                addi s5, zero, 0x80         #s5: addr where req_next 
+                addi s5, zero, 0xac         #s5: addr where req_next is
 pagingA:        addi s2, zero, 0x400        #s2: start address of next page, beginning of sram2
 next_pageA:     jalr zero, s2, 0            #move PC to start address of next page
 

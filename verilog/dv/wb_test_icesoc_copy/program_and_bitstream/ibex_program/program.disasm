@@ -5,13 +5,13 @@ program.elf:     file format elf32-littleriscv
 Disassembly of section .text:
 
 00000000 <initA>:
-   0:	08000113          	li	sp,128
+   0:	0ac00113          	li	sp,172
    4:	00002403          	lw	s0,0(zero) # 0 <initA>
    8:	00402483          	lw	s1,4(zero) # 4 <initA+0x4>
    c:	01002503          	lw	a0,16(zero) # 10 <initA+0x10>
   10:	01402583          	lw	a1,20(zero) # 14 <initA+0x14>
   14:	02002603          	lw	a2,32(zero) # 20 <next_pageA>
-  18:	08000a93          	li	s5,128
+  18:	0ac00a93          	li	s5,172
 
 0000001c <pagingA>:
   1c:	40000913          	li	s2,1024
