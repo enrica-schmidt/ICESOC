@@ -1,3 +1,4 @@
+#include <stdint.h>
 volatile static const uint32_t bitstream[] = {
     0xdeadbee0,
     0xdeadbee1,
