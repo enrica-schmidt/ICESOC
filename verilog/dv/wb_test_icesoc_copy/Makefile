@@ -98,6 +98,7 @@ endif
 %.elf: %.c $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
 	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h
 	cd program_and_bitstream/bitstream && cp bitstream.h ../../bitstream.h
+	cd program_and_bitstream && cp instr_bitstr_sizes.h ../instr_bitstr_sizes.h
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
 
 %.disasm: %.elf

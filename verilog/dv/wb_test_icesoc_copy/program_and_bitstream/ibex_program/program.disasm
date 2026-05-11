@@ -65,7 +65,7 @@ Disassembly of section .text:
 00000098 <pagingB>:
   98:	40000913          	li	s2,1024
   9c:	00100993          	li	s3,1
-  a0:	00098a33          	add	s4,s3,zero
+  a0:	00000a13          	li	s4,0
   a4:	06c0006f          	j	110 <req_pagesB>
   a8:	00000013          	nop
   ac:	00000013          	nop
@@ -142,7 +142,7 @@ Disassembly of section .text:
 
 00000188 <deadbeef1>:
  188:	deadc2b7          	lui	t0,0xdeadc
- 18c:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada4f7>
+ 18c:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada437>
  190:	02502223          	sw	t0,36(zero) # 24 <req_all_bitB>
  194:	00008067          	ret
  198:	00000013          	nop
@@ -162,7 +162,7 @@ Disassembly of section .text:
 
 000001c8 <deadbeef2>:
  1c8:	deadc2b7          	lui	t0,0xdeadc
- 1cc:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada4f7>
+ 1cc:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada437>
  1d0:	02502423          	sw	t0,40(zero) # 28 <req_all_bitB+0x4>
  1d4:	00008067          	ret
  1d8:	00000013          	nop
@@ -173,3 +173,63 @@ Disassembly of section .text:
  1ec:	00000013          	nop
  1f0:	00000013          	nop
  1f4:	00000013          	nop
+
+000001f8 <main3>:
+ 1f8:	000a80e7          	jalr	s5
+ 1fc:	00c000ef          	jal	208 <deadbeef3>
+ 200:	00000013          	nop
+ 204:	020a8067          	jr	32(s5)
+
+00000208 <deadbeef3>:
+ 208:	deadc2b7          	lui	t0,0xdeadc
+ 20c:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada437>
+ 210:	02502623          	sw	t0,44(zero) # 2c <load_bitstreamB>
+ 214:	00008067          	ret
+ 218:	00000013          	nop
+ 21c:	00000013          	nop
+ 220:	00000013          	nop
+ 224:	00000013          	nop
+ 228:	00000013          	nop
+ 22c:	00000013          	nop
+ 230:	00000013          	nop
+ 234:	00000013          	nop
+
+00000238 <main4>:
+ 238:	000a80e7          	jalr	s5
+ 23c:	00c000ef          	jal	248 <deadbeef4>
+ 240:	00000013          	nop
+ 244:	020a8067          	jr	32(s5)
+
+00000248 <deadbeef4>:
+ 248:	deadc2b7          	lui	t0,0xdeadc
+ 24c:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada437>
+ 250:	02502823          	sw	t0,48(zero) # 30 <load_bitstreamB+0x4>
+ 254:	00008067          	ret
+ 258:	00000013          	nop
+ 25c:	00000013          	nop
+ 260:	00000013          	nop
+ 264:	00000013          	nop
+ 268:	00000013          	nop
+ 26c:	00000013          	nop
+ 270:	00000013          	nop
+ 274:	00000013          	nop
+
+00000278 <main5>:
+ 278:	000a80e7          	jalr	s5
+ 27c:	00c000ef          	jal	288 <deadbeef5>
+ 280:	00000013          	nop
+ 284:	020a8067          	jr	32(s5)
+
+00000288 <deadbeef5>:
+ 288:	deadc2b7          	lui	t0,0xdeadc
+ 28c:	eef28293          	addi	t0,t0,-273 # deadbeef <__global_pointer$+0xdeada437>
+ 290:	02502a23          	sw	t0,52(zero) # 34 <load_bitstreamB+0x8>
+ 294:	00008067          	ret
+ 298:	00000013          	nop
+ 29c:	00000013          	nop
+ 2a0:	00000013          	nop
+ 2a4:	00000013          	nop
+ 2a8:	00000013          	nop
+ 2ac:	00000013          	nop
+ 2b0:	00000013          	nop
+ 2b4:	00000013          	nop

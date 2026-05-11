@@ -1,5 +1,5 @@
 #SRAM paging
-#### page A ############################################################################
+#### page A ###########################################################@0x80
 initA:          addi sp, zero, 0x80         #stack pointer=middle of sram1(before boot addr)
                 #because sp is decremented before writing, the first word on the stack is written to addr 0x7c
                 lw s0, 0x0(zero)            #s0: instr_page_size (mem[0x0])
@@ -9,16 +9,9 @@ initA:          addi sp, zero, 0x80         #stack pointer=middle of sram1(befor
                 lw a2, 0x20(zero)           #a2: bitstream_words
                 addi s5, zero, 0x80         #s5: addr where req_next 
 pagingA:        addi s2, zero, 0x400        #s2: start address of next page, beginning of sram2
-                #addi s3, zero, 1            #s3: page counter
-                #addi s4, s3, 0              #s4: page counter modulo  
-                #bne s4, s1, poll_instr0
-                #addi s4, zero, 0
-#poll_instr0:    lw t0, 0x8(zero)            #instr_page_ready=mem[0x8]
-                #blt t0, s3, poll_instr0
 next_pageA:     jalr zero, s2, 0            #move PC to start address of next page
 
-#### page B ############################################################################
-## put this as a double page in sram2 for the bitstream reading, use sram1 0x80-0xfc for loading the bitstream, then jump to sram1 0x80-0xfc for the next page, starting then, alternate between sram1 second half and sram2 for the instruction pages? or just use sram 2 for the instruction pages? or just use second half of sram1? 
+#### page B ###########################################################@0x400
 req_all_bitB:   addi t5, a1, -1             #request all pages (up to bitstr_nr_pages-1))
                 sw t5, 0x1c(zero)           #mem[0x1c]=bitstr_page_request
 load_bitstreamB:addi t0, zero, 0x0          #t0: word_ctr = 0
@@ -50,7 +43,7 @@ poll_bitstrB:   lw t6, 0x18(zero)            #bitstr_page_ready=mem(0x18 = sram2
                 j read_pageB
 pagingB:        addi s2, zero, 0x400        #s2: start address of next page; start_page += page_size
                 addi s3, zero, 1            #s3: page counter
-                add s4, s3, zero            #s4: page counter modulo++
+                addi s4, zero, 0            #s4: page counter modulo++
                 j req_pagesB
                 nop
                 nop
@@ -86,7 +79,7 @@ poll_instrB:    lw t0, 0x8(zero)            #instr_page_ready=mem[0x8]
                 blt t0, s3, poll_instrB
 next_pageB:     jalr zero, s2, 0            #move PC to start address of next page
 
-#### page C ############################################################################
+#### page C ###########################################################@0x80
 #this page is written to mem[0x80]=sram1[0x80] and is kept there permanently because every page needs to call these functions
 #the values of s0, s1, s2, s3, s4, s5 are preserved between pages (dont use them except for the paging)
 req_next:       addi sp, sp, -4
@@ -111,7 +104,7 @@ next_page:      lw t0, 0(sp)
                 addi sp, sp, 4
                 jalr zero, s2, 0            #move PC to start address of next page
 
-#### page 1 ############################################################################
+#### page 1 ###########################################################@0x400
 #have to pad pages with nops to have a length of exactly page_size
 main1:          jalr ra, s5, 0x0            #function call of req_next at addr s5
                 jal ra, deadbeef1
@@ -119,7 +112,7 @@ main1:          jalr ra, s5, 0x0            #function call of req_next at addr s
                 jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
 deadbeef1:      lui t0, 0xdeadc
                 addi t0, t0, -273           #t0=deadbeef
-                sw t0, 0x024(zero)          #mem[0x020]=deadbeef
+                sw t0, 0x024(zero)          #mem[0x024]=deadbeef
                 jalr zero, 0(ra)
                 nop
                 nop
@@ -130,7 +123,7 @@ deadbeef1:      lui t0, 0xdeadc
                 nop
                 nop
 
-#### page 2 ############################################################################
+#### page 2 ###########################################################@0x440
 #have to pad pages with nops to have a length of exactly page_size
 main2:          jalr ra, s5, 0x0            #function call of req_next at addr s5
                 jal ra, deadbeef2
@@ -138,7 +131,61 @@ main2:          jalr ra, s5, 0x0            #function call of req_next at addr s
                 jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
 deadbeef2:      lui t0, 0xdeadc
                 addi t0, t0, -273           #t0=deadbeef
-                sw t0, 0x028(zero)          #mem[0x020]=deadbeef
+                sw t0, 0x028(zero)          #mem[0x028]=deadbeef
+                jalr zero, 0(ra)
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+#### page 3 ###########################################################@0x480
+#have to pad pages with nops to have a length of exactly page_size
+main3:          jalr ra, s5, 0x0            #function call of req_next at addr s5
+                jal ra, deadbeef3
+                nop                         #do stuff here
+                jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
+deadbeef3:      lui t0, 0xdeadc
+                addi t0, t0, -273           #t0=deadbeef
+                sw t0, 0x02c(zero)          #mem[0x02c]=deadbeef
+                jalr zero, 0(ra)
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+#### page 4 ###########################################################@0x4c0
+#have to pad pages with nops to have a length of exactly page_size
+main4:          jalr ra, s5, 0x0            #function call of req_next at addr s5
+                jal ra, deadbeef4
+                nop                         #do stuff here
+                jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
+deadbeef4:      lui t0, 0xdeadc
+                addi t0, t0, -273           #t0=deadbeef
+                sw t0, 0x030(zero)          #mem[0x030]=deadbeef
+                jalr zero, 0(ra)
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+#### page 5 ###########################################################@0x400
+#have to pad pages with nops to have a length of exactly page_size
+main5:          jalr ra, s5, 0x0            #function call of req_next at addr s5
+                jal ra, deadbeef5
+                nop                         #do stuff here
+                jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
+deadbeef5:      lui t0, 0xdeadc
+                addi t0, t0, -273           #t0=deadbeef
+                sw t0, 0x034(zero)          #mem[0x034]=deadbeef
                 jalr zero, 0(ra)
                 nop
                 nop

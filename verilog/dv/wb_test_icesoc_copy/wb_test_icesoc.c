@@ -20,23 +20,37 @@
 #include <gpio_config_io.h>
 #include <stdint.h>
 #include <stub.c>
-#include "memory.h"
-#include "bitstream.h"
+#include "instr_bitstr_sizes.h"
+
+//#include "memory.h"
+//#include "bitstream.h"
 /*
         Wishbone Test:
                 - Configures MPRJ lower 8-IO pins as outputs
                 - Checks counter value through the wishbone port
 */
+//#define BITSTREAM_WORDS 72 //full bitstream 5000 words
+//#define INSTRUCTION_WORDS 32 //nr of instructions to be written to sram (not including page A-C) (PAGE_SIZE_INSTRS/4 * nr of virtual pages)
+
+//#define BITSTR_WORDS_PER_PAGE 16 //nr words per page, only 1/4th is addressable
+//#define BITSTR_NR_PHYS_PAGES 2 //nr of physical pages
+//#define INSTRS_WORDS_PER_PAGE 16 //nr words per page, only 1/4th is addressable
+//#define INSTRS_NR_PHYS_PAGES 4 //nr of physical pages
+
+
 #define SRAM_2_OFFSET 0x100                    // 0x400 / 4
 #define SRAM_LAST_ACCESSIBLE_WORD_ADDRESS 0x3F // 0FF / 4
 #define PROGRAM_START_ADDRESS 0x20             // 0x80 / 4
-#define MAX_BITBYTES 288 //change this back to 20000
-#define NUM_INSTR 32 //nr of instructions to be written to sram (not including page A-C) (PAGE_SIZE_INSTRS/4 * nr of virtual pages)
-#define MEM_BYTES (NUM_INSTR * 4) //4 bytes written per instruction
-#define PAGE_SIZE_BITSTR 64 //nr words per page, only 1/4th is addressable
-#define NUM_PAGES_BITSTR 2 //nr of physical pages
-#define PAGE_SIZE_INSTRS 64 //nr words per page, only 1/4th is addressable
-#define NUM_PAGES_INSTRS 4 //nr of physical pages
+#define MAX_BITBYTES (BITSTREAM_WORDS * 4)
+//#define NUM_INSTR 32 //nr of instructions to be written to sram (not including page A-C) (PAGE_SIZE_INSTRS/4 * nr of virtual pages)
+//#define MEM_BYTES (NUM_INSTR * 4) //4 bytes written per instruction
+#define PAGE_SIZE_BITSTR (BITSTR_WORDS_PER_PAGE * 4) //address range of a page, only 1/4th is addressable
+//#define NUM_PAGES_BITSTR 2 //nr of physical pages
+#define PAGE_SIZE_INSTRS (INSTRS_WORDS_PER_PAGE * 4) //address range of a page, only 1/4th is addressable
+//#define NUM_PAGES_INSTRS 4 //nr of physical pages
+#define BITSTR_NR_PHYS_PAGES (32 / BITSTR_WORDS_PER_PAGE) //nr of physical pages (the bitstream is paged in the second half of sram1, 32 available words)
+#define INSTRS_NR_PHYS_PAGES (64 / INSTRS_WORDS_PER_PAGE) //nr of physical pages (the instructions are put in sram2, which has 64 words available)
+
 #define INSTRS_PAGE_A 9
 #define INSTRS_PAGE_B 64
 #define INSTRS_PAGE_C 21
@@ -166,11 +180,11 @@ void main() {
   uint32_t word;
 
   sram1[0] = PAGE_SIZE_INSTRS;
-  sram1[1] = NUM_PAGES_INSTRS;  
+  sram1[1] = INSTRS_NR_PHYS_PAGES;  
   sram1[2] = 0x00000000;        //initialize instruction page ready counter (first page will be ready when ibex is started))
   sram1[3] = 0x00000000;        //initialize instruction page request counter
   sram1[4] = PAGE_SIZE_BITSTR;  //highest address - lowest address (nr words * 4)
-  sram1[5] = NUM_PAGES_BITSTR;
+  sram1[5] = BITSTR_NR_PHYS_PAGES;
   sram1[6] = 0xffffffff;        //initialize bistream page ready counter (first page will be ready when ibex is started)
   sram1[7] = 0xffffffff;        //initialize bitstream page request counter    
   sram1[8] = MAX_BITBYTES/4;    //nr of words in bitstream
@@ -195,7 +209,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
   } //wait until next page is requested
   while (word_ctr < MAX_BITBYTES/4) {
     page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
-    page_idx = page_ctr % NUM_PAGES_BITSTR;
+    page_idx = page_ctr % BITSTR_NR_PHYS_PAGES;
 
     sram1[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 
@@ -233,9 +247,9 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
     page_request_idx = sram1[3]; //read new value of page request
   } //wait until page request >= page 1 
 
-  while(word_ctr < NUM_INSTR) {
+  while(word_ctr < INSTRUCTION_WORDS) {
     page_ctr = word_ctr / (PAGE_SIZE_INSTRS/4);
-    page_idx = page_ctr % NUM_PAGES_INSTRS;
+    page_idx = page_ctr % INSTRS_NR_PHYS_PAGES;
 
     sram2[(page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr_total];
 
@@ -259,7 +273,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   while (1) {
-    if (sram1[4] == 0xDEADBEEF) {
+    if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
       reg_mprj_datal = 0x00040000; // simulation end with successful test
     } else if (sram1[1] == 0xCAFEBABE) {
       reg_mprj_datal = 0x00050000; // simulation end with failed test

@@ -126,7 +126,7 @@ data_init:
 100000c4:	00000593          	li	a1,0
   la a2, _fdata_rom
 100000c8:	00001617          	auipc	a2,0x1
-100000cc:	b3860613          	addi	a2,a2,-1224 # 10000c00 <_erodata>
+100000cc:	c3860613          	addi	a2,a2,-968 # 10000d00 <_erodata>
 
 100000d0 <data_loop>:
 data_loop:
@@ -202,10 +202,10 @@ void isr(void) {
     reg_timer0_update = 1;
 10000120:	f00056b7          	lui	a3,0xf0005
     reg_timer0_irq_en = 0; // disable interrupt
-10000124:	0007ae23          	sw	zero,28(a5) # f000501c <_erodata+0xe000441c>
+10000124:	0007ae23          	sw	zero,28(a5) # f000501c <_erodata+0xe000431c>
     reg_timer0_update = 1;
 10000128:	00100713          	li	a4,1
-1000012c:	00e6a623          	sw	a4,12(a3) # f000500c <_erodata+0xe000440c>
+1000012c:	00e6a623          	sw	a4,12(a3) # f000500c <_erodata+0xe000430c>
     if (reg_timer0_value == 0)
 10000130:	0106a683          	lw	a3,16(a3)
     reg_timer0_irq_en = 0; // disable interrupt
@@ -231,7 +231,7 @@ void count_down(const int d) {
   /* Configure timer for a single-shot countdown */
   reg_timer0_config = 0;
 1000014c:	f00057b7          	lui	a5,0xf0005
-10000150:	0007a423          	sw	zero,8(a5) # f0005008 <_erodata+0xe0004408>
+10000150:	0007a423          	sw	zero,8(a5) # f0005008 <_erodata+0xe0004308>
   reg_timer0_data = d;
 10000154:	00a7a023          	sw	a0,0(a5)
   reg_timer0_config = 1; /* Enabled, one-shot, down count */
@@ -267,7 +267,7 @@ void send_pulse_io37() {
   int mask = 0x1F;
   int temp = reg_mprj_datah & mask;
 1000018c:	26000437          	lui	s0,0x26000
-10000190:	01042783          	lw	a5,16(s0) # 26000010 <_erodata+0x15fff410>
+10000190:	01042783          	lw	a5,16(s0) # 26000010 <_erodata+0x15fff310>
 void send_pulse_io37() {
 10000194:	00112623          	sw	ra,12(sp)
   reg_mprj_datah = temp; // 0
@@ -344,7 +344,7 @@ int receive_io0() {
   int flag = 0;
   old_received = reg_mprj_datal & mask;
 10000218:	260004b7          	lui	s1,0x26000
-1000021c:	00c48493          	addi	s1,s1,12 # 2600000c <_erodata+0x15fff40c>
+1000021c:	00c48493          	addi	s1,s1,12 # 2600000c <_erodata+0x15fff30c>
 int receive_io0() {
 10000220:	00812423          	sw	s0,8(sp)
   old_received = reg_mprj_datal & mask;
@@ -398,7 +398,7 @@ void delay(const int clock_cycles) {
   /* Configure timer for a single-shot countdown */
   reg_timer0_config = 0;
 10000274:	f00057b7          	lui	a5,0xf0005
-10000278:	0007a423          	sw	zero,8(a5) # f0005008 <_erodata+0xe0004408>
+10000278:	0007a423          	sw	zero,8(a5) # f0005008 <_erodata+0xe0004308>
   reg_timer0_data = clock_cycles;
 1000027c:	00a7a023          	sw	a0,0(a5)
   reg_timer0_config = 1;
@@ -433,7 +433,7 @@ void bb_mode() {
   reg_mprj_xfer = 0x06; // Enable bit-bang mode
 100002ac:	260007b7          	lui	a5,0x26000
 100002b0:	00600713          	li	a4,6
-100002b4:	00e7a023          	sw	a4,0(a5) # 26000000 <_erodata+0x15fff400>
+100002b4:	00e7a023          	sw	a4,0(a5) # 26000000 <_erodata+0x15fff300>
   reg_mprj_xfer = 0x02; // Pulse reset
 100002b8:	00200693          	li	a3,2
 100002bc:	00d7a023          	sw	a3,0(a5)
@@ -455,7 +455,7 @@ void load() {
   delay(WAIT);
 100002e0:	0000c537          	lui	a0,0xc
   reg_mprj_xfer = 0x06;
-100002e4:	00942023          	sw	s1,0(s0) # 26000000 <_erodata+0x15fff400>
+100002e4:	00942023          	sw	s1,0(s0) # 26000000 <_erodata+0x15fff300>
   delay(WAIT);
 100002e8:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
 100002ec:	f89ff0ef          	jal	10000274 <delay>
@@ -505,7 +505,7 @@ void clear_registers() {
 1000034c:	0000c537          	lui	a0,0xc
 10000350:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
     reg_mprj_xfer = 0x06;
-10000354:	0134a023          	sw	s3,0(s1) # 26000000 <_erodata+0x15fff400>
+10000354:	0134a023          	sw	s3,0(s1) # 26000000 <_erodata+0x15fff300>
     delay(WAIT);
 10000358:	f1dff0ef          	jal	10000274 <delay>
     delay(WAIT);
@@ -574,7 +574,7 @@ void gpio_config_io(char const *const config_stream) {
 100003e4:	0000c537          	lui	a0,0xc
 100003e8:	35050513          	addi	a0,a0,848 # c350 <_fstack+0xbf50>
     reg_mprj_xfer = config_stream[i];
-100003ec:	00f92023          	sw	a5,0(s2) # 26000000 <_erodata+0x15fff400>
+100003ec:	00f92023          	sw	a5,0(s2) # 26000000 <_erodata+0x15fff300>
     delay(WAIT);
 100003f0:	e85ff0ef          	jal	10000274 <delay>
     reg_mprj_xfer = config_stream[i] + 0x10;
@@ -612,7 +612,7 @@ void uart_putchar(char c) {
 10000430:	fe5ff0ef          	jal	10000414 <uart_putchar>
     while (reg_uart_txfull == 1)
 10000434:	f00067b7          	lui	a5,0xf0006
-10000438:	80478793          	addi	a5,a5,-2044 # f0005804 <_erodata+0xe0004c04>
+10000438:	80478793          	addi	a5,a5,-2044 # f0005804 <_erodata+0xe0004b04>
 1000043c:	00100713          	li	a4,1
 10000440:	0007a683          	lw	a3,0(a5)
 10000444:	fee68ee3          	beq	a3,a4,10000440 <uart_putchar+0x2c>
@@ -622,7 +622,7 @@ void uart_putchar(char c) {
 }
 1000044c:	00c12083          	lw	ra,12(sp)
     reg_uart_data = c;
-10000450:	8087a023          	sw	s0,-2048(a5) # f0005800 <_erodata+0xe0004c00>
+10000450:	8087a023          	sw	s0,-2048(a5) # f0005800 <_erodata+0xe0004b00>
 }
 10000454:	00812403          	lw	s0,8(sp)
 10000458:	01010113          	addi	sp,sp,16
@@ -658,10 +658,10 @@ void print(const char *p) {
   reg_wb_enable = 1;
 10000494:	00100713          	li	a4,1
 10000498:	f00047b7          	lui	a5,0xf0004
-1000049c:	80e7a023          	sw	a4,-2048(a5) # f0003800 <_erodata+0xe0002c00>
+1000049c:	80e7a023          	sw	a4,-2048(a5) # f0003800 <_erodata+0xe0002b00>
   reg_hkspi_disable = 1;
 100004a0:	262007b7          	lui	a5,0x26200
-100004a4:	00e7a823          	sw	a4,16(a5) # 26200010 <_erodata+0x161ff410>
+100004a4:	00e7a823          	sw	a4,16(a5) # 26200010 <_erodata+0x161ff310>
 
   // Connect the housekeeping SPI to the SPI master
   // so that the CSB line is not left floating.  This allows
@@ -671,7 +671,7 @@ void print(const char *p) {
 100004a8:	000027b7          	lui	a5,0x2
 100004ac:	260006b7          	lui	a3,0x26000
 100004b0:	80978793          	addi	a5,a5,-2039 # 1809 <_fstack+0x1409>
-100004b4:	0af6ac23          	sw	a5,184(a3) # 260000b8 <_erodata+0x15fff4b8>
+100004b4:	0af6ac23          	sw	a5,184(a3) # 260000b8 <_erodata+0x15fff3b8>
   reg_mprj_io_36 = GPIO_MODE_MGMT_STD_OUTPUT;
 100004b8:	0af6aa23          	sw	a5,180(a3)
   reg_mprj_io_35 = GPIO_MODE_MGMT_STD_OUTPUT;
@@ -761,11 +761,11 @@ void print(const char *p) {
   reg_mprj_datal = 0x00010000; //low 32 bits of 38 bit signal
 1000055c:	260007b7          	lui	a5,0x26000
 10000560:	00010737          	lui	a4,0x10
-10000564:	00e7a623          	sw	a4,12(a5) # 2600000c <_erodata+0x15fff40c>
+10000564:	00e7a623          	sw	a4,12(a5) # 2600000c <_erodata+0x15fff30c>
   reg_la2_oenb = reg_la2_iena = 0xFFFFFFFF; // [95:64]
 10000568:	f00036b7          	lui	a3,0xf0003
 1000056c:	fff00713          	li	a4,-1
-10000570:	00e6a223          	sw	a4,4(a3) # f0003004 <_erodata+0xe0002404>
+10000570:	00e6a223          	sw	a4,4(a3) # f0003004 <_erodata+0xe0002304>
 10000574:	00e6aa23          	sw	a4,20(a3)
 
   // Set LA bits 0-3 as outputs
@@ -786,8 +786,8 @@ void print(const char *p) {
 1000058c:	00d7a623          	sw	a3,12(a5)
   reg_la0_data = reg_la0_data & ~0xA;
 10000590:	f00037b7          	lui	a5,0xf0003
-10000594:	03c7a683          	lw	a3,60(a5) # f000303c <_erodata+0xe000243c>
-  sram1[1] = NUM_PAGES_INSTRS;  
+10000594:	03c7a683          	lw	a3,60(a5) # f000303c <_erodata+0xe000233c>
+  sram1[1] = INSTRS_NR_PHYS_PAGES;  
 10000598:	00400613          	li	a2,4
   reg_la0_data = reg_la0_data & ~0xA;
 1000059c:	ff56f693          	andi	a3,a3,-11
@@ -799,8 +799,8 @@ void print(const char *p) {
   sram1[0] = PAGE_SIZE_INSTRS;
 100005b0:	300006b7          	lui	a3,0x30000
 100005b4:	04000793          	li	a5,64
-100005b8:	00f6a023          	sw	a5,0(a3) # 30000000 <_erodata+0x1ffff400>
-  sram1[1] = NUM_PAGES_INSTRS;  
+100005b8:	00f6a023          	sw	a5,0(a3) # 30000000 <_erodata+0x1ffff300>
+  sram1[1] = INSTRS_NR_PHYS_PAGES;  
 100005bc:	00c6a223          	sw	a2,4(a3)
   sram1[2] = 0x00000000;        //initialize instruction page ready counter (first page will be ready when ibex is started))
 100005c0:	0006a423          	sw	zero,8(a3)
@@ -808,7 +808,7 @@ void print(const char *p) {
 100005c4:	0006a623          	sw	zero,12(a3)
   sram1[4] = PAGE_SIZE_BITSTR;  //highest address - lowest address (nr words * 4)
 100005c8:	00f6a823          	sw	a5,16(a3)
-  sram1[5] = NUM_PAGES_BITSTR;
+  sram1[5] = BITSTR_NR_PHYS_PAGES;
 100005cc:	00068793          	mv	a5,a3
 100005d0:	00200693          	li	a3,2
 100005d4:	00d7aa23          	sw	a3,20(a5)
@@ -825,11 +825,11 @@ void print(const char *p) {
   sram1[8] = MAX_BITBYTES/4;    //nr of words in bitstream
 100005ec:	02e7a023          	sw	a4,32(a5)
     word = instructions[word_ctr];
-100005f0:	80068693          	addi	a3,a3,-2048 # 10000800 <_etext>
+100005f0:	90068693          	addi	a3,a3,-1792 # 10000900 <_etext>
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_A; word_ctr++) {
 100005f4:	00000793          	li	a5,0
     sram1[32 + word_ctr] = word;
-100005f8:	08060613          	addi	a2,a2,128 # 30000080 <_erodata+0x1ffff480>
+100005f8:	08060613          	addi	a2,a2,128 # 30000080 <_erodata+0x1ffff380>
     word = instructions[word_ctr];
 100005fc:	00279713          	slli	a4,a5,0x2
 10000600:	00e68533          	add	a0,a3,a4
@@ -848,7 +848,7 @@ void print(const char *p) {
     word = instructions[INSTRS_PAGE_A + word_ctr];
     sram2[0 + word_ctr] = word;
 10000618:	30000637          	lui	a2,0x30000
-1000061c:	3dc60613          	addi	a2,a2,988 # 300003dc <_erodata+0x1ffff7dc>
+1000061c:	3dc60613          	addi	a2,a2,988 # 300003dc <_erodata+0x1ffff6dc>
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_B; word_ctr++) {
 10000620:	04900593          	li	a1,73
     word = instructions[INSTRS_PAGE_A + word_ctr];
@@ -868,20 +868,20 @@ void print(const char *p) {
 reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page are ready
 10000640:	26000737          	lui	a4,0x26000
 10000644:	00070637          	lui	a2,0x70
-10000648:	00c72623          	sw	a2,12(a4) # 2600000c <_erodata+0x15fff40c>
+10000648:	00c72623          	sw	a2,12(a4) # 2600000c <_erodata+0x15fff30c>
 //writing bitstream to sram1//////////////////////////////////////////////////////////////////////////////////////////////////////////////
   word_ctr = 0;
   page_request_idx = sram1[7];
 1000064c:	30000737          	lui	a4,0x30000
-10000650:	01c72603          	lw	a2,28(a4) # 3000001c <_erodata+0x1ffff41c>
+10000650:	01c72603          	lw	a2,28(a4) # 3000001c <_erodata+0x1ffff31c>
 10000654:	01c70713          	addi	a4,a4,28
   while (page_request_idx == 0xffffffff) { //0xffffffff: first page not requested yet
 10000658:	fff00593          	li	a1,-1
-1000065c:	14b60063          	beq	a2,a1,1000079c <main+0x308>
+1000065c:	18b60663          	beq	a2,a1,100007e8 <main+0x354>
   } //wait until next page is requested
   while (word_ctr < MAX_BITBYTES/4) {
     page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
-    page_idx = page_ctr % NUM_PAGES_BITSTR;
+    page_idx = page_ctr % BITSTR_NR_PHYS_PAGES;
 
     sram1[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 10000660:	30000337          	lui	t1,0x30000
@@ -891,7 +891,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
     if ((word_ctr + 1) % (PAGE_SIZE_BITSTR/4) == 0) {
          __asm__ volatile("" ::: "memory"); //to make sure all the writes to sram above are done before continuing, otherwise instructions might be reordered
 				sram1[6] = page_ctr;  //bitstream page ready counter
-10000668:	01830813          	addi	a6,t1,24 # 30000018 <_erodata+0x1ffff418>
+10000668:	01830813          	addi	a6,t1,24 # 30000018 <_erodata+0x1ffff318>
         __asm__ volatile("" ::: "memory");
 
         page_request_idx = sram1[7];
@@ -900,7 +900,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
 10000670:	04800e13          	li	t3,72
     page_ctr = word_ctr / (PAGE_SIZE_BITSTR/4);
 10000674:	00465593          	srli	a1,a2,0x4
-    page_idx = page_ctr % NUM_PAGES_BITSTR;
+    page_idx = page_ctr % BITSTR_NR_PHYS_PAGES;
 10000678:	0015f713          	andi	a4,a1,1
     sram1[32 + (page_idx * (PAGE_SIZE_BITSTR/4)) + (word_ctr % (PAGE_SIZE_BITSTR/4))] = bitstream[word_ctr];
 1000067c:	00270713          	addi	a4,a4,2
@@ -909,7 +909,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
 10000688:	01170733          	add	a4,a4,a7
 1000068c:	00261893          	slli	a7,a2,0x2
 10000690:	011688b3          	add	a7,a3,a7
-10000694:	1f88a883          	lw	a7,504(a7)
+10000694:	2b88a883          	lw	a7,696(a7)
 10000698:	00271713          	slli	a4,a4,0x2
 1000069c:	00670733          	add	a4,a4,t1
     if ((word_ctr + 1) % (PAGE_SIZE_BITSTR/4) == 0) {
@@ -918,7 +918,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
 100006a4:	01172023          	sw	a7,0(a4)
     if ((word_ctr + 1) % (PAGE_SIZE_BITSTR/4) == 0) {
 100006a8:	00f67713          	andi	a4,a2,15
-100006ac:	0e070c63          	beqz	a4,100007a4 <main+0x310>
+100006ac:	14070263          	beqz	a4,100007f0 <main+0x35c>
   while (word_ctr < MAX_BITBYTES/4) {
 100006b0:	fdc612e3          	bne	a2,t3,10000674 <main+0x1e0>
         } //wait until next page is requested
@@ -929,7 +929,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
   sram1[6] = page_ctr;
 100006b4:	30000737          	lui	a4,0x30000
 100006b8:	00400613          	li	a2,4
-100006bc:	00c72c23          	sw	a2,24(a4) # 30000018 <_erodata+0x1ffff418>
+100006bc:	00c72c23          	sw	a2,24(a4) # 30000018 <_erodata+0x1ffff318>
   __asm__ volatile("" ::: "memory");
 
 //writing permanent page with req_next and paging function to sram1////////////////////////////////////////////////////////////////////////////////////////////////
@@ -945,7 +945,7 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
     word = instructions[INSTRS_PAGE_A + INSTRS_PAGE_B + word_ctr];
     sram1[32 + word_ctr] = word;
 100006cc:	30000637          	lui	a2,0x30000
-100006d0:	f5c60613          	addi	a2,a2,-164 # 2fffff5c <_erodata+0x1ffff35c>
+100006d0:	f5c60613          	addi	a2,a2,-164 # 2fffff5c <_erodata+0x1ffff25c>
   for (word_ctr = 0; word_ctr < INSTRS_PAGE_C; word_ctr++) {
 100006d4:	05e00593          	li	a1,94
     word = instructions[INSTRS_PAGE_A + INSTRS_PAGE_B + word_ctr];
@@ -967,126 +967,145 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
   word_ctr = 0;
   page_request_idx = sram1[3];
 100006f4:	300007b7          	lui	a5,0x30000
-100006f8:	00c78793          	addi	a5,a5,12 # 3000000c <_erodata+0x1ffff40c>
+100006f8:	00c78793          	addi	a5,a5,12 # 3000000c <_erodata+0x1ffff30c>
   while(page_request_idx < 1) {
     page_request_idx = sram1[3]; //read new value of page request
 100006fc:	0007a703          	lw	a4,0(a5)
   while(page_request_idx < 1) {
 10000700:	fe070ee3          	beqz	a4,100006fc <main+0x268>
 
-  while(word_ctr < NUM_INSTR) {
+  while(word_ctr < INSTRUCTION_WORDS) {
     page_ctr = word_ctr / (PAGE_SIZE_INSTRS/4);
-    page_idx = page_ctr % NUM_PAGES_INSTRS;
+    page_idx = page_ctr % INSTRS_NR_PHYS_PAGES;
 
     sram2[(page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr_total];
-10000704:	300005b7          	lui	a1,0x30000
+10000704:	30000537          	lui	a0,0x30000
 
     if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
       __asm__ volatile("" ::: "memory");
       sram1[2] = page_ctr + 1; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
-10000708:	30000537          	lui	a0,0x30000
+10000708:	30000837          	lui	a6,0x30000
       __asm__ volatile("" ::: "memory");
 
       page_request_idx = sram1[3];
-1000070c:	30000637          	lui	a2,0x30000
+1000070c:	300005b7          	lui	a1,0x30000
   word_ctr = 0;
 10000710:	00000793          	li	a5,0
     sram2[(page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr_total];
-10000714:	40058593          	addi	a1,a1,1024 # 30000400 <_erodata+0x1ffff800>
+10000714:	40050513          	addi	a0,a0,1024 # 30000400 <_erodata+0x1ffff700>
       sram1[2] = page_ctr + 1; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
-10000718:	00850513          	addi	a0,a0,8 # 30000008 <_erodata+0x1ffff408>
+10000718:	00880813          	addi	a6,a6,8 # 30000008 <_erodata+0x1ffff308>
       page_request_idx = sram1[3];
-1000071c:	00c60613          	addi	a2,a2,12 # 3000000c <_erodata+0x1ffff40c>
-  while(word_ctr < NUM_INSTR) {
-10000720:	02000893          	li	a7,32
-10000724:	05e78713          	addi	a4,a5,94
+1000071c:	00c58593          	addi	a1,a1,12 # 3000000c <_erodata+0x1ffff30c>
+  while(word_ctr < INSTRUCTION_WORDS) {
+10000720:	05000893          	li	a7,80
+10000724:	05e78613          	addi	a2,a5,94
     sram2[(page_idx * (PAGE_SIZE_INSTRS/4)) + (word_ctr % (PAGE_SIZE_INSTRS/4))] = instructions[word_ctr_total];
-10000728:	00271713          	slli	a4,a4,0x2
-1000072c:	00e68733          	add	a4,a3,a4
-10000730:	00072703          	lw	a4,0(a4)
-10000734:	00279813          	slli	a6,a5,0x2
-10000738:	00b80833          	add	a6,a6,a1
-1000073c:	00e82023          	sw	a4,0(a6)
+10000728:	00261613          	slli	a2,a2,0x2
+1000072c:	00c68633          	add	a2,a3,a2
+10000730:	00062603          	lw	a2,0(a2)
+10000734:	03f7f713          	andi	a4,a5,63
+10000738:	00271713          	slli	a4,a4,0x2
+1000073c:	00a70733          	add	a4,a4,a0
+10000740:	00c72023          	sw	a2,0(a4)
     if ((word_ctr + 1)% (PAGE_SIZE_INSTRS/4) == 0) {
-10000740:	00078713          	mv	a4,a5
-10000744:	00178793          	addi	a5,a5,1
-10000748:	00f7f813          	andi	a6,a5,15
-1000074c:	06080863          	beqz	a6,100007bc <main+0x328>
-  while(word_ctr < NUM_INSTR) {
-10000750:	fd179ae3          	bne	a5,a7,10000724 <main+0x290>
+10000744:	00078713          	mv	a4,a5
+10000748:	00178793          	addi	a5,a5,1
+1000074c:	00f7f613          	andi	a2,a5,15
+10000750:	0a060c63          	beqz	a2,10000808 <main+0x374>
+  while(word_ctr < INSTRUCTION_WORDS) {
+10000754:	fd1798e3          	bne	a5,a7,10000724 <main+0x290>
     }
     word_ctr++;
     word_ctr_total++;
   }
   __asm__ volatile("" ::: "memory");
   sram1[2] = page_ctr + 1;
-10000754:	300007b7          	lui	a5,0x30000
-10000758:	00200713          	li	a4,2
-1000075c:	00e7a423          	sw	a4,8(a5) # 30000008 <_erodata+0x1ffff408>
-  __asm__ volatile("" ::: "memory");
+10000758:	300007b7          	lui	a5,0x30000
+1000075c:	00500713          	li	a4,5
+10000760:	00e7a423          	sw	a4,8(a5) # 30000008 <_erodata+0x1ffff308>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   while (1) {
-    if (sram1[4] == 0xDEADBEEF) {
-10000760:	deadc6b7          	lui	a3,0xdeadc
-10000764:	01078713          	addi	a4,a5,16
+    if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
       reg_mprj_datal = 0x00040000; // simulation end with successful test
     } else if (sram1[1] == 0xCAFEBABE) {
-10000768:	00478613          	addi	a2,a5,4
-1000076c:	cafec5b7          	lui	a1,0xcafec
-10000770:	260007b7          	lui	a5,0x26000
-    if (sram1[4] == 0xDEADBEEF) {
-10000774:	eef68693          	addi	a3,a3,-273 # deadbeef <_erodata+0xceadb2ef>
+10000764:	30000637          	lui	a2,0x30000
+    if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
+10000768:	02478693          	addi	a3,a5,36
     } else if (sram1[1] == 0xCAFEBABE) {
-10000778:	abe58593          	addi	a1,a1,-1346 # cafebabe <_erodata+0xbafeaebe>
-1000077c:	00c78793          	addi	a5,a5,12 # 2600000c <_erodata+0x15fff40c>
+1000076c:	cafec5b7          	lui	a1,0xcafec
+    if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
+10000770:	deadc7b7          	lui	a5,0xdeadc
+10000774:	26000737          	lui	a4,0x26000
+10000778:	30000537          	lui	a0,0x30000
+1000077c:	30000837          	lui	a6,0x30000
+10000780:	300008b7          	lui	a7,0x30000
+10000784:	30000337          	lui	t1,0x30000
+10000788:	eef78793          	addi	a5,a5,-273 # deadbeef <_erodata+0xceadb1ef>
+    } else if (sram1[1] == 0xCAFEBABE) {
+1000078c:	00460613          	addi	a2,a2,4 # 30000004 <_erodata+0x1ffff304>
+10000790:	abe58593          	addi	a1,a1,-1346 # cafebabe <_erodata+0xbafeadbe>
+10000794:	00c70713          	addi	a4,a4,12 # 2600000c <_erodata+0x15fff30c>
       reg_mprj_datal = 0x00050000; // simulation end with failed test
     } else {
       reg_mprj_datal = 0x00060000; // simulation end with failed test
-10000780:	00060537          	lui	a0,0x60
+10000798:	00060e37          	lui	t3,0x60
       reg_mprj_datal = 0x00050000; // simulation end with failed test
-10000784:	00050837          	lui	a6,0x50
+1000079c:	00050eb7          	lui	t4,0x50
+    if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
+100007a0:	02850513          	addi	a0,a0,40 # 30000028 <_erodata+0x1ffff328>
+100007a4:	02c80813          	addi	a6,a6,44 # 3000002c <_erodata+0x1ffff32c>
+100007a8:	03088893          	addi	a7,a7,48 # 30000030 <_erodata+0x1ffff330>
+100007ac:	03430313          	addi	t1,t1,52 # 30000034 <_erodata+0x1ffff334>
+100007b0:	0006af03          	lw	t5,0(a3)
+100007b4:	06ff1a63          	bne	t5,a5,10000828 <main+0x394>
+100007b8:	00052f03          	lw	t5,0(a0)
+100007bc:	06ff1663          	bne	t5,a5,10000828 <main+0x394>
+100007c0:	00082f03          	lw	t5,0(a6)
+100007c4:	06ff1263          	bne	t5,a5,10000828 <main+0x394>
+100007c8:	0008af03          	lw	t5,0(a7)
+100007cc:	04ff1e63          	bne	t5,a5,10000828 <main+0x394>
+100007d0:	00032f03          	lw	t5,0(t1)
+100007d4:	04ff1a63          	bne	t5,a5,10000828 <main+0x394>
       reg_mprj_datal = 0x00040000; // simulation end with successful test
-10000788:	000408b7          	lui	a7,0x40
-    if (sram1[4] == 0xDEADBEEF) {
-1000078c:	00072303          	lw	t1,0(a4)
-10000790:	04d31663          	bne	t1,a3,100007dc <main+0x348>
-      reg_mprj_datal = 0x00040000; // simulation end with successful test
-10000794:	0117a023          	sw	a7,0(a5)
-10000798:	ff5ff06f          	j	1000078c <main+0x2f8>
+100007d8:	26000f37          	lui	t5,0x26000
+100007dc:	00040fb7          	lui	t6,0x40
+100007e0:	01ff2623          	sw	t6,12(t5) # 2600000c <_erodata+0x15fff30c>
+100007e4:	fcdff06f          	j	100007b0 <main+0x31c>
     page_request_idx = sram1[7]; //read new value of page request
-1000079c:	00072603          	lw	a2,0(a4)
-100007a0:	ebdff06f          	j	1000065c <main+0x1c8>
+100007e8:	00072603          	lw	a2,0(a4)
+100007ec:	e71ff06f          	j	1000065c <main+0x1c8>
 				sram1[6] = page_ctr;  //bitstream page ready counter
-100007a4:	00b82023          	sw	a1,0(a6) # 50000 <_fstack+0x4fc00>
+100007f0:	00b82023          	sw	a1,0(a6)
         page_request_idx = sram1[7];
-100007a8:	00052703          	lw	a4,0(a0) # 60000 <_fstack+0x5fc00>
+100007f4:	00052703          	lw	a4,0(a0)
         while (page_request_idx < (page_ctr + 1)) {
-100007ac:	00158593          	addi	a1,a1,1
-100007b0:	ecb772e3          	bgeu	a4,a1,10000674 <main+0x1e0>
+100007f8:	00158593          	addi	a1,a1,1
+100007fc:	e6b77ce3          	bgeu	a4,a1,10000674 <main+0x1e0>
           page_request_idx = sram1[7]; //read new value of page request
-100007b4:	00052703          	lw	a4,0(a0)
-100007b8:	ff9ff06f          	j	100007b0 <main+0x31c>
+10000800:	00052703          	lw	a4,0(a0)
+10000804:	ff9ff06f          	j	100007fc <main+0x368>
     page_ctr = word_ctr / (PAGE_SIZE_INSTRS/4);
-100007bc:	00475713          	srli	a4,a4,0x4
+10000808:	00475713          	srli	a4,a4,0x4
       sram1[2] = page_ctr + 1; //write page counter to address 0x000 (address 0 in sram1) so the core can check this if the next page is ready
-100007c0:	00170813          	addi	a6,a4,1
-100007c4:	01052023          	sw	a6,0(a0)
+1000080c:	00170613          	addi	a2,a4,1
+10000810:	00c82023          	sw	a2,0(a6)
       page_request_idx = sram1[3];
-100007c8:	00062803          	lw	a6,0(a2)
+10000814:	0005a603          	lw	a2,0(a1)
       while (page_request_idx < (page_ctr + 2)) {
-100007cc:	00270713          	addi	a4,a4,2
-100007d0:	f8e870e3          	bgeu	a6,a4,10000750 <main+0x2bc>
+10000818:	00270713          	addi	a4,a4,2
+1000081c:	f2e67ce3          	bgeu	a2,a4,10000754 <main+0x2c0>
         page_request_idx = sram1[3]; //read new value of page request
-100007d4:	00062803          	lw	a6,0(a2)
-100007d8:	ff9ff06f          	j	100007d0 <main+0x33c>
+10000820:	0005a603          	lw	a2,0(a1)
+10000824:	ff9ff06f          	j	1000081c <main+0x388>
     } else if (sram1[1] == 0xCAFEBABE) {
-100007dc:	00062303          	lw	t1,0(a2)
-100007e0:	00b31663          	bne	t1,a1,100007ec <main+0x358>
+10000828:	00062f03          	lw	t5,0(a2)
+1000082c:	00bf1663          	bne	t5,a1,10000838 <main+0x3a4>
       reg_mprj_datal = 0x00050000; // simulation end with failed test
-100007e4:	0107a023          	sw	a6,0(a5)
-100007e8:	fa5ff06f          	j	1000078c <main+0x2f8>
+10000830:	01d72023          	sw	t4,0(a4)
+10000834:	f7dff06f          	j	100007b0 <main+0x31c>
       reg_mprj_datal = 0x00060000; // simulation end with failed test
-100007ec:	00a7a023          	sw	a0,0(a5)
-100007f0:	f9dff06f          	j	1000078c <main+0x2f8>
+10000838:	01c72023          	sw	t3,0(a4)
+1000083c:	f75ff06f          	j	100007b0 <main+0x31c>
 	...

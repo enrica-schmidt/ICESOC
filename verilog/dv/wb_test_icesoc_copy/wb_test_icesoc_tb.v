@@ -27,7 +27,7 @@ module wb_test_icesoc_tb;
 	//reg CSB;
 	reg power1, power2;
 	reg power3, power4;
-	integer address;
+	integer address, iteration;
 
 	wire gpio;
 	wire [37:0] mprj_io;
@@ -42,10 +42,8 @@ module wb_test_icesoc_tb;
 	assign sram_address = mprj_io[31:0];
 
 	assign mprj_io[9] = rxd_uart_to_mem; //send data from testbench to icesoc (write to sram)
-	//assign txd_uart_from_mem = mprj_io[11]; //receive data from icesoc (read from sram)
 
 	//assign mprj_io[3] = (CSB == 1'b1) ? 1'b1 : 1'bz;
-
 
 	// External clock is used by default.  Make this artificially fast for the
 	// simulation.  Normally this would be a slow clock and the digital PLL
@@ -58,26 +56,6 @@ module wb_test_icesoc_tb;
 	end
 
 	localparam CLK_PER = 2 * 12.5;
-    localparam MAX_BITBYTES = 200; //change this back to 20000
-    localparam NUM_INSTR = 128; //nr of instructions to be written to sram 
-    localparam MEM_BYTES = NUM_INSTR * 4; //4 bytes written per instruction
-    localparam BIT_PERIOD_UART_TO_MEM = 8 * CLK_PER;
-	
-	localparam PAGE_SIZE_BITSTR = 256; //nr words per page, only 1/4th is addressable
-	localparam NUM_PAGES_BITSTR = 2; //nr of pages
-	
-	localparam PAGE_SIZE_INSTRS = 256; //nr words per page, only 1/4th is addressable
-	localparam NUM_PAGES_INSTRS = 2; //nr of pages
-
-    reg [7:0] memory[0:MEM_BYTES-1];
-	reg [7:0] bitstream[0:MAX_BITBYTES-1];
-	reg [7:0] ctrl_bytes[0:2];
-	reg [24:0] flat_ctrl_bytes, flat_ctrl_bytes_start;
-	reg [31:0] word;
-
-	integer ctrl_byte_idx, bit_idx, data_byte_idx, word_ctr, page_ctr, page_idx;
-	reg [7:0] send_byte;
-
 
 	initial begin
 		$dumpfile("wb_test_icesoc.vcd");
@@ -91,10 +69,11 @@ module wb_test_icesoc_tb;
 		#2000;             //hold reset for 2000ns
 		RSTB <= 1'b1;        // Release resetB
 
-		//wait(checkbits == 16'h0007); //wait for the first instruction page to be written to sram
-		repeat (50) begin
+		iteration = 0;
+		repeat (65) begin
 			repeat (10000) @(posedge clock);
-            $display("+1000 cycles");
+            $display("+1000 cycles %0d", iteration);
+			iteration = iteration + 1;
 		end
 		$finish;
 	end
@@ -107,8 +86,8 @@ module wb_test_icesoc_tb;
 	   	$display("Monitor: MPRJ-Logic WB Started [T=%0t]", $realtime);
 	   	wait(checkbits == 16'h0002);
 	   	$display("Monitor: Program ibex [T=%0t]", $realtime);
-		wait(checkbits == 16'h0007); //after the first instruction page is written
-	   	$display("Monitor: Start ibex (first instruction page and first bitstream page were written) [T=%0t]", $realtime);
+		wait(checkbits == 16'h0007); //after the first two instruction pages are written
+	   	$display("Monitor: Start ibex (instruction pages A and B are ready) [T=%0t]", $realtime);
 		ibex_ctrl = 8'b0010_0110; //set mprj_io[5]=fetch_enable_1=1 to start ibex core
 		//start and finish bitstream upload
 	end
@@ -117,8 +96,6 @@ module wb_test_icesoc_tb;
 		wait(checkbits == 16'h0004);
 		$display ("Monitor: ibex Passed [T=%0t]", $realtime);
 		//#7000;
-		//#(BIT_PERIOD_UART_TO_MEM * 40000);
-		//#(BIT_PERIOD_UART_TO_MEM * 450000);
 		//$finish;
 	end
 
@@ -127,7 +104,6 @@ module wb_test_icesoc_tb;
 		wait(checkbits == 16'h0005);
 		$display ("Monitor: ibex Failed [T=%0t]", $realtime);
 		#7000;
-		#(BIT_PERIOD_UART_TO_MEM * 20000);
 		$finish;
 	end
 
