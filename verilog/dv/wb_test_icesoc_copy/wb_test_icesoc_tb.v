@@ -58,24 +58,34 @@ module wb_test_icesoc_tb;
 	localparam CLK_PER = 2 * 12.5;
 
 	initial begin
+		//unit: -6: microseconds us, 3: digits after decimal point, " us": microseconds string, 13: min field width (to how many places the number will be padded with spaces for lining up)
+		$timeformat(-6, 3, " us", 13); 
+	end
+
+	initial begin
 		$dumpfile("wb_test_icesoc.vcd");
 		$dumpvars(0, wb_test_icesoc_tb);
+		/*
 		for (address = 0; address < 256; address = address + 4) begin
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[address]);
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_2_i.mem[address]);
 		end
+		*/
 
 		RSTB <= 1'b0;
 		#2000;             //hold reset for 2000ns
 		RSTB <= 1'b1;        // Release resetB
 
+		/*
 		iteration = 0;
-		repeat (65) begin
+		repeat (20) begin
 			repeat (10000) @(posedge clock);
             $display("+1000 cycles %0d", iteration);
 			iteration = iteration + 1;
 		end
 		$finish;
+		*/
+		
 	end
 
 	reg [31:0] checkpoint;
@@ -83,26 +93,35 @@ module wb_test_icesoc_tb;
 	initial begin
 		ibex_ctrl = 8'b0000_0110;
 	   	wait(checkbits == 16'h0001);
-	   	$display("Monitor: MPRJ-Logic WB Started [T=%0t]", $realtime);
+	   	$display("Monitor: MPRJ-Logic WB Started [T=%t]", $realtime);
 	   	wait(checkbits == 16'h0002);
-	   	$display("Monitor: Program ibex [T=%0t]", $realtime);
+	   	$display("Monitor: Program ibex [T=%t]", $realtime);
 		wait(checkbits == 16'h0007); //after the first two instruction pages are written
-	   	$display("Monitor: Start ibex (instruction pages A and B are ready) [T=%0t]", $realtime);
+	   	$display("Monitor: Start ibex (instruction pages A and B are ready) [T=%t]", $realtime);
 		ibex_ctrl = 8'b0010_0110; //set mprj_io[5]=fetch_enable_1=1 to start ibex core
 		//start and finish bitstream upload
 	end
 
 	initial begin
+		iteration = 0;
+		forever begin
+			repeat (100000) @(posedge clock);
+            $display("+100 000 cycles %0d [T=%t]", iteration, $realtime);
+			iteration = iteration + 1;
+		end
+	end
+
+	initial begin
 		wait(checkbits == 16'h0004);
-		$display ("Monitor: ibex Passed [T=%0t]", $realtime);
-		//#7000;
-		//$finish;
+		$display ("Monitor: ibex Passed [T=%t]", $realtime);
+		#7000;
+		$finish;
 	end
 
 
 	initial begin
 		wait(checkbits == 16'h0005);
-		$display ("Monitor: ibex Failed [T=%0t]", $realtime);
+		$display ("Monitor: ibex Failed [T=%t]", $realtime);
 		#7000;
 		$finish;
 	end
