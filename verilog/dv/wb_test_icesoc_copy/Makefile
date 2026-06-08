@@ -15,7 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ## PDK
-PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
+
+#PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
 PDK_PATH = $(PDK_ROOT)/sky130A
 
 ## Caravel Pointers
@@ -62,7 +63,7 @@ SIM?=RTL
 
 PATTERN = wb_test_icesoc
 
-all:  clean ${PATTERN:=.vcd} ${PATTERN:=.disasm}
+all:  clean ${PATTERN:=.fst} ${PATTERN:=.disasm}
 
 hex:  ${PATTERN:=.hex}
 
@@ -88,8 +89,8 @@ else
 	$< -o $@
 endif
 
-%.vcd: %.vvp
-	vvp $<
+%.fst: %.vvp
+	vvp $< -fst
 
 #ibex_prog = ./ibex_prog.h
 #$(ibex_prog): ibex_prog/*.c
@@ -97,7 +98,7 @@ endif
 
 #compile the program for ibex with the makefile in that folder, copy the header file generated in this directory, copy the bitstream.h file. then compile the firmware 
 %.elf: %.c $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
-	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && rm program.h && rm program.hex
+	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && $(MAKE) clean
 	cd program_and_bitstream/bitstream && python generate_header.py bitstr.hex bitstr.h && cp bitstr.h ../../bitstream.h && rm bitstr.h
 	cd program_and_bitstream && cp instr_bitstr_sizes.h ../instr_bitstr_sizes.h
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
@@ -134,6 +135,6 @@ endif
 # ---- Clean ----
 
 clean:
-	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.disasm *.log ibex_prog.h ibex_prog/build *.h
+	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.fst *.disasm *.log ibex_prog.h ibex_prog/build *.h
 
 .PHONY: clean hex all

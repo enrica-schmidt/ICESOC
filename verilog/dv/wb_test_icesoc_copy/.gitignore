@@ -1,3 +1,9 @@
 ibex_prog.h
 build/
 *.hex
+*.h
+*.elf
+*.disasm
+*.bin
+!program_and_bitstream/bitstream/bitstr.hex
+!program_and_bitstream/instr_bitstr_sizes.h
