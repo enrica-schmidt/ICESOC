@@ -15,7 +15,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ## PDK
-PDK_ROOT=/scratch/tn312
+
+#PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
+#PDK_ROOT=/scratch/tn312
 PDK_PATH = $(PDK_ROOT)/sky130A
 
 ## Caravel Pointers
@@ -97,7 +99,7 @@ endif
 
 #compile the program for ibex with the makefile in that folder, copy the header file generated in this directory, copy the bitstream.h file. then compile the firmware 
 %.elf: %.c $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
-	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && rm program.h && rm program.hex
+	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && $(MAKE) clean
 	cd program_and_bitstream/bitstream && python generate_header.py bitstr.hex bitstr.h && cp bitstr.h ../../bitstream.h && rm bitstr.h
 	cd program_and_bitstream && cp instr_bitstr_sizes.h ../instr_bitstr_sizes.h
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
