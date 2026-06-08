@@ -19,13 +19,13 @@ load_bitstreamB:addi t0, zero, 0x0          #t0: word_ctr = 0
                 addi t2, zero, 0x0          #t2: page_ctr_modulo = 0
                 addi t3, t1, 0x0            #t3: start_page = start_first_page
                 addi t4, zero, 0x0          #t4: page_ctr
-first_pageB:    lw t6, 0x18(zero)           #bitstr_page_ready=mem(0x18 = sram2[0])
-                bgeu t6, t5, first_pageB     #init value is 0xffffffff, so the page is ready when the counter has a value between 0 and bitstr_nr_pages-1, which is still in reg t5
+first_pageB:    lw t6, 0x18(zero)           #bitstr_page_ready=mem(0x18 = sram1[24])
+                bgeu t6, t5, first_pageB    #init value is 0xffffffff, so the page is ready when the counter has a value between 0 and bitstr_nr_pages-1, which is still in reg t5
 read_pageB:     addi t5, t3, 0x0            #t5: read_addr = start_page
 configB:        lw t6, 0(t5)
                 nop
                 addi t0, t0, 0x1
-                beq t0, a2, pagingB      #the entire bitstream was read, next request new instr pages
+                beq t0, a2, pagingB         #the entire bitstream was read, next request new instr pages
                 addi t5, t5, 0x4            #increment read_addr
                 add t6, t3, a0              #end_page = start_page + page_size
                 blt t5, t6, configB
@@ -37,9 +37,9 @@ req_nextB:      lw t6, 0x1c(zero)           #read page request counter
                 add t3, t3, a0              #start_page += page_size
                 bne t2, a1, poll_bitstrB    #check if modulo counter has reached last page, if so reset it
                 addi t2, zero, 0x0
-                addi t3, t1, 0x0             #start at first physical page again 
-poll_bitstrB:   lw t6, 0x18(zero)            #bitstr_page_ready=mem(0x18 = sram2[0])
-                blt t6, t4, poll_bitstrB     #use ctr, not modulo ctr for hard check
+                addi t3, t1, 0x0            #start at first physical page again 
+poll_bitstrB:   lw t6, 0x18(zero)           #bitstr_page_ready=mem(0x18 = sram2[0])
+                blt t6, t4, poll_bitstrB    #use ctr, not modulo ctr for hard check
                 j read_pageB
 pagingB:        addi s2, zero, 0x400        #s2: start address of next page; start_page += page_size
                 addi s3, zero, 1            #s3: page counter
