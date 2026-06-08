@@ -21,3 +21,8 @@ Bitstream : "wb_test_icesoc_copy/program_and_bitstream/bitstream/bitstream.h" To
 
 - bitstream page index start at 0 (change this later if possible, use 0 for initialization)
 - instruction page index start at 1, pages A-C don't count. did this so could initialize with 0 and not with 0xffffffff. counter starts at 1 for matching with the value in sram, modulo counter still starts at 0 for easier logic
+
+on Epic:
+export GCC_PATH=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
+export PDK_ROOT=/scratch/tn312
+source /scratch/tn312/oss-cad-suite/environment
