@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ## PDK
-PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
+PDK_ROOT=/scratch/tn312
 PDK_PATH = $(PDK_ROOT)/sky130A
 
 ## Caravel Pointers
@@ -51,8 +51,8 @@ LDSCRIPT := ../riscv_firmware_src/sections.lds
 LDFLAGS := -Wl,-Bstatic,-T,$(LDSCRIPT)
 
 ## RISCV GCC
-GCC_PATH?=
-GCC_PREFIX=riscv64-unknown-elf
+GCC_PATH?=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
+GCC_PREFIX=riscv-none-elf
 
 ## Simulation mode: RTL/GL
 SIM_DEFINES = -DFUNCTIONAL -DSIM
@@ -62,7 +62,7 @@ SIM?=RTL
 
 PATTERN = wb_test_icesoc
 
-all:  clean ${PATTERN:=.vcd} ${PATTERN:=.disasm}
+all:  clean ${PATTERN:=.fst} ${PATTERN:=.disasm}
 
 hex:  ${PATTERN:=.hex}
 
@@ -88,8 +88,8 @@ else
 	$< -o $@
 endif
 
-%.vcd: %.vvp
-	vvp $<
+%.fst: %.vvp
+	vvp $< -fst
 
 #ibex_prog = ./ibex_prog.h
 #$(ibex_prog): ibex_prog/*.c
@@ -103,7 +103,7 @@ endif
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
 
 %.disasm: %.elf
-	riscv64-unknown-elf-objdump -S -d $< > $@
+	${GCC_PATH}${GCC_PREFIX}-objdump -S -d $< > $@
 
 %.hex: %.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O verilog $< $@
@@ -134,6 +134,6 @@ endif
 # ---- Clean ----
 
 clean:
-	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.disasm *.log ibex_prog.h ibex_prog/build *.h
+	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.fst *.disasm *.log ibex_prog.h ibex_prog/build *.h
 
 .PHONY: clean hex all
