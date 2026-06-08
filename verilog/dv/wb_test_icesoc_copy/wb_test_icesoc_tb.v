@@ -49,13 +49,12 @@ module wb_test_icesoc_tb;
 	// simulation.  Normally this would be a slow clock and the digital PLL
 	// would be the fast clock.
 
+	localparam CLK_PER = 2 * 12.5;
 	always #(CLK_PER/2) clock <= (clock === 1'b0);
 
 	initial begin
 		clock = 0;
 	end
-
-	localparam CLK_PER = 2 * 12.5;
 
 	initial begin
 		//unit: -6: microseconds us, 3: digits after decimal point, " us": microseconds string, 13: min field width (to how many places the number will be padded with spaces for lining up)
@@ -63,14 +62,25 @@ module wb_test_icesoc_tb;
 	end
 
 	initial begin
-		$dumpfile("wb_test_icesoc.vcd");
-		$dumpvars(0, wb_test_icesoc_tb);
-		/*
+		$dumpfile("wb_test_icesoc.fst");
+		//$dumpvars(0, wb_test_icesoc_tb);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.io_in);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.io_out);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.io_oeb);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.W_OPA);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.W_OPB);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.W_RES0);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.W_RES1);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.W_RES2);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.eFPGA_operand_a_1_o);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.gen_eFPGA.Inst_eFPGA);
+		
 		for (address = 0; address < 256; address = address + 4) begin
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[address]);
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_2_i.mem[address]);
 		end
-		*/
+		
+		
 
 		RSTB <= 1'b0;
 		#2000;             //hold reset for 2000ns
@@ -78,7 +88,7 @@ module wb_test_icesoc_tb;
 
 		/*
 		iteration = 0;
-		repeat (20) begin
+		repeat (10) begin
 			repeat (10000) @(posedge clock);
             $display("+1000 cycles %0d", iteration);
 			iteration = iteration + 1;
@@ -92,11 +102,11 @@ module wb_test_icesoc_tb;
 	reg [ 7:0] ibex_ctrl;
 	initial begin
 		ibex_ctrl = 8'b0000_0110;
-	   	wait(checkbits == 16'h0001);
+	   	wait(checkbits == 16'h1000);
 	   	$display("Monitor: MPRJ-Logic WB Started [T=%t]", $realtime);
-	   	wait(checkbits == 16'h0002);
+	   	wait(checkbits == 16'h2000);
 	   	$display("Monitor: Program ibex [T=%t]", $realtime);
-		wait(checkbits == 16'h0007); //after the first two instruction pages are written
+		wait(checkbits == 16'h3000); //after the first two instruction pages are written
 	   	$display("Monitor: Start ibex (instruction pages A and B are ready) [T=%t]", $realtime);
 		ibex_ctrl = 8'b0010_0110; //set mprj_io[5]=fetch_enable_1=1 to start ibex core
 		//start and finish bitstream upload
@@ -112,7 +122,7 @@ module wb_test_icesoc_tb;
 	end
 
 	initial begin
-		wait(checkbits == 16'h0004);
+		wait(checkbits == 16'h4000);
 		$display ("Monitor: ibex Passed [T=%t]", $realtime);
 		#7000;
 		$finish;
@@ -120,7 +130,7 @@ module wb_test_icesoc_tb;
 
 
 	initial begin
-		wait(checkbits == 16'h0005);
+		wait(checkbits == 16'h5000);
 		$display ("Monitor: ibex Failed [T=%t]", $realtime);
 		#7000;
 		$finish;

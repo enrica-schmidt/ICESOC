@@ -115,14 +115,14 @@ void main() {
     ;
 
   // Flag start of the test
-  reg_mprj_datal = 0x00010000; //low 32 bits of 38 bit signal
+  reg_mprj_datal = 0x10000000; //low 32 bits of 38 bit signal
   reg_la2_oenb = reg_la2_iena = 0xFFFFFFFF; // [95:64]
 
   // Set LA bits 0-3 as outputs
   reg_la0_oenb = reg_la0_oenb & ~0xF;
 
   // Flag stop ibex_core to program
-  reg_mprj_datal = 0x00020000;
+  reg_mprj_datal = 0x20000000;
 
   // Set Fetch Enable (bits 1 & 3) to 0
   reg_la0_data = reg_la0_data & ~0xA;
@@ -160,7 +160,7 @@ void main() {
     sram2[0 + word_ctr] = word;
   }
 //start ibex core
-reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page are ready
+reg_mprj_datal = 0x30000000;  //signaling that first and second instruction page are ready
 
 //writing bitstream to sram1//////////////////////////////////////////////////////////////////////////////////////////
   word_ctr = 0;
@@ -231,13 +231,24 @@ reg_mprj_datal = 0x00070000;  //signaling that first and second instruction page
   __asm__ volatile("" ::: "memory");
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  while (1) {
+//reg_mprj_datal = 0x00040000;  
+reg_mprj_datal = 0x00060000; //set en=1 and rst=1 for top design on fabric (io_out[17] = I_top[0] = rst, io_out[18] = I_top[1] = en)
+int delay = 1000;
+while (delay > 0) {
+  delay--;
+}
+reg_mprj_datal = 0x00040000; //set en=1 and rst=0 for top design on fabric (io_out[17] = I_top[0] = rst, io_out[18] = I_top[1] = en)
+delay = 10000;
+while (delay > 0) {
+  delay--;
+}
+while (1) {
     if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
-      reg_mprj_datal = 0x00040000; // simulation end with successful test
+      reg_mprj_datal = 0x40000000; // simulation end with successful test
     } else if (sram1[1] == 0xCAFEBABE) {
-      reg_mprj_datal = 0x00050000; // simulation end with failed test
+      reg_mprj_datal = 0x50000000; // simulation end with failed test
     } else {
-      reg_mprj_datal = 0x00060000; // simulation end with failed test
+      reg_mprj_datal = 0x60000000; // simulation end with failed test
     }
   }
 }
