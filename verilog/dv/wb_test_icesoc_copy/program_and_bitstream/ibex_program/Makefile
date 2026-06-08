@@ -2,15 +2,18 @@ TARGET = program
 
 .PHONY: all clean
 
+#GCC_PATH?=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
+GCC_PREFIX=riscv64-unknown-elf
+
 all: 
 	$(MAKE) clean
 	$(MAKE) $(TARGET).hex $(TARGET).h $(TARGET).disasm
 
 %.elf: %.s
-	riscv64-unknown-elf-gcc -march=rv32im -mabi=ilp32 -nostdlib -static -Wl,-Ttext=0x0 -o $@ $<
+	${GCC_PATH}${GCC_PREFIX}-gcc -march=rv32im -mabi=ilp32 -nostdlib -static -Wl,-Ttext=0x0 -o $@ $<
 
 %.bin: %.elf
-	riscv64-unknown-elf-objcopy -O binary $< $@
+	${GCC_PATH}${GCC_PREFIX}-objcopy -O binary $< $@
 
 %.hex: %.bin
 #need to escape the $ with $$ for the sed command
@@ -36,7 +39,7 @@ all:
 
 
 %.disasm: %.elf
-	riscv64-unknown-elf-objdump -d $< > $@
+	${GCC_PATH}${GCC_PREFIX}-objdump -d $< > $@
 
 clean:
 	rm -f *.elf *.bin *.hex *.disasm *.h
