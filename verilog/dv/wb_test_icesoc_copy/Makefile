@@ -16,8 +16,8 @@
 
 ## PDK
 
-#PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
-#PDK_ROOT=/scratch/tn312
+#export PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
+#export PDK_ROOT=/scratch/tn312
 PDK_PATH = $(PDK_ROOT)/sky130A
 
 ## Caravel Pointers
@@ -64,7 +64,7 @@ SIM?=RTL
 
 PATTERN = wb_test_icesoc
 
-all:  clean ${PATTERN:=.fst} ${PATTERN:=.disasm}
+all:  clean ${PATTERN:=.fst} ${PATTERN:=.disasm} clean_without_fst
 
 hex:  ${PATTERN:=.hex}
 
@@ -138,4 +138,7 @@ endif
 clean:
 	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.fst *.disasm *.log ibex_prog.h ibex_prog/build *.h
 
-.PHONY: clean hex all
+clean_without_fst:
+	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.disasm *.log ibex_prog.h ibex_prog/build *.h
+
+.PHONY: clean hex all clean_without_fst
