@@ -104,7 +104,7 @@ endif
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
 
 %.disasm: %.elf
-	riscv64-unknown-elf-objdump -S -d $< > $@
+	${GCC_PATH}${GCC_PREFIX}-objdump -S -d $< > $@
 
 %.hex: %.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O verilog $< $@
