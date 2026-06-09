@@ -7,7 +7,8 @@ GCC_PREFIX=riscv-none-elf
 
 all: 
 	$(MAKE) clean
-	$(MAKE) $(TARGET).hex $(TARGET).h $(TARGET).disasm
+	$(MAKE) $(TARGET).h
+#	$(MAKE) $(TARGET).hex $(TARGET).disasm
 
 %.elf: %.s
 	${GCC_PATH}${GCC_PREFIX}-gcc -march=rv32im -mabi=ilp32 -nostdlib -static -Wl,-Ttext=0x0 -o $@ $<
