@@ -27,7 +27,7 @@ module wb_test_icesoc_tb;
 	//reg CSB;
 	reg power1, power2;
 	reg power3, power4;
-	integer address, iteration;
+	integer address, iteration, i;
 
 	wire gpio;
 	wire [37:0] mprj_io;
@@ -64,6 +64,10 @@ module wb_test_icesoc_tb;
 	initial begin
 		$dumpfile("wb_test_icesoc.fst");
 		//$dumpvars(0, wb_test_icesoc_tb);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.CLK);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.SelfWriteData);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.SelfWriteStrobe);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.fetch_enable_1);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.io_in);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.io_out);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.io_oeb);
@@ -86,15 +90,15 @@ module wb_test_icesoc_tb;
 		#2000;             //hold reset for 2000ns
 		RSTB <= 1'b1;        // Release resetB
 
-		/*
-		iteration = 0;
-		repeat (10) begin
+		
+		i = 0;
+		repeat (20) begin
 			repeat (10000) @(posedge clock);
-            $display("+1000 cycles %0d", iteration);
-			iteration = iteration + 1;
+            $display("+1000 cycles %0d", i);
+			i = i + 1;
 		end
 		$finish;
-		*/
+		
 		
 	end
 

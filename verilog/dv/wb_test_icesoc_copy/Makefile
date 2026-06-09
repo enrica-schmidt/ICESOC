@@ -17,6 +17,8 @@
 ## PDK
 
 #export PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
+#export PDK_ROOT=/scratch/tn312
+#export GCC_PATH=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
 PDK_PATH = $(PDK_ROOT)/sky130A
 
 ## Caravel Pointers
@@ -63,13 +65,16 @@ SIM?=RTL
 
 PATTERN = wb_test_icesoc
 
-all:  clean ${PATTERN:=.fst} ${PATTERN:=.disasm} clean_without_fst
+all:  
+	$(MAKE) clean 
+	$(MAKE) ${PATTERN:=.fst} 
+	$(MAKE) clean_without_fst
+#	$(MAKE) ${PATTERN:=.disasm} 
 
 hex:  ${PATTERN:=.hex}
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)
-	date
 	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
 	-I $(UPRJ_RTL_PATH) \
@@ -81,7 +86,6 @@ ifeq ($(SIM),RTL)
 	$(UPRJ_RTL_EFPGACORE)/*.v \
 	$(UPRJ_RTL_PATH)/models_pack.v \
 	$< -o $@ -g2012
-	date
 else
 	iverilog $(SIM_DEFINES) -DGL -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(CARAVEL_VERILOG_PATH) \
@@ -90,6 +94,7 @@ else
 endif
 
 %.fst: %.vvp
+	date
 	vvp $< -fst
 
 #ibex_prog = ./ibex_prog.h
@@ -138,6 +143,6 @@ clean:
 	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.fst *.disasm *.log ibex_prog.h ibex_prog/build *.h
 
 clean_without_fst:
-	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.disasm *.log ibex_prog.h ibex_prog/build *.h
+	rm -rf *.elf *.hex *.bin *.vvp *.vcd *.disasm *.log ibex_prog.h ibex_prog/build memory.h bitstream.h
 
 .PHONY: clean hex all clean_without_fst
