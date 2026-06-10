@@ -31,14 +31,14 @@ module wb_test_icesoc_tb;
 
 	wire gpio;
 	wire [37:0] mprj_io;
-	wire [15:0] checkbits;
+	wire [3:0] checkbits;
 	wire [31:0]sram_address;
 
 	logic rxd_uart_to_mem; //, txd_uart_from_mem;
 	integer word_idx, fd;
 	logic dummy_signal_debug;
 
-	assign checkbits = mprj_io[31:16];
+	assign checkbits = mprj_io[31:28];
 	assign sram_address = mprj_io[31:0];
 
 	assign mprj_io[9] = rxd_uart_to_mem; //send data from testbench to icesoc (write to sram)
@@ -63,7 +63,8 @@ module wb_test_icesoc_tb;
 
 	initial begin
 		$dumpfile("wb_test_icesoc.fst");
-		//$dumpvars(0, wb_test_icesoc_tb);
+		$dumpvars(1, wb_test_icesoc_tb);
+		//$dumpvars(0, wb_test_icesoc_tb.mprj_io);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.CLK);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.SelfWriteData);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.SelfWriteStrobe);
@@ -92,7 +93,7 @@ module wb_test_icesoc_tb;
 
 		
 		i = 0;
-		repeat (20) begin
+		repeat (40) begin
 			repeat (10000) @(posedge clock);
             $display("+1000 cycles %0d", i);
 			i = i + 1;
@@ -102,15 +103,15 @@ module wb_test_icesoc_tb;
 		
 	end
 
-	reg [31:0] checkpoint;
+	//reg [31:0] checkpoint;
 	reg [ 7:0] ibex_ctrl;
 	initial begin
 		ibex_ctrl = 8'b0000_0110;
-	   	wait(checkbits == 16'h1000);
+	   	wait(checkbits == 4'h1);
 	   	$display("Monitor: MPRJ-Logic WB Started [T=%t]", $realtime);
-	   	wait(checkbits == 16'h2000);
+	   	wait(checkbits == 4'h2);
 	   	$display("Monitor: Program ibex [T=%t]", $realtime);
-		wait(checkbits == 16'h3000); //after the first two instruction pages are written
+		wait(checkbits == 4'h3); //after the first two instruction pages are written
 	   	$display("Monitor: Start ibex (instruction pages A and B are ready) [T=%t]", $realtime);
 		ibex_ctrl = 8'b0010_0110; //set mprj_io[5]=fetch_enable_1=1 to start ibex core
 		//start and finish bitstream upload
@@ -125,16 +126,24 @@ module wb_test_icesoc_tb;
 		end
 	end
 
+	reg [ 9:0] fabric_ctrl;
+	assign mprj_io[26:17] = fabric_ctrl;
 	initial begin
-		wait(checkbits == 16'h4000);
+		fabric_ctrl = 10'b0000000000;
+		wait(checkbits == 4'h4);
 		$display ("Monitor: ibex Passed [T=%t]", $realtime);
+		fabric_ctrl[0] = 1'b1; //set input io_in[17] of user project to 1 (rst=1 to fabric)
+		fabric_ctrl[1] = 1'b1; //set input io_in[18] of user project to 1 (en=1 to fabric)
+		#(CLK_PER * 5);
+		fabric_ctrl[0] = 1'b0; //deassert reset so counter on fabric starts counting
+		#(CLK_PER * 1000); // let the counter count
 		#7000;
 		$finish;
 	end
 
 
 	initial begin
-		wait(checkbits == 16'h5000);
+		wait(checkbits == 4'h5);
 		$display ("Monitor: ibex Failed [T=%t]", $realtime);
 		#7000;
 		$finish;
