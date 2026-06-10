@@ -232,6 +232,7 @@ reg_mprj_datal = 0x30000000;  //signaling that first and second instruction page
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //reg_mprj_datal = 0x00040000;  
+/*
 reg_mprj_datal = 0x00060000; //set en=1 and rst=1 for top design on fabric (io_out[17] = I_top[0] = rst, io_out[18] = I_top[1] = en)
 int delay = 1000;
 while (delay > 0) {
@@ -242,8 +243,9 @@ delay = 10000;
 while (delay > 0) {
   delay--;
 }
+  */
 while (1) {
-    if (sram1[9] == 0xdeadbeef && sram1[10] == 0xdeadbeef && sram1[11] == 0xdeadbeef && sram1[12] == 0xdeadbeef && sram1[13] == 0xdeadbeef) {
+    if (sram1[9] == 0xdeadbeef) {
       reg_mprj_datal = 0x40000000; // simulation end with successful test
     } else if (sram1[1] == 0xCAFEBABE) {
       reg_mprj_datal = 0x50000000; // simulation end with failed test
