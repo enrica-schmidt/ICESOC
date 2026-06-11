@@ -24,7 +24,6 @@
 module wb_test_icesoc_tb;
 	reg clock;
 	reg RSTB;
-	//reg CSB;
 	reg power1, power2;
 	reg power3, power4;
 	integer address, iteration, i;
@@ -32,18 +31,8 @@ module wb_test_icesoc_tb;
 	wire gpio;
 	wire [37:0] mprj_io;
 	wire [3:0] checkbits;
-	wire [31:0]sram_address;
-
-	logic rxd_uart_to_mem; //, txd_uart_from_mem;
-	integer word_idx, fd;
-	logic dummy_signal_debug;
 
 	assign checkbits = mprj_io[31:28];
-	assign sram_address = mprj_io[31:0];
-
-	assign mprj_io[9] = rxd_uart_to_mem; //send data from testbench to icesoc (write to sram)
-
-	//assign mprj_io[3] = (CSB == 1'b1) ? 1'b1 : 1'bz;
 
 	// External clock is used by default.  Make this artificially fast for the
 	// simulation.  Normally this would be a slow clock and the digital PLL
@@ -92,6 +81,7 @@ module wb_test_icesoc_tb;
 		RSTB <= 1'b1;        // Release resetB
 
 		
+		///*
 		i = 0;
 		repeat (40) begin
 			repeat (10000) @(posedge clock);
@@ -99,7 +89,7 @@ module wb_test_icesoc_tb;
 			i = i + 1;
 		end
 		$finish;
-		
+		//*/
 		
 	end
 
@@ -126,18 +116,21 @@ module wb_test_icesoc_tb;
 		end
 	end
 
-	reg [ 9:0] fabric_ctrl;
-	assign mprj_io[26:17] = fabric_ctrl;
+	reg [1:0] fabric_ctrl;
+	assign mprj_io[18:17] = fabric_ctrl;
 	initial begin
-		fabric_ctrl = 10'b0000000000;
+		fabric_ctrl = 2'b00;
 		wait(checkbits == 4'h4);
 		$display ("Monitor: ibex Passed [T=%t]", $realtime);
+		$display ("Monitor: Setting rst and en for fabric [T=%t]", $realtime);
 		fabric_ctrl[0] = 1'b1; //set input io_in[17] of user project to 1 (rst=1 to fabric)
 		fabric_ctrl[1] = 1'b1; //set input io_in[18] of user project to 1 (en=1 to fabric)
 		#(CLK_PER * 5);
 		fabric_ctrl[0] = 1'b0; //deassert reset so counter on fabric starts counting
-		#(CLK_PER * 1000); // let the counter count
+		$display ("Monitor: Counter rst deasserted [T=%t]", $realtime);
+		#(CLK_PER * 10000); // let the counter count
 		#7000;
+		$display ("Monitor: Counter at %0d [T=%t]", mprj_io[26:19], $realtime);
 		$finish;
 	end
 
