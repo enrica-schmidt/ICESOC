@@ -80,16 +80,16 @@ void main() {
   reg_mprj_io_29 = GPIO_MODE_MGMT_STD_OUTPUT;
   reg_mprj_io_28 = GPIO_MODE_MGMT_STD_OUTPUT;
   reg_mprj_io_27 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_26 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_25 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_24 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_23 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_22 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_21 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_20 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_19 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_18 = GPIO_MODE_MGMT_STD_OUTPUT;
-  reg_mprj_io_17 = GPIO_MODE_MGMT_STD_OUTPUT;
+  reg_mprj_io_26 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_25 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_24 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_23 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_22 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_21 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_20 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_19 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_18 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
+  reg_mprj_io_17 = GPIO_MODE_USER_STD_BIDIRECTIONAL;
   reg_mprj_io_16 = GPIO_MODE_MGMT_STD_OUTPUT;
 
   // Configure lower 8-IOs as user output
