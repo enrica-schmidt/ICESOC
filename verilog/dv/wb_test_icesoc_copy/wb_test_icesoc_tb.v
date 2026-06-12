@@ -85,7 +85,7 @@ module wb_test_icesoc_tb;
 		i = 0;
 		repeat (40) begin
 			repeat (10000) @(posedge clock);
-            $display("+1000 cycles %0d", i);
+            $display("+10 000 cycles %0d", i);
 			i = i + 1;
 		end
 		$finish;

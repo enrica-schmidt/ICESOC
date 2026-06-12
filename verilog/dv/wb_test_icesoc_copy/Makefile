@@ -16,9 +16,13 @@
 
 ## PDK
 
-#export PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
-#export PDK_ROOT=/scratch/tn312
-#export GCC_PATH=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
+#locally: export PDK_ROOT=~/Uni/studienarbeit/tools_icesoc/pdks
+#locally: export GCC_PREFIX=riscv64-unknown-elf
+
+#epic:    export PDK_ROOT=/scratch/tn312
+#epic:    export GCC_PATH=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
+#epic:    export GCC_PREFIX=riscv-none-elf
+
 PDK_PATH = $(PDK_ROOT)/sky130A
 
 ## Caravel Pointers
@@ -55,7 +59,7 @@ LDFLAGS := -Wl,-Bstatic,-T,$(LDSCRIPT)
 
 ## RISCV GCC
 GCC_PATH?=
-GCC_PREFIX=riscv64-unknown-elf
+#GCC_PREFIX=
 
 ## Simulation mode: RTL/GL
 SIM_DEFINES = -DFUNCTIONAL -DSIM

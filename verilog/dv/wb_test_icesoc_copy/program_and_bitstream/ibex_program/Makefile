@@ -2,8 +2,10 @@ TARGET = program
 
 .PHONY: all clean
 
-#export GCC_PATH=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
-GCC_PREFIX=riscv64-unknown-elf
+#locally: export GCC_PREFIX=riscv64-unknown-elf
+
+#epic:    export GCC_PATH=/scratch/tn312/xpack-riscv-none-elf-gcc-15.2.0-1/bin/
+#epic:    export GCC_PREFIX=riscv-none-elf
 
 all: 
 	$(MAKE) clean
