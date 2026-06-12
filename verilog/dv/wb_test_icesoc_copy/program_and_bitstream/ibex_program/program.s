@@ -23,7 +23,7 @@ first_pageB:    lw t6, 0x18(zero)           #bitstr_page_ready=mem(0x18 = sram1[
                 bgeu t6, t5, first_pageB    #init value is 0xffffffff, so the page is ready when the counter has a value between 0 and bitstr_nr_pages-1, which is still in reg t5
 read_pageB:     addi t5, t3, 0x0            #t5: read_addr = start_page
 configB:        lw t6, 0(t5)
-                nop
+                nop #0x000ff00b -> eFPGA3d0 zero, t6, zero (configure with contents of t6)
                 addi t0, t0, 0x1
                 beq t0, a2, pagingB         #the entire bitstream was read, next request new instr pages
                 addi t5, t5, 0x4            #increment read_addr
@@ -126,72 +126,19 @@ deadbeef1:      lui t0, 0xdeadc
 #### page 2 ###########################################################@0x440
 #have to pad pages with nops to have a length of exactly page_size
 main2:          jalr ra, s5, 0x0            #function call of req_next at addr s5
-                jal ra, deadbeef2
+                jal ra, cis2
                 nop                         #do stuff here
                 jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
-deadbeef2:      lui t0, 0xdeadc
-                addi t0, t0, -273           #t0=deadbeef
-                sw t0, 0x028(zero)          #mem[0x028]=deadbeef
+cis2:           addi t0, zero, 0xaa
+                addi t1, zero, 0xf0
+                nop #0x0053038b -> eFPGA0d0 t2, t1, t0
+                nop #0x00531e0b -> eFPGA1d0 t3, t1, t0
+                nop #0x00532e8b -> eFPGA2d0 t4, t1, t0
+                sw t2, 0x3c(zero)
+                sw t3, 0x40(zero)
+                sw t4, 0x44(zero)
                 jalr zero, 0(ra)
                 nop
                 nop
                 nop
-                nop
-                nop
-                nop
-                nop
-                nop
-#### page 3 ###########################################################@0x480
-#have to pad pages with nops to have a length of exactly page_size
-main3:          jalr ra, s5, 0x0            #function call of req_next at addr s5
-                jal ra, deadbeef3
-                nop                         #do stuff here
-                jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
-deadbeef3:      lui t0, 0xdeadc
-                addi t0, t0, -273           #t0=deadbeef
-                sw t0, 0x02c(zero)          #mem[0x02c]=deadbeef
-                jalr zero, 0(ra)
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-#### page 4 ###########################################################@0x4c0
-#have to pad pages with nops to have a length of exactly page_size
-main4:          jalr ra, s5, 0x0            #function call of req_next at addr s5
-                jal ra, deadbeef4
-                nop                         #do stuff here
-                jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
-deadbeef4:      lui t0, 0xdeadc
-                addi t0, t0, -273           #t0=deadbeef
-                sw t0, 0x030(zero)          #mem[0x030]=deadbeef
-                jalr zero, 0(ra)
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-#### page 5 ###########################################################@0x400
-#have to pad pages with nops to have a length of exactly page_size
-main5:          jalr ra, s5, 0x0            #function call of req_next at addr s5
-                jal ra, deadbeef5
-                nop                         #do stuff here
-                jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
-deadbeef5:      lui t0, 0xdeadc
-                addi t0, t0, -273           #t0=deadbeef
-                sw t0, 0x034(zero)          #mem[0x034]=deadbeef
-                jalr zero, 0(ra)
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
+
