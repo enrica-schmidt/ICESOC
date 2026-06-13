@@ -81,7 +81,7 @@ module wb_test_icesoc_tb;
 		RSTB <= 1'b1;        // Release resetB
 
 		
-		///*
+		/*
 		i = 0;
 		repeat (40) begin
 			repeat (10000) @(posedge clock);
@@ -89,7 +89,7 @@ module wb_test_icesoc_tb;
 			i = i + 1;
 		end
 		$finish;
-		//*/
+		*/
 		
 	end
 
