@@ -81,7 +81,7 @@ module wb_test_icesoc_tb;
 		RSTB <= 1'b1;        // Release resetB
 
 		
-		///*
+		/*
 		i = 0;
 		repeat (40) begin
 			repeat (10000) @(posedge clock);
@@ -89,7 +89,7 @@ module wb_test_icesoc_tb;
 			i = i + 1;
 		end
 		$finish;
-		//*/
+		*/
 		
 	end
 
@@ -113,6 +113,10 @@ module wb_test_icesoc_tb;
 			repeat (100000) @(posedge clock);
             $display("+100 000 cycles %0d [T=%t]", iteration, $realtime);
 			iteration = iteration + 1;
+			if (iteration >= 200) begin
+				$display("reached 200 iterations. finish now.");
+				$finish;
+			end
 		end
 	end
 
