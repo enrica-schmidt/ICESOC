@@ -19,7 +19,7 @@
 #include <gpio_config_io.h>
 #include <stdint.h>
 #include <stub.c>
-#include "instr_bitstr_sizes.h"
+#include "instr_bitstr_sizes_shrunk.h"
 
 /*
         Wishbone Test:
