@@ -86,6 +86,7 @@ module wb_test_icesoc_tb;
 		repeat (40) begin
 			repeat (10000) @(posedge clock);
             $display("+10 000 cycles %0d", i);
+			$display("bitstream page ready: %0h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[24]);
 			i = i + 1;
 		end
 		$finish;
@@ -112,6 +113,7 @@ module wb_test_icesoc_tb;
 		forever begin
 			repeat (100000) @(posedge clock);
             $display("+100 000 cycles %0d [T=%t]", iteration, $realtime);
+			$display("bitstream page ready: %0h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[24]);
 			iteration = iteration + 1;
 		end
 	end
