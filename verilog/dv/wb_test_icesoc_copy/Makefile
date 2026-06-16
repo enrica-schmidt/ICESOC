@@ -61,18 +61,26 @@ SIM_DEFINES = -DFUNCTIONAL -DSIM
 SIM?=RTL
 
 .SUFFIXES:
+.SECONDARY: $(RUN_DIR)/%.elf $(RUN_DIR)/%.hex
 
-PATTERN = wb_test_icesoc
+PATTERN ?= wb_test_icesoc
+RUN_DIR ?= output_dir
 
 all:  
-	$(MAKE) clean 
-	$(MAKE) ${PATTERN:=.fst} 
-	$(MAKE) clean_without_fst
-#	$(MAKE) ${PATTERN:=.disasm} 
+#	$(MAKE) clean 
+#	mkdir -p $(RUN_DIR)
+	mkdir -p $(RUN_DIR)/sources
+	cp wb_test_icesoc.c $(RUN_DIR)/sources
+	cp wb_test_icesoc_tb.v $(RUN_DIR)/sources
+	cp instr_bitstr_sizes.h $(RUN_DIR)/sources
+	$(MAKE) ${RUN_DIR}/${PATTERN:=.disasm} 
+	$(MAKE) ${RUN_DIR}/${PATTERN:=.fst} 
+#	$(MAKE) clean_without_fst
+	
 
-hex:  ${PATTERN:=.hex}
+hex:  ${RUN_DIR}/${PATTERN:=.hex}
 
-%.vvp: %_tb.v %.hex
+$(RUN_DIR)/%.vvp: $(RUN_DIR)/sources/%_tb.v $(RUN_DIR)/%.hex
 ifeq ($(SIM),RTL)
 	iverilog $(SIM_DEFINES) -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(UPRJ_BEHAVIOURAL_MODELS) \
@@ -92,30 +100,30 @@ else
 	$< -o $@
 endif
 
-%.fst: %.vvp
+$(RUN_DIR)/%.fst: $(RUN_DIR)/%.vvp
 	date
-	vvp $< -fst
+	cd $(RUN_DIR) && vvp $(notdir $<) -fst
 
 #ibex_prog = ./ibex_prog.h
 #$(ibex_prog): ibex_prog/*.c
 #	make -C ./ibex_prog all work_dir=build
 
 #compile the program for ibex with the makefile in that folder, copy the header file generated in this directory, copy the bitstream.h file. then compile the firmware 
-%.elf: %.c $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
+$(RUN_DIR)/%.elf: $(RUN_DIR)/sources/%.c $(LDSCRIPT) ../riscv_firmware_src/crt0_vex.S check-env
 #	cd program_and_bitstream/ibex_program && $(MAKE) && cp program.h ../../memory.h && $(MAKE) clean
 #	cd program_and_bitstream/bitstream && python generate_header.py bitstr.hex bitstr.h && cp bitstr.h ../../bitstream.h && rm bitstr.h
 #	cd program_and_bitstream && cp instr_bitstr_sizes.h ../instr_bitstr_sizes.h
 	${GCC_PATH}${GCC_PREFIX}-gcc $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@ $(SRC_FILES) $<
 
-%.disasm: %.elf
+$(RUN_DIR)/%.disasm: $(RUN_DIR)/%.elf
 	${GCC_PATH}${GCC_PREFIX}-objdump -S -d $< > $@
 
-%.hex: %.elf
+$(RUN_DIR)/%.hex: $(RUN_DIR)/%.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O verilog $< $@
 	# to fix flash base address
 	sed -i 's/@1000/@0000/g' $@
 
-%.bin: %.elf
+$(RUN_DIR)/%.bin: $(RUN_DIR)/%.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O binary $< $@
 
 # The compiler should either be located at a specific location or available as a global command
