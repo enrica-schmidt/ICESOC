@@ -73,8 +73,8 @@ all:
 	cp wb_test_icesoc.c $(RUN_DIR)/sources
 	cp wb_test_icesoc_tb.v $(RUN_DIR)/sources
 	cp instr_bitstr_sizes.h $(RUN_DIR)/sources
-	$(MAKE) ${RUN_DIR}/${PATTERN:=.disasm} 
-	$(MAKE) ${RUN_DIR}/${PATTERN:=.fst} 
+	$(MAKE) ${RUN_DIR}/${PATTERN:=.disasm} 2>&1 | tee $(RUN_DIR)/simulation.log
+	$(MAKE) ${RUN_DIR}/${PATTERN:=.fst} 2>&1 | tee $(RUN_DIR)/simulation.log
 #	$(MAKE) clean_without_fst
 	
 
