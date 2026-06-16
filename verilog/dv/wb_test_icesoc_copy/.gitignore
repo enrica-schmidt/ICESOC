@@ -1,7 +1,5 @@
 ibex_prog.h
 build/
-*.hex
-*.h
 *.elf
 *.disasm
 *.bin
