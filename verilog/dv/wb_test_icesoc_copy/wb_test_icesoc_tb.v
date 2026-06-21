@@ -68,6 +68,7 @@ module wb_test_icesoc_tb;
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.W_RES2);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.eFPGA_operand_a_1_o);
 		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.gen_eFPGA.Inst_eFPGA);
+		$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.ibex_core_1.u_ibex_core.instr_rdata_i);
 		
 		for (address = 0; address < 256; address = address + 4) begin
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[address]);
