@@ -8,3 +8,4 @@ build/
 *.gtkw
 !program_and_bitstream/bitstream/bitstr.hex
 !program_and_bitstream/instr_bitstr_sizes.h
+sim_*/
