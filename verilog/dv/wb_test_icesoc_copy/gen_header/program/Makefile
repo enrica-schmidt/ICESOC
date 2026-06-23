@@ -1,4 +1,6 @@
-TARGET = program
+include ../../environment_vars.txt 
+
+TARGET ?= program
 
 .PHONY: all clean
 
@@ -6,6 +8,11 @@ all:
 	$(MAKE) clean
 	$(MAKE) $(TARGET).h
 #	$(MAKE) $(TARGET).hex $(TARGET).disasm
+
+
+disasm:
+	$(MAKE) clean
+	$(MAKE) $(TARGET).disasm
 
 %.elf: %.s
 	${GCC_PATH}${GCC_PREFIX}-gcc -march=rv32im -mabi=ilp32 -nostdlib -static -Wl,-Ttext=0x0 -o $@ $<
