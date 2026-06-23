@@ -115,9 +115,11 @@ module wb_test_icesoc_tb;
 			repeat (100000) @(posedge clock);
             $display("+100 000 cycles %0d [T=%t]", iteration, $realtime);
 			$display("bitstream page ready: 0x%0h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[24]);
+			$fflush();
 			iteration = iteration + 1;
 			if (iteration >= 200) begin
 				$display("reached 200 iterations. finish now.");
+				$fflush();
 				$finish;
 			end
 		end
