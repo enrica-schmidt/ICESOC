@@ -12,7 +12,7 @@
 */
 
 #include "programs/program_c.h"     //custom instructions in page 2, write ops and res to sram
-#include "bitstreams/bitstream_b.h" //counter and custom instructions on original fabric, fixed version which uses only correct 32 bit of ops and res
+#include "bitstreams/bitstream_g.h" //counter and custom instructions on original fabric, fixed version which uses only correct 32 bit of ops and res
 
 #define BITSTREAM_WORDS 4506 //full bitstream 4506 words //2406 shrunk
 #define INSTRUCTION_WORDS 32 //nr of instructions to be written to sram (not including page A-C) (PAGE_SIZE_INSTRS/4 * nr of virtual pages)
