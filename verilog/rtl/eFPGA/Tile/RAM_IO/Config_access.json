@@ -1,0 +1,92 @@
+{
+  "creator": "Yosys 0.58+35 (git sha1 9a12d9255, clang++ 18.1.8 -fPIC -O3)",
+  "modules": {
+    "Config_access": {
+      "attributes": {
+        "C_bit3": 3,
+        "C_bit2": 2,
+        "C_bit1": 1,
+        "C_bit0": 0,
+        "BelMap": 1,
+        "FABulous": 1,
+        "dynports": 1,
+        "top": 1,
+        "src": "/home/enrica/Uni/studienarbeit/ICESOC_FABulous_user_project/Tile/RAM_IO/Config_access.v:7.1-23.10"
+      },
+      "parameter_default_values": {
+        "NoConfigBits": 4
+      },
+      "ports": {
+        "C_bit0": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "C_bit1": {
+          "direction": "output",
+          "bits": [ 3 ]
+        },
+        "C_bit2": {
+          "direction": "output",
+          "bits": [ 4 ]
+        },
+        "C_bit3": {
+          "direction": "output",
+          "bits": [ 5 ]
+        },
+        "ConfigBits": {
+          "direction": "input",
+          "bits": [ 2, 3, 4, 5 ]
+        }
+      },
+      "cells": {
+      },
+      "netnames": {
+        "C_bit0": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "EXTERNAL": 1,
+            "FABulous": 1,
+            "src": "/home/enrica/Uni/studienarbeit/ICESOC_FABulous_user_project/Tile/RAM_IO/Config_access.v:10.33-10.39"
+          }
+        },
+        "C_bit1": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "EXTERNAL": 1,
+            "FABulous": 1,
+            "src": "/home/enrica/Uni/studienarbeit/ICESOC_FABulous_user_project/Tile/RAM_IO/Config_access.v:11.33-11.39"
+          }
+        },
+        "C_bit2": {
+          "hide_name": 0,
+          "bits": [ 4 ],
+          "attributes": {
+            "EXTERNAL": 1,
+            "FABulous": 1,
+            "src": "/home/enrica/Uni/studienarbeit/ICESOC_FABulous_user_project/Tile/RAM_IO/Config_access.v:12.33-12.39"
+          }
+        },
+        "C_bit3": {
+          "hide_name": 0,
+          "bits": [ 5 ],
+          "attributes": {
+            "EXTERNAL": 1,
+            "FABulous": 1,
+            "src": "/home/enrica/Uni/studienarbeit/ICESOC_FABulous_user_project/Tile/RAM_IO/Config_access.v:13.33-13.39"
+          }
+        },
+        "ConfigBits": {
+          "hide_name": 0,
+          "bits": [ 2, 3, 4, 5 ],
+          "attributes": {
+            "FABulous": 1,
+            "GLOBAL": 1,
+            "src": "/home/enrica/Uni/studienarbeit/ICESOC_FABulous_user_project/Tile/RAM_IO/Config_access.v:15.49-15.59"
+          }
+        }
+      }
+    }
+  }
+}
