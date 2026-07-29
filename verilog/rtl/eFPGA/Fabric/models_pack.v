@@ -1,3 +1,6 @@
+// file from icesoc_fabulous_user_project
+
+
 // Models for the embedded FPGA fabric
 // LHD1 Latch area 11.76
 //`timescale 1ns/1ns

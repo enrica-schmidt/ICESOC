@@ -34,8 +34,20 @@ UPRJ_BEHAVIOURAL_MODELS = ../
 UPRJ_RTL_PATH      = $(UPRJ_VERILOG_PATH)/rtl
 UPRJ_RTL_ICESOC    = $(UPRJ_VERILOG_PATH)/rtl/icesoc
 UPRJ_RTL_IBEXCORE  = $(UPRJ_VERILOG_PATH)/rtl/ibex_core
-UPRJ_RTL_EFPGACORE = $(UPRJ_VERILOG_PATH)/rtl/eFPGA_core
-UPRJ_RTL_EFPGACONF = $(UPRJ_VERILOG_PATH)/rtl/eFPGA_conf
+UPRJ_RTL_EFPGA     = $(shell find $(UPRJ_VERILOG_PATH)/rtl/eFPGA -type d)
+#Gemini:
+# Find all subdirectories inside eFPGA
+EFPGA_DIRS = $(shell find $(UPRJ_RTL_EFPGA) -type d)
+
+# Add '-I' for `include statements
+EFPGA_INCLUDES = $(addprefix -I , $(EFPGA_DIRS))
+
+# Add '-y' so iverilog automatically searches these folders for missing modules
+EFPGA_LIBS = $(addprefix -y , $(EFPGA_DIRS))
+
+EFPGA_SRCS = $(UPRJ_RTL_EFPGA)/eFPGA.v
+# UPRJ_RTL_EFPGACONF = $(UPRJ_VERILOG_PATH)/rtl/eFPGA_conf
+
 
 SRC_FILES := \
 	../riscv_firmware_src/crt0_vex.S \
@@ -87,11 +99,18 @@ ifeq ($(SIM),RTL)
 	-I $(UPRJ_RTL_PATH) \
 	-I $(UPRJ_RTL_ICESOC) \
 	-I $(UPRJ_RTL_IBEXCORE) \
-	-I $(UPRJ_RTL_EFPGACORE) \
-	-I $(UPRJ_RTL_EFPGACONF) \
-	$(UPRJ_RTL_EFPGACONF)/*.v \
-	$(UPRJ_RTL_EFPGACORE)/*.v \
-	$(UPRJ_RTL_PATH)/models_pack.v \
+	$(EFPGA_INCLUDES) \
+	$(EFPGA_LIBS) \
+	$(EFPGA_SRCS) \
+	$(UPRJ_RTL_PATH)/eFPGA/Fabric/models_pack.v \
+	$(UPRJ_RTL_PATH)/eFPGA/Tile/DSP/DSP_bot/DSP_bot_tile.v \
+	$(UPRJ_RTL_PATH)/eFPGA/Tile/DSP/DSP_top/DSP_top_tile.v \
+	$(UPRJ_RTL_PATH)/eFPGA/Frame_Select_Pack.v \
+	$(UPRJ_RTL_PATH)/eFPGA/Frame_Data_Reg_Pack.v \
+	$(UPRJ_RTL_PATH)/eFPGA/ConfigFSM.v \
+	$(UPRJ_RTL_PATH)/eFPGA/Config.v \
+	$(UPRJ_RTL_PATH)/eFPGA/config_UART.v \
+	$(UPRJ_RTL_PATH)/eFPGA/bitbang.v \
 	$< -o $@ -g2012
 else
 	iverilog $(SIM_DEFINES) -DGL -I $(PDK_PATH) \

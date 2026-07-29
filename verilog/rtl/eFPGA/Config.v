@@ -1,10 +1,26 @@
-module eFPGA_Config (CLK, resetn, Rx, ComActive, ReceiveLED, s_clk, s_data, SelfWriteData, SelfWriteStrobe, ConfigWriteData, ConfigWriteStrobe, FrameAddressRegister, LongFrameStrobe, RowSelect);
-	parameter NumberOfRows = 16;
+// SPDX-FileCopyrightText: 
+// 2021 Nguyen Dao
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+module Config (CLK, Rx, ComActive, ReceiveLED, s_clk, s_data, SelfWriteData, SelfWriteStrobe, ConfigWriteData, ConfigWriteStrobe, FrameAddressRegister, LongFrameStrobe, RowSelect);
+	//parameter NumberOfRows = 16;
 	parameter RowSelectWidth = 5;
 	parameter FrameBitsPerRow = 32;
-	parameter desync_flag = 20;
+	//parameter desync_flag = 20;
 	input CLK;
-	input resetn;
 	// UART configuration port
 	input Rx;
 	output ComActive;
@@ -37,11 +53,10 @@ module eFPGA_Config (CLK, resetn, Rx, ComActive, ReceiveLED, s_clk, s_data, Self
 	wire BitBangWriteStrobe_Mux;
 	wire BitBangActive;
 	
-	wire FSM_Reset;
+	wire Reset;
 
 	config_UART INST_config_UART (
 	.CLK(CLK),
-	.resetn(resetn),
 	.Rx(Rx),
 	.WriteData(UART_WriteData),
 	.ComActive(UART_ComActive),
@@ -57,8 +72,7 @@ module eFPGA_Config (CLK, resetn, Rx, ComActive, ReceiveLED, s_clk, s_data, Self
 	.strobe(BitBangWriteStrobe),
 	.data(BitBangWriteData),
 	.active(BitBangActive),
-	.clk(CLK),
-	.resetn(resetn)
+	.clk(CLK)
 	);
 	
 	// BitBangActive is used to switch between bitbang or internal configuration port (BitBang has therefore higher priority)
@@ -72,7 +86,7 @@ module eFPGA_Config (CLK, resetn, Rx, ComActive, ReceiveLED, s_clk, s_data, Self
 	assign ConfigWriteData = UART_WriteData_Mux;
 	assign ConfigWriteStrobe = UART_WriteStrobe_Mux;
 	
-	assign FSM_Reset = UART_ComActive || BitBangActive;
+	assign Reset = UART_ComActive || BitBangActive;
 
 	assign ComActive = UART_ComActive;
 	assign ReceiveLED = UART_LED^BitBangWriteStrobe;   
@@ -81,18 +95,11 @@ module eFPGA_Config (CLK, resetn, Rx, ComActive, ReceiveLED, s_clk, s_data, Self
 //	wire LongFrameStrobe;
 //	wire [RowSelectWidth-1:0] RowSelect;
 	
-	ConfigFSM #(
-	.NumberOfRows(NumberOfRows),
-	.RowSelectWidth(RowSelectWidth),
-	.FrameBitsPerRow(FrameBitsPerRow),
-	.desync_flag(desync_flag)
-	)
-	ConfigFSM_inst
-	(.CLK(CLK),
-	.resetn(resetn),
+	ConfigFSM ConfigFSM_inst (
+	.CLK(CLK),
 	.WriteData(UART_WriteData_Mux),
 	.WriteStrobe(UART_WriteStrobe_Mux),
-	.FSM_Reset(FSM_Reset),
+	.Reset(Reset),
 	//outputs
 	.FrameAddressRegister(FrameAddressRegister),
 	.LongFrameStrobe(LongFrameStrobe),
