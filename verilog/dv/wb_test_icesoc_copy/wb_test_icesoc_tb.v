@@ -84,7 +84,7 @@ module wb_test_icesoc_tb;
 		
 		/*
 		i = 0;
-		repeat (40) begin
+		repeat (2000) begin
 			repeat (10000) @(posedge clock);
             $display("+10 000 cycles %0d", i);
 			$display("bitstream page ready: 0x%0h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[24]);
@@ -131,6 +131,7 @@ module wb_test_icesoc_tb;
 		fabric_ctrl = 2'b00;
 		wait(checkbits == 4'h4);
 		$display ("Monitor: ibex Passed [T=%t]", $realtime);
+		$display("CRC result: 0x%h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[16]);
 		$display ("Monitor: Setting rst and en for fabric [T=%t]", $realtime);
 		fabric_ctrl[0] = 1'b1; //set input io_in[17] of user project to 1 (rst=1 to fabric)
 		fabric_ctrl[1] = 1'b1; //set input io_in[18] of user project to 1 (en=1 to fabric)

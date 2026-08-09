@@ -15,7 +15,7 @@ disasm:
 	$(MAKE) $(TARGET).disasm
 
 %.elf: %.s
-	${GCC_PATH}${GCC_PREFIX}-gcc -march=rv32im -mabi=ilp32 -nostdlib -static -Wl,-Ttext=0x0 -o $@ $<
+	${GCC_PATH}${GCC_PREFIX}-gcc -march=rv32im_zicsr -mabi=ilp32 -nostdlib -static -Wl,-Ttext=0x0 -o $@ $<
 
 %.bin: %.elf
 	${GCC_PATH}${GCC_PREFIX}-objcopy -O binary $< $@
@@ -40,7 +40,9 @@ disasm:
 	@hexdump -v -e '1/4 "    0x%08x,\n"' $< >> $@
 	@sed -i '$${s/,//}' $@
 	@echo "};" >> $@
-	@perl -0777 -i -pe 's/0x00000013/0x000ff00b/' $@
+	@perl -0777 -i -pe 's/0x00000013/0x000ff00b/' $@ 
+	@echo "--------REMINDER-------- If you want to use custom instructions,they should be written as nops in the program. Those nops now have to be replaced manually in the .h."
+#above: replace first occurrence of nop with custom instruction for configuring
 
 
 %.disasm: %.elf

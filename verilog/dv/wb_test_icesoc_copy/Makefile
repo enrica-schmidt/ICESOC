@@ -121,7 +121,7 @@ endif
 
 $(RUN_DIR)/%.fst: $(RUN_DIR)/%.vvp
 	date
-	cd $(RUN_DIR) && vvp $(notdir $<) -fst
+	cd $(RUN_DIR) && time vvp $(notdir $<) -fst
 
 #ibex_prog = ./ibex_prog.h
 #$(ibex_prog): ibex_prog/*.c
