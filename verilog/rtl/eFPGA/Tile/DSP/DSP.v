@@ -14,7 +14,14 @@
 // limitations under the License.
 //
 // SPDX-License-Identifier: Apache-2.0
-module DSP (top_N1BEG, top_N2BEG, top_N2BEGb, top_N4BEG, top_NN4BEG, top_S1END, top_S2MID, top_S2END, top_S4END, top_SS4END, top_E1BEG, top_E2BEG, top_E2BEGb, top_EE4BEG, top_E6BEG, top_E1END, top_E2MID, top_E2END, top_EE4END, top_E6END, top_W1BEG, top_W2BEG, top_W2BEGb, top_WW4BEG, top_W6BEG, top_W1END, top_W2MID, top_W2END, top_WW4END, top_W6END, bot_E1BEG, bot_E2BEG, bot_E2BEGb, bot_EE4BEG, bot_E6BEG, bot_E1END, bot_E2MID, bot_E2END, bot_EE4END, bot_E6END, bot_W1BEG, bot_W2BEG, bot_W2BEGb, bot_WW4BEG, bot_W6BEG, bot_W1END, bot_W2MID, bot_W2END, bot_WW4END, bot_W6END, bot_S1BEG, bot_S2BEG, bot_S2BEGb, bot_S4BEG, bot_SS4BEG, bot_N1END, bot_N2MID, bot_N2END, bot_N4END, bot_NN4END, UserCLK, UserCLKo, top_FrameData, top_FrameData_O, bot_FrameData, bot_FrameData_O, FrameStrobe, FrameStrobe_O);
+module DSP 
+	`ifdef EMULATION
+	#(
+        parameter [639:0] Emulate_Bitstream_top=640'b0,
+		parameter [639:0] Emulate_Bitstream_bot=640'b0
+	)
+	`endif
+(top_N1BEG, top_N2BEG, top_N2BEGb, top_N4BEG, top_NN4BEG, top_S1END, top_S2MID, top_S2END, top_S4END, top_SS4END, top_E1BEG, top_E2BEG, top_E2BEGb, top_EE4BEG, top_E6BEG, top_E1END, top_E2MID, top_E2END, top_EE4END, top_E6END, top_W1BEG, top_W2BEG, top_W2BEGb, top_WW4BEG, top_W6BEG, top_W1END, top_W2MID, top_W2END, top_WW4END, top_W6END, bot_E1BEG, bot_E2BEG, bot_E2BEGb, bot_EE4BEG, bot_E6BEG, bot_E1END, bot_E2MID, bot_E2END, bot_EE4END, bot_E6END, bot_W1BEG, bot_W2BEG, bot_W2BEGb, bot_WW4BEG, bot_W6BEG, bot_W1END, bot_W2MID, bot_W2END, bot_WW4END, bot_W6END, bot_S1BEG, bot_S2BEG, bot_S2BEGb, bot_S4BEG, bot_SS4BEG, bot_N1END, bot_N2MID, bot_N2END, bot_N4END, bot_NN4END, UserCLK, UserCLKo, top_FrameData, top_FrameData_O, bot_FrameData, bot_FrameData_O, FrameStrobe, FrameStrobe_O);
 
 	parameter MaxFramesPerCol = 20;
 	parameter FrameBitsPerRow = 32;
@@ -154,7 +161,11 @@ module DSP (top_N1BEG, top_N2BEG, top_N2BEGb, top_N4BEG, top_NN4BEG, top_S1END, 
 	
 	wire [MaxFramesPerCol-1:0] bot2top_FrameStrobe;
 	
-	DSP_top Inst_DSP_top(
+	DSP_top 
+	`ifdef EMULATION
+    #( .Emulate_Bitstream(Emulate_Bitstream_top) )
+    `endif
+	Inst_DSP_top(
 	.N1END(N1BEG),		// internal
 	.N2MID(N2BEG),		// internal
 	.N2END(N2BEGb),		// internal
@@ -205,7 +216,11 @@ module DSP (top_N1BEG, top_N2BEG, top_N2BEGb, top_N4BEG, top_NN4BEG, top_S1END, 
 	.FrameStrobe_O(FrameStrobe_O)
 	); 
 
-	DSP_bot Inst_DSP_bot(
+	DSP_bot 
+	`ifdef EMULATION
+    #( .Emulate_Bitstream(Emulate_Bitstream_bot) )
+    `endif
+	Inst_DSP_bot(
 	.N1END(bot_N1END),
 	.N2MID(bot_N2MID),
 	.N2END(bot_N2END),

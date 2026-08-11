@@ -4582,7 +4582,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y0_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y1_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y1_W_CPU_IO (
 	.W1END(Tile_X4Y1_W1BEG[3:0]),
 	.W2MID(Tile_X4Y1_W2BEG[7:0]),
 	.W2END(Tile_X4Y1_W2BEGb[7:0]),
@@ -4623,7 +4629,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y1_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y1_LUT4AB (
 	.N1END(Tile_X5Y2_N1BEG[3:0]),
 	.N2MID(Tile_X5Y2_N2BEG[7:0]),
 	.N2END(Tile_X5Y2_N2BEGb[7:0]),
@@ -4675,7 +4687,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y1_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y1_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y1_LUT4AB (
 	.N1END(Tile_X6Y2_N1BEG[3:0]),
 	.N2MID(Tile_X6Y2_N2BEG[7:0]),
 	.N2END(Tile_X6Y2_N2BEGb[7:0]),
@@ -4727,7 +4745,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y1_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y1_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y1_LUT4AB (
 	.N1END(Tile_X7Y2_N1BEG[3:0]),
 	.N2MID(Tile_X7Y2_N2BEG[7:0]),
 	.N2END(Tile_X7Y2_N2BEGb[7:0]),
@@ -4780,7 +4804,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y1_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y1_LUT4AB (
 	.N1END(Tile_X9Y2_N1BEG[3:0]),
 	.N2MID(Tile_X9Y2_N2BEG[7:0]),
 	.N2END(Tile_X9Y2_N2BEGb[7:0]),
@@ -4832,7 +4862,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y1_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y1_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y1_LUT4AB (
 	.N1END(Tile_X10Y2_N1BEG[3:0]),
 	.N2MID(Tile_X10Y2_N2BEG[7:0]),
 	.N2END(Tile_X10Y2_N2BEGb[7:0]),
@@ -4884,7 +4920,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y1_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y1_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y1_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y1_E_CPU_IO (
 	.E1END(Tile_X10Y1_E1BEG[3:0]),
 	.E2MID(Tile_X10Y1_E2BEG[7:0]),
 	.E2END(Tile_X10Y1_E2BEGb[7:0]),
@@ -4924,7 +4966,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y1_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y2_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y2_W_CPU_IO (
 	.W1END(Tile_X4Y2_W1BEG[3:0]),
 	.W2MID(Tile_X4Y2_W2BEG[7:0]),
 	.W2END(Tile_X4Y2_W2BEGb[7:0]),
@@ -4965,7 +5013,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y2_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y2_LUT4AB (
 	.N1END(Tile_X5Y3_N1BEG[3:0]),
 	.N2MID(Tile_X5Y3_N2BEG[7:0]),
 	.N2END(Tile_X5Y3_N2BEGb[7:0]),
@@ -5017,7 +5071,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y2_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y2_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y2_LUT4AB (
 	.N1END(Tile_X6Y3_N1BEG[3:0]),
 	.N2MID(Tile_X6Y3_N2BEG[7:0]),
 	.N2END(Tile_X6Y3_N2BEGb[7:0]),
@@ -5069,7 +5129,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y2_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y2_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y2_LUT4AB (
 	.N1END(Tile_X7Y3_N1BEG[3:0]),
 	.N2MID(Tile_X7Y3_N2BEG[7:0]),
 	.N2END(Tile_X7Y3_N2BEGb[7:0]),
@@ -5122,7 +5188,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y2_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y2_LUT4AB (
 	.N1END(Tile_X9Y3_N1BEG[3:0]),
 	.N2MID(Tile_X9Y3_N2BEG[7:0]),
 	.N2END(Tile_X9Y3_N2BEGb[7:0]),
@@ -5174,7 +5246,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y2_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y2_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y2_LUT4AB (
 	.N1END(Tile_X10Y3_N1BEG[3:0]),
 	.N2MID(Tile_X10Y3_N2BEG[7:0]),
 	.N2END(Tile_X10Y3_N2BEGb[7:0]),
@@ -5226,7 +5304,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y2_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y2_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y2_E_CPU_IO (
 	.E1END(Tile_X10Y2_E1BEG[3:0]),
 	.E2MID(Tile_X10Y2_E2BEG[7:0]),
 	.E2END(Tile_X10Y2_E2BEGb[7:0]),
@@ -5266,7 +5350,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y2_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y3_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y3_W_CPU_IO (
 	.W1END(Tile_X4Y3_W1BEG[3:0]),
 	.W2MID(Tile_X4Y3_W2BEG[7:0]),
 	.W2END(Tile_X4Y3_W2BEGb[7:0]),
@@ -5307,7 +5397,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y3_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y3_LUT4AB (
 	.N1END(Tile_X5Y4_N1BEG[3:0]),
 	.N2MID(Tile_X5Y4_N2BEG[7:0]),
 	.N2END(Tile_X5Y4_N2BEGb[7:0]),
@@ -5359,7 +5455,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y3_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y3_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y3_LUT4AB (
 	.N1END(Tile_X6Y4_N1BEG[3:0]),
 	.N2MID(Tile_X6Y4_N2BEG[7:0]),
 	.N2END(Tile_X6Y4_N2BEGb[7:0]),
@@ -5411,7 +5513,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y3_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y3_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y3_LUT4AB (
 	.N1END(Tile_X7Y4_N1BEG[3:0]),
 	.N2MID(Tile_X7Y4_N2BEG[7:0]),
 	.N2END(Tile_X7Y4_N2BEGb[7:0]),
@@ -5464,7 +5572,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y3_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y3_LUT4AB (
 	.N1END(Tile_X9Y4_N1BEG[3:0]),
 	.N2MID(Tile_X9Y4_N2BEG[7:0]),
 	.N2END(Tile_X9Y4_N2BEGb[7:0]),
@@ -5516,7 +5630,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y3_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y3_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y3_LUT4AB (
 	.N1END(Tile_X10Y4_N1BEG[3:0]),
 	.N2MID(Tile_X10Y4_N2BEG[7:0]),
 	.N2END(Tile_X10Y4_N2BEGb[7:0]),
@@ -5568,7 +5688,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y3_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y3_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y3_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y3_E_CPU_IO (
 	.E1END(Tile_X10Y3_E1BEG[3:0]),
 	.E2MID(Tile_X10Y3_E2BEG[7:0]),
 	.E2END(Tile_X10Y3_E2BEGb[7:0]),
@@ -5608,7 +5734,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y3_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y4_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y4_W_CPU_IO (
 	.W1END(Tile_X4Y4_W1BEG[3:0]),
 	.W2MID(Tile_X4Y4_W2BEG[7:0]),
 	.W2END(Tile_X4Y4_W2BEGb[7:0]),
@@ -5649,7 +5781,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y4_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y4_LUT4AB (
 	.N1END(Tile_X5Y5_N1BEG[3:0]),
 	.N2MID(Tile_X5Y5_N2BEG[7:0]),
 	.N2END(Tile_X5Y5_N2BEGb[7:0]),
@@ -5701,7 +5839,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y4_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y4_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y4_LUT4AB (
 	.N1END(Tile_X6Y5_N1BEG[3:0]),
 	.N2MID(Tile_X6Y5_N2BEG[7:0]),
 	.N2END(Tile_X6Y5_N2BEGb[7:0]),
@@ -5753,7 +5897,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y4_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y4_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y4_LUT4AB (
 	.N1END(Tile_X7Y5_N1BEG[3:0]),
 	.N2MID(Tile_X7Y5_N2BEG[7:0]),
 	.N2END(Tile_X7Y5_N2BEGb[7:0]),
@@ -5806,7 +5956,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y4_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y4_LUT4AB (
 	.N1END(Tile_X9Y5_N1BEG[3:0]),
 	.N2MID(Tile_X9Y5_N2BEG[7:0]),
 	.N2END(Tile_X9Y5_N2BEGb[7:0]),
@@ -5858,7 +6014,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y4_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y4_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y4_LUT4AB (
 	.N1END(Tile_X10Y5_N1BEG[3:0]),
 	.N2MID(Tile_X10Y5_N2BEG[7:0]),
 	.N2END(Tile_X10Y5_N2BEGb[7:0]),
@@ -5910,7 +6072,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y4_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y4_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y4_E_CPU_IO (
 	.E1END(Tile_X10Y4_E1BEG[3:0]),
 	.E2MID(Tile_X10Y4_E2BEG[7:0]),
 	.E2END(Tile_X10Y4_E2BEGb[7:0]),
@@ -5950,7 +6118,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y4_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y5_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y5_W_CPU_IO (
 	.W1END(Tile_X4Y5_W1BEG[3:0]),
 	.W2MID(Tile_X4Y5_W2BEG[7:0]),
 	.W2END(Tile_X4Y5_W2BEGb[7:0]),
@@ -5991,7 +6165,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y5_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y5_LUT4AB (
 	.N1END(Tile_X5Y6_N1BEG[3:0]),
 	.N2MID(Tile_X5Y6_N2BEG[7:0]),
 	.N2END(Tile_X5Y6_N2BEGb[7:0]),
@@ -6043,7 +6223,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y5_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y5_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y5_LUT4AB (
 	.N1END(Tile_X6Y6_N1BEG[3:0]),
 	.N2MID(Tile_X6Y6_N2BEG[7:0]),
 	.N2END(Tile_X6Y6_N2BEGb[7:0]),
@@ -6095,7 +6281,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y5_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y5_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y5_LUT4AB (
 	.N1END(Tile_X7Y6_N1BEG[3:0]),
 	.N2MID(Tile_X7Y6_N2BEG[7:0]),
 	.N2END(Tile_X7Y6_N2BEGb[7:0]),
@@ -6148,7 +6340,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y5_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y5_LUT4AB (
 	.N1END(Tile_X9Y6_N1BEG[3:0]),
 	.N2MID(Tile_X9Y6_N2BEG[7:0]),
 	.N2END(Tile_X9Y6_N2BEGb[7:0]),
@@ -6200,7 +6398,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y5_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y5_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y5_LUT4AB (
 	.N1END(Tile_X10Y6_N1BEG[3:0]),
 	.N2MID(Tile_X10Y6_N2BEG[7:0]),
 	.N2END(Tile_X10Y6_N2BEGb[7:0]),
@@ -6252,7 +6456,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y5_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y5_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y5_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y5_E_CPU_IO (
 	.E1END(Tile_X10Y5_E1BEG[3:0]),
 	.E2MID(Tile_X10Y5_E2BEG[7:0]),
 	.E2END(Tile_X10Y5_E2BEGb[7:0]),
@@ -6292,7 +6502,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y5_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y6_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y6_W_CPU_IO (
 	.W1END(Tile_X4Y6_W1BEG[3:0]),
 	.W2MID(Tile_X4Y6_W2BEG[7:0]),
 	.W2END(Tile_X4Y6_W2BEGb[7:0]),
@@ -6333,7 +6549,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y6_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y6_LUT4AB (
 	.N1END(Tile_X5Y7_N1BEG[3:0]),
 	.N2MID(Tile_X5Y7_N2BEG[7:0]),
 	.N2END(Tile_X5Y7_N2BEGb[7:0]),
@@ -6385,7 +6607,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y6_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y6_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y6_LUT4AB (
 	.N1END(Tile_X6Y7_N1BEG[3:0]),
 	.N2MID(Tile_X6Y7_N2BEG[7:0]),
 	.N2END(Tile_X6Y7_N2BEGb[7:0]),
@@ -6437,7 +6665,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y6_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y6_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y6_LUT4AB (
 	.N1END(Tile_X7Y7_N1BEG[3:0]),
 	.N2MID(Tile_X7Y7_N2BEG[7:0]),
 	.N2END(Tile_X7Y7_N2BEGb[7:0]),
@@ -6490,7 +6724,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y6_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y6_LUT4AB (
 	.N1END(Tile_X9Y7_N1BEG[3:0]),
 	.N2MID(Tile_X9Y7_N2BEG[7:0]),
 	.N2END(Tile_X9Y7_N2BEGb[7:0]),
@@ -6542,7 +6782,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y6_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y6_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y6_LUT4AB (
 	.N1END(Tile_X10Y7_N1BEG[3:0]),
 	.N2MID(Tile_X10Y7_N2BEG[7:0]),
 	.N2END(Tile_X10Y7_N2BEGb[7:0]),
@@ -6594,7 +6840,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y6_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y6_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y6_E_CPU_IO (
 	.E1END(Tile_X10Y6_E1BEG[3:0]),
 	.E2MID(Tile_X10Y6_E2BEG[7:0]),
 	.E2END(Tile_X10Y6_E2BEGb[7:0]),
@@ -6634,7 +6886,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y6_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y7_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y7_W_CPU_IO (
 	.W1END(Tile_X4Y7_W1BEG[3:0]),
 	.W2MID(Tile_X4Y7_W2BEG[7:0]),
 	.W2END(Tile_X4Y7_W2BEGb[7:0]),
@@ -6675,7 +6933,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y7_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y7_LUT4AB (
 	.N1END(Tile_X5Y8_N1BEG[3:0]),
 	.N2MID(Tile_X5Y8_N2BEG[7:0]),
 	.N2END(Tile_X5Y8_N2BEGb[7:0]),
@@ -6727,7 +6991,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y7_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y7_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y7_LUT4AB (
 	.N1END(Tile_X6Y8_N1BEG[3:0]),
 	.N2MID(Tile_X6Y8_N2BEG[7:0]),
 	.N2END(Tile_X6Y8_N2BEGb[7:0]),
@@ -6779,7 +7049,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y7_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y7_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y7_LUT4AB (
 	.N1END(Tile_X7Y8_N1BEG[3:0]),
 	.N2MID(Tile_X7Y8_N2BEG[7:0]),
 	.N2END(Tile_X7Y8_N2BEGb[7:0]),
@@ -6832,7 +7108,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y7_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y7_LUT4AB (
 	.N1END(Tile_X9Y8_N1BEG[3:0]),
 	.N2MID(Tile_X9Y8_N2BEG[7:0]),
 	.N2END(Tile_X9Y8_N2BEGb[7:0]),
@@ -6884,7 +7166,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y7_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y7_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y7_LUT4AB (
 	.N1END(Tile_X10Y8_N1BEG[3:0]),
 	.N2MID(Tile_X10Y8_N2BEG[7:0]),
 	.N2END(Tile_X10Y8_N2BEGb[7:0]),
@@ -6936,7 +7224,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y7_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y7_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y7_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y7_E_CPU_IO (
 	.E1END(Tile_X10Y7_E1BEG[3:0]),
 	.E2MID(Tile_X10Y7_E2BEG[7:0]),
 	.E2END(Tile_X10Y7_E2BEGb[7:0]),
@@ -6976,7 +7270,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y7_FrameStrobe_O)
 	);
 
-	W_CPU_IO Tile_X3Y8_W_CPU_IO (
+	W_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y8_W_CPU_IO (
 	.W1END(Tile_X4Y8_W1BEG[3:0]),
 	.W2MID(Tile_X4Y8_W2BEG[7:0]),
 	.W2END(Tile_X4Y8_W2BEGb[7:0]),
@@ -7017,7 +7317,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y8_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y8_LUT4AB (
 	.N1END(Tile_X5Y9_N1BEG[3:0]),
 	.N2MID(Tile_X5Y9_N2BEG[7:0]),
 	.N2END(Tile_X5Y9_N2BEGb[7:0]),
@@ -7069,7 +7375,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y8_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y8_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y8_LUT4AB (
 	.N1END(Tile_X6Y9_N1BEG[3:0]),
 	.N2MID(Tile_X6Y9_N2BEG[7:0]),
 	.N2END(Tile_X6Y9_N2BEGb[7:0]),
@@ -7121,7 +7433,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y8_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y8_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y8_LUT4AB (
 	.N1END(Tile_X7Y9_N1BEG[3:0]),
 	.N2MID(Tile_X7Y9_N2BEG[7:0]),
 	.N2END(Tile_X7Y9_N2BEGb[7:0]),
@@ -7174,7 +7492,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y8_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y8_LUT4AB (
 	.N1END(Tile_X9Y9_N1BEG[3:0]),
 	.N2MID(Tile_X9Y9_N2BEG[7:0]),
 	.N2END(Tile_X9Y9_N2BEGb[7:0]),
@@ -7226,7 +7550,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y8_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y8_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y8_LUT4AB (
 	.N1END(Tile_X10Y9_N1BEG[3:0]),
 	.N2MID(Tile_X10Y9_N2BEG[7:0]),
 	.N2END(Tile_X10Y9_N2BEGb[7:0]),
@@ -7278,7 +7608,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y8_FrameStrobe_O)
 	);
 
-	E_CPU_IO Tile_X11Y8_E_CPU_IO (
+	E_CPU_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y8_E_CPU_IO (
 	.E1END(Tile_X10Y8_E1BEG[3:0]),
 	.E2MID(Tile_X10Y8_E2BEG[7:0]),
 	.E2END(Tile_X10Y8_E2BEGb[7:0]),
@@ -7353,7 +7689,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X2Y9_FrameStrobe_O)
 	);
 
-	W_CPU_IO_bot Tile_X3Y9_W_CPU_IO_bot (
+	W_CPU_IO_bot 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y9_W_CPU_IO_bot (
 	.N1END(Tile_X3Y10_N1BEG[3:0]),
 	.N2MID(Tile_X3Y10_N2BEG[7:0]),
 	.N2END(Tile_X3Y10_N2BEGb[7:0]),
@@ -7405,7 +7747,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y9_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y9_LUT4AB (
 	.N1END(Tile_X5Y10_N1BEG[3:0]),
 	.N2MID(Tile_X5Y10_N2BEG[7:0]),
 	.N2END(Tile_X5Y10_N2BEGb[7:0]),
@@ -7457,7 +7805,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y9_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y9_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y9_LUT4AB (
 	.N1END(Tile_X6Y10_N1BEG[3:0]),
 	.N2MID(Tile_X6Y10_N2BEG[7:0]),
 	.N2END(Tile_X6Y10_N2BEGb[7:0]),
@@ -7509,7 +7863,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y9_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y9_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y9_LUT4AB (
 	.N1END(Tile_X7Y10_N1BEG[3:0]),
 	.N2MID(Tile_X7Y10_N2BEG[7:0]),
 	.N2END(Tile_X7Y10_N2BEGb[7:0]),
@@ -7562,7 +7922,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y9_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y9_LUT4AB (
 	.N1END(Tile_X9Y10_N1BEG[3:0]),
 	.N2MID(Tile_X9Y10_N2BEG[7:0]),
 	.N2END(Tile_X9Y10_N2BEGb[7:0]),
@@ -7614,7 +7980,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y9_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y9_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y9_LUT4AB (
 	.N1END(Tile_X10Y10_N1BEG[3:0]),
 	.N2MID(Tile_X10Y10_N2BEG[7:0]),
 	.N2END(Tile_X10Y10_N2BEGb[7:0]),
@@ -7666,7 +8038,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y9_FrameStrobe_O)
 	);
 
-	E_CPU_IO_bot Tile_X11Y9_E_CPU_IO_bot (
+	E_CPU_IO_bot 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y9_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y9_E_CPU_IO_bot (
 	.N1END(Tile_X11Y10_N1BEG[3:0]),
 	.N2MID(Tile_X11Y10_N2BEG[7:0]),
 	.N2END(Tile_X11Y10_N2BEGb[7:0]),
@@ -7767,7 +8145,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X14Y9_FrameStrobe_O)
 	);
 
-	W_IO Tile_X0Y10_W_IO (
+	W_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X0Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X0Y10_W_IO (
 	.W1END(Tile_X1Y10_W1BEG[3:0]),
 	.W2MID(Tile_X1Y10_W2BEG[7:0]),
 	.W2END(Tile_X1Y10_W2BEGb[7:0]),
@@ -7801,7 +8185,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X0Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X1Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X1Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X1Y10_LUT4AB (
 	.N1END(Tile_X1Y11_N1BEG[3:0]),
 	.N2MID(Tile_X1Y11_N2BEG[7:0]),
 	.N2END(Tile_X1Y11_N2BEGb[7:0]),
@@ -7853,7 +8243,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X1Y10_FrameStrobe_O)
 	);
 
-	RegFile Tile_X2Y10_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X2Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X2Y10_RegFile (
 	.N1END(Tile_X2Y11_N1BEG[3:0]),
 	.N2MID(Tile_X2Y11_N2BEG[7:0]),
 	.N2END(Tile_X2Y11_N2BEGb[7:0]),
@@ -7903,7 +8299,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X2Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X3Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y10_LUT4AB (
 	.N1END(Tile_X3Y11_N1BEG[3:0]),
 	.N2MID(Tile_X3Y11_N2BEG[7:0]),
 	.N2END(Tile_X3Y11_N2BEGb[7:0]),
@@ -7956,7 +8358,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y10_LUT4AB (
 	.N1END(Tile_X5Y11_N1BEG[3:0]),
 	.N2MID(Tile_X5Y11_N2BEG[7:0]),
 	.N2END(Tile_X5Y11_N2BEGb[7:0]),
@@ -8008,7 +8416,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y10_LUT4AB (
 	.N1END(Tile_X6Y11_N1BEG[3:0]),
 	.N2MID(Tile_X6Y11_N2BEG[7:0]),
 	.N2END(Tile_X6Y11_N2BEGb[7:0]),
@@ -8060,7 +8474,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y10_LUT4AB (
 	.N1END(Tile_X7Y11_N1BEG[3:0]),
 	.N2MID(Tile_X7Y11_N2BEG[7:0]),
 	.N2END(Tile_X7Y11_N2BEGb[7:0]),
@@ -8113,7 +8533,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y10_LUT4AB (
 	.N1END(Tile_X9Y11_N1BEG[3:0]),
 	.N2MID(Tile_X9Y11_N2BEG[7:0]),
 	.N2END(Tile_X9Y11_N2BEGb[7:0]),
@@ -8165,7 +8591,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y10_LUT4AB (
 	.N1END(Tile_X10Y11_N1BEG[3:0]),
 	.N2MID(Tile_X10Y11_N2BEG[7:0]),
 	.N2END(Tile_X10Y11_N2BEGb[7:0]),
@@ -8217,7 +8649,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X11Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y10_LUT4AB (
 	.N1END(Tile_X11Y11_N1BEG[3:0]),
 	.N2MID(Tile_X11Y11_N2BEG[7:0]),
 	.N2END(Tile_X11Y11_N2BEGb[7:0]),
@@ -8269,7 +8707,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y10_FrameStrobe_O)
 	);
 
-	RegFile Tile_X12Y10_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X12Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X12Y10_RegFile (
 	.N1END(Tile_X12Y11_N1BEG[3:0]),
 	.N2MID(Tile_X12Y11_N2BEG[7:0]),
 	.N2END(Tile_X12Y11_N2BEGb[7:0]),
@@ -8319,7 +8763,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X12Y10_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X13Y10_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X13Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X13Y10_LUT4AB (
 	.N1END(Tile_X13Y11_N1BEG[3:0]),
 	.N2MID(Tile_X13Y11_N2BEG[7:0]),
 	.N2END(Tile_X13Y11_N2BEGb[7:0]),
@@ -8371,7 +8821,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X13Y10_FrameStrobe_O)
 	);
 
-	RAM_IO Tile_X14Y10_RAM_IO (
+	RAM_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X14Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X14Y10_RAM_IO (
 	.N1END(Tile_X14Y11_N1BEG[3:0]),
 	.N2MID(Tile_X14Y11_N2BEG[7:0]),
 	.N2END(Tile_X14Y11_N2BEGb[7:0]),
@@ -8455,7 +8911,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X14Y10_FrameStrobe_O)
 	);
 
-	W_IO Tile_X0Y11_W_IO (
+	W_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X0Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X0Y11_W_IO (
 	.W1END(Tile_X1Y11_W1BEG[3:0]),
 	.W2MID(Tile_X1Y11_W2BEG[7:0]),
 	.W2END(Tile_X1Y11_W2BEGb[7:0]),
@@ -8489,7 +8951,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X0Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X1Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X1Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X1Y11_LUT4AB (
 	.N1END(Tile_X1Y12_N1BEG[3:0]),
 	.N2MID(Tile_X1Y12_N2BEG[7:0]),
 	.N2END(Tile_X1Y12_N2BEGb[7:0]),
@@ -8541,7 +9009,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X1Y11_FrameStrobe_O)
 	);
 
-	RegFile Tile_X2Y11_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X2Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X2Y11_RegFile (
 	.N1END(Tile_X2Y12_N1BEG[3:0]),
 	.N2MID(Tile_X2Y12_N2BEG[7:0]),
 	.N2END(Tile_X2Y12_N2BEGb[7:0]),
@@ -8591,7 +9065,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X2Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X3Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y11_LUT4AB (
 	.N1END(Tile_X3Y12_N1BEG[3:0]),
 	.N2MID(Tile_X3Y12_N2BEG[7:0]),
 	.N2END(Tile_X3Y12_N2BEGb[7:0]),
@@ -8644,7 +9124,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y11_LUT4AB (
 	.N1END(Tile_X5Y12_N1BEG[3:0]),
 	.N2MID(Tile_X5Y12_N2BEG[7:0]),
 	.N2END(Tile_X5Y12_N2BEGb[7:0]),
@@ -8696,7 +9182,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y11_LUT4AB (
 	.N1END(Tile_X6Y12_N1BEG[3:0]),
 	.N2MID(Tile_X6Y12_N2BEG[7:0]),
 	.N2END(Tile_X6Y12_N2BEGb[7:0]),
@@ -8748,7 +9240,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y11_LUT4AB (
 	.N1END(Tile_X7Y12_N1BEG[3:0]),
 	.N2MID(Tile_X7Y12_N2BEG[7:0]),
 	.N2END(Tile_X7Y12_N2BEGb[7:0]),
@@ -8801,7 +9299,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y11_LUT4AB (
 	.N1END(Tile_X9Y12_N1BEG[3:0]),
 	.N2MID(Tile_X9Y12_N2BEG[7:0]),
 	.N2END(Tile_X9Y12_N2BEGb[7:0]),
@@ -8853,7 +9357,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y11_LUT4AB (
 	.N1END(Tile_X10Y12_N1BEG[3:0]),
 	.N2MID(Tile_X10Y12_N2BEG[7:0]),
 	.N2END(Tile_X10Y12_N2BEGb[7:0]),
@@ -8905,7 +9415,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X11Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y11_LUT4AB (
 	.N1END(Tile_X11Y12_N1BEG[3:0]),
 	.N2MID(Tile_X11Y12_N2BEG[7:0]),
 	.N2END(Tile_X11Y12_N2BEGb[7:0]),
@@ -8957,7 +9473,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y11_FrameStrobe_O)
 	);
 
-	RegFile Tile_X12Y11_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X12Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X12Y11_RegFile (
 	.N1END(Tile_X12Y12_N1BEG[3:0]),
 	.N2MID(Tile_X12Y12_N2BEG[7:0]),
 	.N2END(Tile_X12Y12_N2BEGb[7:0]),
@@ -9007,7 +9529,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X12Y11_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X13Y11_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X13Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X13Y11_LUT4AB (
 	.N1END(Tile_X13Y12_N1BEG[3:0]),
 	.N2MID(Tile_X13Y12_N2BEG[7:0]),
 	.N2END(Tile_X13Y12_N2BEGb[7:0]),
@@ -9059,7 +9587,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X13Y11_FrameStrobe_O)
 	);
 
-	RAM_IO Tile_X14Y11_RAM_IO (
+	RAM_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X14Y11_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X14Y11_RAM_IO (
 	.N1END(Tile_X14Y12_N1BEG[3:0]),
 	.N2MID(Tile_X14Y12_N2BEG[7:0]),
 	.N2END(Tile_X14Y12_N2BEGb[7:0]),
@@ -9143,7 +9677,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X14Y11_FrameStrobe_O)
 	);
 
-	W_IO Tile_X0Y12_W_IO (
+	W_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X0Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X0Y12_W_IO (
 	.W1END(Tile_X1Y12_W1BEG[3:0]),
 	.W2MID(Tile_X1Y12_W2BEG[7:0]),
 	.W2END(Tile_X1Y12_W2BEGb[7:0]),
@@ -9177,7 +9717,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X0Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X1Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X1Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X1Y12_LUT4AB (
 	.N1END(Tile_X1Y13_N1BEG[3:0]),
 	.N2MID(Tile_X1Y13_N2BEG[7:0]),
 	.N2END(Tile_X1Y13_N2BEGb[7:0]),
@@ -9229,7 +9775,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X1Y12_FrameStrobe_O)
 	);
 
-	RegFile Tile_X2Y12_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X2Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X2Y12_RegFile (
 	.N1END(Tile_X2Y13_N1BEG[3:0]),
 	.N2MID(Tile_X2Y13_N2BEG[7:0]),
 	.N2END(Tile_X2Y13_N2BEGb[7:0]),
@@ -9279,7 +9831,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X2Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X3Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y12_LUT4AB (
 	.N1END(Tile_X3Y13_N1BEG[3:0]),
 	.N2MID(Tile_X3Y13_N2BEG[7:0]),
 	.N2END(Tile_X3Y13_N2BEGb[7:0]),
@@ -9332,7 +9890,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y12_LUT4AB (
 	.N1END(Tile_X5Y13_N1BEG[3:0]),
 	.N2MID(Tile_X5Y13_N2BEG[7:0]),
 	.N2END(Tile_X5Y13_N2BEGb[7:0]),
@@ -9384,7 +9948,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y12_LUT4AB (
 	.N1END(Tile_X6Y13_N1BEG[3:0]),
 	.N2MID(Tile_X6Y13_N2BEG[7:0]),
 	.N2END(Tile_X6Y13_N2BEGb[7:0]),
@@ -9436,7 +10006,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y12_LUT4AB (
 	.N1END(Tile_X7Y13_N1BEG[3:0]),
 	.N2MID(Tile_X7Y13_N2BEG[7:0]),
 	.N2END(Tile_X7Y13_N2BEGb[7:0]),
@@ -9489,7 +10065,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y12_LUT4AB (
 	.N1END(Tile_X9Y13_N1BEG[3:0]),
 	.N2MID(Tile_X9Y13_N2BEG[7:0]),
 	.N2END(Tile_X9Y13_N2BEGb[7:0]),
@@ -9541,7 +10123,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y12_LUT4AB (
 	.N1END(Tile_X10Y13_N1BEG[3:0]),
 	.N2MID(Tile_X10Y13_N2BEG[7:0]),
 	.N2END(Tile_X10Y13_N2BEGb[7:0]),
@@ -9593,7 +10181,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X11Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y12_LUT4AB (
 	.N1END(Tile_X11Y13_N1BEG[3:0]),
 	.N2MID(Tile_X11Y13_N2BEG[7:0]),
 	.N2END(Tile_X11Y13_N2BEGb[7:0]),
@@ -9645,7 +10239,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y12_FrameStrobe_O)
 	);
 
-	RegFile Tile_X12Y12_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X12Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X12Y12_RegFile (
 	.N1END(Tile_X12Y13_N1BEG[3:0]),
 	.N2MID(Tile_X12Y13_N2BEG[7:0]),
 	.N2END(Tile_X12Y13_N2BEGb[7:0]),
@@ -9695,7 +10295,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X12Y12_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X13Y12_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X13Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X13Y12_LUT4AB (
 	.N1END(Tile_X13Y13_N1BEG[3:0]),
 	.N2MID(Tile_X13Y13_N2BEG[7:0]),
 	.N2END(Tile_X13Y13_N2BEGb[7:0]),
@@ -9747,7 +10353,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X13Y12_FrameStrobe_O)
 	);
 
-	RAM_IO Tile_X14Y12_RAM_IO (
+	RAM_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X14Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X14Y12_RAM_IO (
 	.N1END(Tile_X14Y13_N1BEG[3:0]),
 	.N2MID(Tile_X14Y13_N2BEG[7:0]),
 	.N2END(Tile_X14Y13_N2BEGb[7:0]),
@@ -9831,7 +10443,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X14Y12_FrameStrobe_O)
 	);
 
-	W_IO Tile_X0Y13_W_IO (
+	W_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X0Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X0Y13_W_IO (
 	.W1END(Tile_X1Y13_W1BEG[3:0]),
 	.W2MID(Tile_X1Y13_W2BEG[7:0]),
 	.W2END(Tile_X1Y13_W2BEGb[7:0]),
@@ -9865,7 +10483,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X0Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X1Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X1Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X1Y13_LUT4AB (
 	.N1END(Tile_X1Y14_N1BEG[3:0]),
 	.N2MID(Tile_X1Y14_N2BEG[7:0]),
 	.N2END(Tile_X1Y14_N2BEGb[7:0]),
@@ -9917,7 +10541,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X1Y13_FrameStrobe_O)
 	);
 
-	RegFile Tile_X2Y13_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X2Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X2Y13_RegFile (
 	.N1END(Tile_X2Y14_N1BEG[3:0]),
 	.N2MID(Tile_X2Y14_N2BEG[7:0]),
 	.N2END(Tile_X2Y14_N2BEGb[7:0]),
@@ -9967,7 +10597,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X2Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X3Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y13_LUT4AB (
 	.N1END(Tile_X3Y14_N1BEG[3:0]),
 	.N2MID(Tile_X3Y14_N2BEG[7:0]),
 	.N2END(Tile_X3Y14_N2BEGb[7:0]),
@@ -10020,7 +10656,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y13_LUT4AB (
 	.N1END(Tile_X5Y14_N1BEG[3:0]),
 	.N2MID(Tile_X5Y14_N2BEG[7:0]),
 	.N2END(Tile_X5Y14_N2BEGb[7:0]),
@@ -10072,7 +10714,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y13_LUT4AB (
 	.N1END(Tile_X6Y14_N1BEG[3:0]),
 	.N2MID(Tile_X6Y14_N2BEG[7:0]),
 	.N2END(Tile_X6Y14_N2BEGb[7:0]),
@@ -10124,7 +10772,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y13_LUT4AB (
 	.N1END(Tile_X7Y14_N1BEG[3:0]),
 	.N2MID(Tile_X7Y14_N2BEG[7:0]),
 	.N2END(Tile_X7Y14_N2BEGb[7:0]),
@@ -10177,7 +10831,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y13_LUT4AB (
 	.N1END(Tile_X9Y14_N1BEG[3:0]),
 	.N2MID(Tile_X9Y14_N2BEG[7:0]),
 	.N2END(Tile_X9Y14_N2BEGb[7:0]),
@@ -10229,7 +10889,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y13_LUT4AB (
 	.N1END(Tile_X10Y14_N1BEG[3:0]),
 	.N2MID(Tile_X10Y14_N2BEG[7:0]),
 	.N2END(Tile_X10Y14_N2BEGb[7:0]),
@@ -10281,7 +10947,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X11Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y13_LUT4AB (
 	.N1END(Tile_X11Y14_N1BEG[3:0]),
 	.N2MID(Tile_X11Y14_N2BEG[7:0]),
 	.N2END(Tile_X11Y14_N2BEGb[7:0]),
@@ -10333,7 +11005,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y13_FrameStrobe_O)
 	);
 
-	RegFile Tile_X12Y13_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X12Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X12Y13_RegFile (
 	.N1END(Tile_X12Y14_N1BEG[3:0]),
 	.N2MID(Tile_X12Y14_N2BEG[7:0]),
 	.N2END(Tile_X12Y14_N2BEGb[7:0]),
@@ -10383,7 +11061,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X12Y13_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X13Y13_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X13Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X13Y13_LUT4AB (
 	.N1END(Tile_X13Y14_N1BEG[3:0]),
 	.N2MID(Tile_X13Y14_N2BEG[7:0]),
 	.N2END(Tile_X13Y14_N2BEGb[7:0]),
@@ -10435,7 +11119,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X13Y13_FrameStrobe_O)
 	);
 
-	RAM_IO Tile_X14Y13_RAM_IO (
+	RAM_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X14Y13_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X14Y13_RAM_IO (
 	.N1END(Tile_X14Y14_N1BEG[3:0]),
 	.N2MID(Tile_X14Y14_N2BEG[7:0]),
 	.N2END(Tile_X14Y14_N2BEGb[7:0]),
@@ -10519,7 +11209,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X14Y13_FrameStrobe_O)
 	);
 
-	W_IO Tile_X0Y14_W_IO (
+	W_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X0Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X0Y14_W_IO (
 	.W1END(Tile_X1Y14_W1BEG[3:0]),
 	.W2MID(Tile_X1Y14_W2BEG[7:0]),
 	.W2END(Tile_X1Y14_W2BEGb[7:0]),
@@ -10553,7 +11249,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X0Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X1Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X1Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X1Y14_LUT4AB (
 	.N1END(Tile_X1Y15_N1BEG[3:0]),
 	.N2MID(Tile_X1Y15_N2BEG[7:0]),
 	.N2END(Tile_X1Y15_N2BEGb[7:0]),
@@ -10605,7 +11307,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X1Y14_FrameStrobe_O)
 	);
 
-	RegFile Tile_X2Y14_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X2Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X2Y14_RegFile (
 	.N1END(Tile_X2Y15_N1BEG[3:0]),
 	.N2MID(Tile_X2Y15_N2BEG[7:0]),
 	.N2END(Tile_X2Y15_N2BEGb[7:0]),
@@ -10655,7 +11363,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X2Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X3Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X3Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X3Y14_LUT4AB (
 	.N1END(Tile_X3Y15_N1BEG[3:0]),
 	.N2MID(Tile_X3Y15_N2BEG[7:0]),
 	.N2END(Tile_X3Y15_N2BEGb[7:0]),
@@ -10708,7 +11422,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X5Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X5Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X5Y14_LUT4AB (
 	.N1END(Tile_X5Y15_N1BEG[3:0]),
 	.N2MID(Tile_X5Y15_N2BEG[7:0]),
 	.N2END(Tile_X5Y15_N2BEGb[7:0]),
@@ -10760,7 +11480,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X5Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X6Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X6Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X6Y14_LUT4AB (
 	.N1END(Tile_X6Y15_N1BEG[3:0]),
 	.N2MID(Tile_X6Y15_N2BEG[7:0]),
 	.N2END(Tile_X6Y15_N2BEGb[7:0]),
@@ -10812,7 +11538,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X6Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X7Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X7Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X7Y14_LUT4AB (
 	.N1END(Tile_X7Y15_N1BEG[3:0]),
 	.N2MID(Tile_X7Y15_N2BEG[7:0]),
 	.N2END(Tile_X7Y15_N2BEGb[7:0]),
@@ -10865,7 +11597,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	LUT4AB Tile_X9Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X9Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X9Y14_LUT4AB (
 	.N1END(Tile_X9Y15_N1BEG[3:0]),
 	.N2MID(Tile_X9Y15_N2BEG[7:0]),
 	.N2END(Tile_X9Y15_N2BEGb[7:0]),
@@ -10917,7 +11655,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X9Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X10Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X10Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X10Y14_LUT4AB (
 	.N1END(Tile_X10Y15_N1BEG[3:0]),
 	.N2MID(Tile_X10Y15_N2BEG[7:0]),
 	.N2END(Tile_X10Y15_N2BEGb[7:0]),
@@ -10969,7 +11713,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X10Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X11Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X11Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X11Y14_LUT4AB (
 	.N1END(Tile_X11Y15_N1BEG[3:0]),
 	.N2MID(Tile_X11Y15_N2BEG[7:0]),
 	.N2END(Tile_X11Y15_N2BEGb[7:0]),
@@ -11021,7 +11771,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X11Y14_FrameStrobe_O)
 	);
 
-	RegFile Tile_X12Y14_RegFile (
+	RegFile 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X12Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X12Y14_RegFile (
 	.N1END(Tile_X12Y15_N1BEG[3:0]),
 	.N2MID(Tile_X12Y15_N2BEG[7:0]),
 	.N2END(Tile_X12Y15_N2BEGb[7:0]),
@@ -11071,7 +11827,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X12Y14_FrameStrobe_O)
 	);
 
-	LUT4AB Tile_X13Y14_LUT4AB (
+	LUT4AB 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X13Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X13Y14_LUT4AB (
 	.N1END(Tile_X13Y15_N1BEG[3:0]),
 	.N2MID(Tile_X13Y15_N2BEG[7:0]),
 	.N2END(Tile_X13Y15_N2BEGb[7:0]),
@@ -11123,7 +11885,13 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe_O(Tile_X13Y14_FrameStrobe_O)
 	);
 
-	RAM_IO Tile_X14Y14_RAM_IO (
+	RAM_IO 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream(`Tile_X14Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X14Y14_RAM_IO (
 	.N1END(Tile_X14Y15_N1BEG[3:0]),
 	.N2MID(Tile_X14Y15_N2BEG[7:0]),
 	.N2END(Tile_X14Y15_N2BEGb[7:0]),
@@ -11453,7 +12221,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	);
 
 
-	DSP Tile_X4Y1_X4Y2_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y1_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y1_X4Y2_DSP_tile (
 	.top_E1END(Tile_X3Y1_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y1_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y1_E2BEGb[7:0]),
@@ -11524,7 +12299,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y3_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y1_X8Y2_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y1_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y2_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y1_X8Y2_DSP_tile (
 	.top_E1END(Tile_X7Y1_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y1_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y1_E2BEGb[7:0]),
@@ -11595,7 +12377,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X8Y3_FrameStrobe_O)
 	);
 
-	DSP Tile_X4Y3_X4Y4_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y3_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y3_X4Y4_DSP_tile (
 	.top_E1END(Tile_X3Y3_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y3_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y3_E2BEGb[7:0]),
@@ -11666,7 +12455,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y5_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y3_X8Y4_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y3_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y4_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y3_X8Y4_DSP_tile (
 	.top_E1END(Tile_X7Y3_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y3_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y3_E2BEGb[7:0]),
@@ -11737,7 +12533,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X8Y5_FrameStrobe_O)
 	);
 
-	DSP Tile_X4Y5_X4Y6_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y5_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y5_X4Y6_DSP_tile (
 	.top_E1END(Tile_X3Y5_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y5_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y5_E2BEGb[7:0]),
@@ -11808,7 +12611,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y7_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y5_X8Y6_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y5_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y6_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y5_X8Y6_DSP_tile (
 	.top_E1END(Tile_X7Y5_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y5_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y5_E2BEGb[7:0]),
@@ -11879,7 +12689,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X8Y7_FrameStrobe_O)
 	);
 
-	DSP Tile_X4Y7_X4Y8_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y7_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y7_X4Y8_DSP_tile (
 	.top_E1END(Tile_X3Y7_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y7_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y7_E2BEGb[7:0]),
@@ -11950,7 +12767,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y9_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y7_X8Y8_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y7_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y8_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y7_X8Y8_DSP_tile (
 	.top_E1END(Tile_X7Y7_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y7_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y7_E2BEGb[7:0]),
@@ -12021,7 +12845,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X8Y9_FrameStrobe_O)
 	);
 
-	DSP Tile_X4Y9_X4Y10_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y9_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y9_X4Y10_DSP_tile (
 	.top_E1END(Tile_X3Y9_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y9_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y9_E2BEGb[7:0]),
@@ -12092,7 +12923,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y11_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y9_X8Y10_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y9_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y10_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y9_X8Y10_DSP_tile (
 	.top_E1END(Tile_X7Y9_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y9_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y9_E2BEGb[7:0]),
@@ -12163,7 +13001,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X8Y11_FrameStrobe_O)
 	);
 
-	DSP Tile_X4Y11_X4Y12_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y11_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y11_X4Y12_DSP_tile (
 	.top_E1END(Tile_X3Y11_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y11_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y11_E2BEGb[7:0]),
@@ -12234,7 +13079,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y13_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y11_X8Y12_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y11_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y12_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y11_X8Y12_DSP_tile (
 	.top_E1END(Tile_X7Y11_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y11_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y11_E2BEGb[7:0]),
@@ -12305,7 +13157,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X8Y13_FrameStrobe_O)
 	);
 
-	DSP Tile_X4Y13_X4Y14_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X4Y13_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X4Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X4Y13_X4Y14_DSP_tile (
 	.top_E1END(Tile_X3Y13_E1BEG[3:0]),
 	.top_E2MID(Tile_X3Y13_E2BEG[7:0]),
 	.top_E2END(Tile_X3Y13_E2BEGb[7:0]),
@@ -12376,7 +13235,14 @@ module eFPGA (Tile_X3Y1_OPA_I0, Tile_X3Y1_OPA_I1, Tile_X3Y1_OPA_I2, Tile_X3Y1_OP
 	.FrameStrobe(Tile_X4Y15_FrameStrobe_O)
 	);
 
-	DSP Tile_X8Y13_X8Y14_DSP_tile (
+	DSP 
+	`ifdef EMULATION
+    #(
+    .Emulate_Bitstream_top(`Tile_X8Y13_Emulate_Bitstream),
+	.Emulate_Bitstream_bot(`Tile_X8Y14_Emulate_Bitstream)
+    )
+	`endif
+	Tile_X8Y13_X8Y14_DSP_tile (
 	.top_E1END(Tile_X7Y13_E1BEG[3:0]),
 	.top_E2MID(Tile_X7Y13_E2BEG[7:0]),
 	.top_E2END(Tile_X7Y13_E2BEGb[7:0]),

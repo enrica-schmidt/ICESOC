@@ -14,7 +14,13 @@
 // limitations under the License.
 //
 // SPDX-License-Identifier: Apache-2.0
-module DSP_bot (N1BEG, N2BEG, N2BEGb, N4BEG, NN4BEG, bot2top, N1END, N2MID, N2END, N4END, NN4END, E1BEG, E2BEG, E2BEGb, EE4BEG, E6BEG, E1END, E2MID, E2END, EE4END, E6END, S1BEG, S2BEG, S2BEGb, S4BEG, SS4BEG, S1END, S2MID, S2END, S4END, SS4END, top2bot, W1BEG, W2BEG, W2BEGb, WW4BEG, W6BEG, W1END, W2MID, W2END, WW4END, W6END, UserCLK, UserCLKo, FrameData, FrameData_O, FrameStrobe, FrameStrobe_O);
+module DSP_bot 
+	`ifdef EMULATION
+	#(
+		parameter [639:0] Emulate_Bitstream=640'b0
+	)
+	`endif
+	(N1BEG, N2BEG, N2BEGb, N4BEG, NN4BEG, bot2top, N1END, N2MID, N2END, N4END, NN4END, E1BEG, E2BEG, E2BEGb, EE4BEG, E6BEG, E1END, E2MID, E2END, EE4END, E6END, S1BEG, S2BEG, S2BEGb, S4BEG, SS4BEG, S1END, S2MID, S2END, S4END, SS4END, top2bot, W1BEG, W2BEG, W2BEGb, WW4BEG, W6BEG, W1END, W2MID, W2END, WW4END, W6END, UserCLK, UserCLKo, FrameData, FrameData_O, FrameStrobe, FrameStrobe_O);
 	parameter MaxFramesPerCol = 20;
 	parameter FrameBitsPerRow = 32;
 	parameter NoConfigBits = 416;
@@ -1642,7 +1648,13 @@ module DSP_bot (N1BEG, N2BEG, N2BEGb, N4BEG, NN4BEG, bot2top, N1END, N2MID, N2EN
 	clk_buf inst_clk_buf(.A(UserCLK), .X(UserCLKo));
 
 // configuration storage latches
-	DSP_bot_ConfigMem Inst_DSP_bot_ConfigMem (
+	DSP_bot_ConfigMem 
+	`ifdef EMULATION
+	#(
+		.Emulate_Bitstream(Emulate_Bitstream)
+	)
+	`endif
+	Inst_DSP_bot_ConfigMem (
 	.FrameData(FrameData),
 	.FrameStrobe(FrameStrobe),
 	.ConfigBits(ConfigBits),

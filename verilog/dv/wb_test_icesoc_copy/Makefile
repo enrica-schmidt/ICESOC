@@ -69,8 +69,11 @@ GCC_PATH?=
 #GCC_PREFIX=
 
 ## Simulation mode: RTL/GL
-SIM_DEFINES = -DFUNCTIONAL -DSIM
+SIM_DEFINES = -DFUNCTIONAL -DSIM -DEMULATION
 SIM?=RTL
+
+BITSTR_DIR = bitstreams
+DESIGN = top
 
 .SUFFIXES:
 .SECONDARY: $(RUN_DIR)/%.elf $(RUN_DIR)/%.hex
@@ -100,6 +103,7 @@ ifeq ($(SIM),RTL)
 	-I $(UPRJ_RTL_ICESOC) \
 	-I $(UPRJ_RTL_IBEXCORE) \
 	$(EFPGA_INCLUDES) \
+	${BITSTR_DIR}/${DESIGN}.vh \
 	$(EFPGA_LIBS) \
 	$(EFPGA_SRCS) \
 	$(UPRJ_RTL_PATH)/eFPGA/Fabric/models_pack.v \
