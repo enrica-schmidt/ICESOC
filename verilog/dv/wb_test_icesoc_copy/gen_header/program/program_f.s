@@ -110,12 +110,11 @@ main1:          jalr ra, s5, 0x0            #function call of req_next at addr s
                 lw a0, 0x20(zero)           #load pointer to input data from sram1[0x10]
                 lw a1, 0x24(zero)           #load length of input data from sram1[0x14] (in byte)
                 csrr t5, mcycle             #Read lower 32 bits into t5 (ignore high bits since the low bits should be enough)
-                #sw t5, 0x60(zero)
                 jal ra, crc32b_1
                 csrr t6, mcycle             #Read lower 32 bits into t0
                 sw a0, 0x10(zero)           #write crc result to mem[0x10] (overwrite ptr to input data)
                 sub t6, t6, t5              #subtract time at start of crc from time at end
-                sw t6, 0x18(zero)
+                sw t6, 0x14(zero)
                 jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
                 nop
                 nop
@@ -146,25 +145,11 @@ main2:          jalr ra, s5, 0x0            #function call of req_next at addr s
                 lw a0, 0x20(zero)           #load pointer to input data from sram1[0x10]
                 lw a1, 0x24(zero)           #load length of input data from sram1[0x14] (in byte)
                 csrr t5, mcycle             #Read lower 32 bits into t5 (ignore high bits since the low bits should be enough)
-                #jal ra, crc32b_2
+                jal ra, crc32b_acc
                 csrr t6, mcycle             #Read lower 32 bits into t0
-                #sw a0, 0x14(zero)           #write crc result to mem[0x10] (overwrite ptr to input data)
+                sw a0, 0x18(zero)           #write crc result to mem[0x10] (overwrite ptr to input data)
                 sub t6, t6, t5              #subtract time at start of crc from time at end
-                sw t6, 0x20(zero)
-                csrr t5, mcycle             #start 
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-                csrr t6, mcycle             #stop
-                sub t6, t6, t5              #subtract time at start of crc from time at end
-                sw t6, 0x24(zero)
+                sw t6, 0x1c(zero)
                 jalr zero, s5, 32           #function call of paging at addr s5+32 (8 instructions in req_next * 4)
                 nop
                 nop
@@ -174,5 +159,17 @@ main2:          jalr ra, s5, 0x0            #function call of req_next at addr s
                 nop
                 nop
                 nop
-crc32b_2:       nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+crc32b_acc:     lui a0, 0xdeadc
+                addi a0, a0, -273           #a0=0xdeadbeef
                 jalr zero, ra, 0

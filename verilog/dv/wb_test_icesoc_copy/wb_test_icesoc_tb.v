@@ -38,7 +38,7 @@ module wb_test_icesoc_tb;
 	// simulation.  Normally this would be a slow clock and the digital PLL
 	// would be the fast clock.
 
-	localparam CLK_PER = 2 * 12.5;
+	localparam CLK_PER = 2 * 25;
 	always #(CLK_PER/2) clock <= (clock === 1'b0);
 
 	initial begin
