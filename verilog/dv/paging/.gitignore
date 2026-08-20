@@ -6,4 +6,4 @@ build/
 *.fst
 *.fst.hier
 *.gtkw
-sim_*/
+sim_res/
