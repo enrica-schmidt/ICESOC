@@ -1,0 +1,9 @@
+ibex_prog.h
+build/
+*.elf
+*.disasm
+*.bin
+*.fst
+*.fst.hier
+*.gtkw
+sim_*/

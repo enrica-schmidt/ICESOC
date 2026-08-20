@@ -208,12 +208,12 @@ reg_mprj_datal = 0x30000000;  //signaling that first and second instruction page
 
 //providing the input data for the CRC algorithm
   __asm__ volatile("" ::: "memory");
-  static const uint32_t crc_input[] = {0x6C6C6548, 0x6F77206F, 0x21646C72, 0x443A2021}; //the input for the crc
+  static const uint32_t crc_input[] = {0x6C6C6548, 0x6F77206F, 0x21646C72}; //the input for the crc ("Hello world!")
 
   sram1[8] = 0x00000028; //pointer to input data 
-  sram1[9] = 0x10;       //length of input data in byte (0x10=16 byte=4 words)
+  sram1[9] = 0xc;       //length of input data in byte (0x10=16 byte=4 words)
   __asm__ volatile("" ::: "memory");
-  for (int i = 0; i < (16/4); i++) {
+  for (int i = 0; i < (12/4); i++) {
     sram1[10 + i] = crc_input[i]; //write input data to sram1[6]=0x00000018
     __asm__ volatile("" ::: "memory");
   }

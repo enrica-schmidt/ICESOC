@@ -20,6 +20,7 @@
 `include "uprj_netlists.v"
 `include "caravel_netlists.v"
 `include "spiflash.v"
+//`include "bitstreams/top_f.vh"
 
 module wb_test_icesoc_tb;
 	reg clock;
@@ -51,6 +52,7 @@ module wb_test_icesoc_tb;
 	end
 
 	initial begin
+		/*
 		$dumpfile("wb_test_icesoc.fst");
 		$dumpvars(1, wb_test_icesoc_tb);
 		//$dumpvars(0, wb_test_icesoc_tb.mprj_io);
@@ -74,8 +76,7 @@ module wb_test_icesoc_tb;
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[address]);
 			$dumpvars(0, wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_2_i.mem[address]);
 		end
-		
-		
+		*/
 
 		RSTB <= 1'b0;
 		#2000;             //hold reset for 2000ns
@@ -131,7 +132,12 @@ module wb_test_icesoc_tb;
 		fabric_ctrl = 2'b00;
 		wait(checkbits == 4'h4);
 		$display ("Monitor: ibex Passed [T=%t]", $realtime);
-		$display("CRC result: 0x%h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[16]);
+		$display("-------------------------------------------------");
+		$display("CRC result unaccelerated (only on ibex core): 0x%h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[16]);
+		$display("CRC result accelerated (using CI on fabric):  0x%h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[24]);
+		$display("# clk cycles unaccelerated: 0x%h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[20]);
+		$display("# clk cycles accelerated:   0x%h", wb_test_icesoc_tb.uut.chip_core.mprj.inst_eFPGA_CPU_top.icesoc_top_i.sram_1_i.mem[28]);
+		$display("-------------------------------------------------");
 		$display ("Monitor: Setting rst and en for fabric [T=%t]", $realtime);
 		fabric_ctrl[0] = 1'b1; //set input io_in[17] of user project to 1 (rst=1 to fabric)
 		fabric_ctrl[1] = 1'b1; //set input io_in[18] of user project to 1 (en=1 to fabric)
@@ -144,6 +150,22 @@ module wb_test_icesoc_tb;
 		$finish;
 	end
 
+	/*
+	initial begin
+		// This checks if the flag was set during compilation
+		`ifdef EMULATION
+			$display("[INIT] EMULATION flag is DEFINED.");
+		`else
+			$display("[INIT] EMULATION flag is NOT DEFINED. (Warning: Bitstream might not load!)");
+		`endif
+	end
+
+	initial begin
+		// Print in Hexadecimal (shorter, easier to spot-check)
+		$display("X4Y1: %b", `Tile_X4Y1_Emulate_Bitstream);
+		$display("X5Y1: %b", `Tile_X5Y1_Emulate_Bitstream);
+	end
+	*/
 
 	initial begin
 		wait(checkbits == 4'h5);

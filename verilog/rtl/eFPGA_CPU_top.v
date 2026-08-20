@@ -230,7 +230,7 @@ generate
         assign io_out[26:17] = I_top;
         assign io_oeb[26:17] = T_top; //eFPGA IO pins
 
-
+    `ifndef EMULATION
     Config Config_inst (
         .CLK(CLK),
 	.Rx(Rx),
@@ -451,6 +451,7 @@ generate
         .FrameSelect(FrameAddressRegister[FrameBitsPerRow-1:FrameBitsPerRow-(FrameSelectWidth)]),
         .FrameStrobe(LongFrameStrobe)
     );
+    `endif
 
     eFPGA Inst_eFPGA(
         .Tile_X0Y10_A_I_top(I_top[9]),

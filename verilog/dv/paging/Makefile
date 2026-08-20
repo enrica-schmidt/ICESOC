@@ -73,7 +73,7 @@ SIM_DEFINES = -DFUNCTIONAL -DSIM -DEMULATION
 SIM?=RTL
 
 BITSTR_DIR = bitstreams
-DESIGN = top
+DESIGN = top_crc_clocked
 
 .SUFFIXES:
 .SECONDARY: $(RUN_DIR)/%.elf $(RUN_DIR)/%.hex
@@ -88,6 +88,7 @@ all:
 	cp wb_test_icesoc.c $(RUN_DIR)/sources
 	cp wb_test_icesoc_tb.v $(RUN_DIR)/sources
 	cp instr_bitstr_sizes.h $(RUN_DIR)/sources
+	cp Makefile $(RUN_DIR)/sources
 	$(MAKE) ${RUN_DIR}/${PATTERN:=.disasm} 2>&1 | tee $(RUN_DIR)/simulation.log
 	$(MAKE) ${RUN_DIR}/${PATTERN:=.fst} 2>&1 | tee $(RUN_DIR)/simulation.log
 #	$(MAKE) clean_without_fst
