@@ -68,6 +68,6 @@ if the bitstream paging should not be simulated (faster):
 - start the simulation from the paging folder with "make RUN_DIR=name_of_simulation_run"
 
 ## Glossary
-Caravel management (mgmt) core firmware: "paging/wb_test_icesoc.c"
-Program for the ibex core (core 1) in the ICESOC : "paging/gen_header/program/program.s"
+Caravel management (mgmt) core firmware: "paging/wb_test_icesoc.c" <br /><br />
+Program for the ibex core (core 1) in the ICESOC : "paging/gen_header/program/program.s" <br /><br />
 Bitstream : "paging/gen_header/bitstream/bitstream.hex" To configure the eFPGA. Is loaded into SRAM by the Caravel management core and sent to the Config part of the eFPGA by the ibex core using the custom instruction 000ff00b = "eFPGA0d0 zero, t6, zero". This sets the delay as 0, source register 1 as t6, source register 2 and the destination register as zero, and the slot to 11, which means that the eFPGA will be configured with this instruction. The value in t6 will be written to the eFPGA config interface. SelfWriteStrobe and SelfWriteData are set accordingly by the hardware. The bitstream is loaded into reg t6 word by word by the ibex core and sent to the eFPGA with the custom instruction.
